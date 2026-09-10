@@ -35,7 +35,23 @@ model Tenant {
   userTenants UserTenant[]
   roles       Role[]
   auditLogs   AuditLog[]
-  sampleItems SampleItem[]
+  sampleItems       SampleItem[]
+  departments       Department[]
+  personnelProfiles PersonnelProfile[]
+  newsCategories    NewsCategory[]
+  newsPosts         NewsPost[]
+  curriculums       Curriculum[]
+  documentTypes     DocumentType[]
+  documents         Document[]
+  admissionRounds   AdmissionRound[]
+  admissionApps     AdmissionApplication[]
+  researchProjects  ResearchProject[]
+  publications      Publication[]
+  petitionTypes     PetitionType[]
+  petitions         Petition[]
+  assetCategories   AssetCategory[]
+  assetLocations    AssetLocation[]
+  assets            Asset[]
 
   @@map("tenants")
 }
@@ -62,7 +78,18 @@ model User {
 
   userTenants UserTenant[]
   authTokens  AuthToken[]
-  auditLogs   AuditLog[]   @relation("AuditActor")
+  auditLogs         AuditLog[]         @relation("AuditActor")
+  personnelProfiles PersonnelProfile[]
+  newsPosts         NewsPost[]
+  createdDocuments  Document[]
+  documentApprovals DocumentApproval[]
+  reviewedApps      AdmissionApplication[]
+  approvedResearch  ResearchProject[] @relation("ResearchApprover")
+  petitions         Petition[]       @relation("PetitionStudent")
+  petitionActions   PetitionAction[] @relation("PetitionActor")
+
+  assetTransfers    AssetTransfer[]  @relation("AssetTransferredBy")
+  assetInspections  AssetInspection[] @relation("AssetInspector")
 
   @@map("users")
 }
@@ -209,4 +236,688 @@ model SampleItem {
 
   @@index([tenantId])
   @@map("sample_items")
+}
+
+enum PersonnelType {
+  FULL_TIME
+  PART_TIME
+  EXTERNAL
+}
+
+model Department {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  code      String   @db.VarChar(50)
+  nameTh    String   @map("name_th") @db.VarChar(200)
+  nameEn    String   @map("name_en") @db.VarChar(200)
+  parentId  String?  @map("parent_id") @db.Uuid
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  tenant    Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  parent    Department?        @relation("DepartmentHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children    Department[]       @relation("DepartmentHierarchy")
+  personnel   PersonnelProfile[]
+  curriculums Curriculum[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId])
+  @@map("departments")
+}
+
+model PersonnelProfile {
+  id            String        @id @default(uuid()) @db.Uuid
+  tenantId      String        @map("tenant_id") @db.Uuid
+  userId        String?       @map("user_id") @db.Uuid
+  employeeCode  String        @map("employee_code") @db.VarChar(50)
+  titleTh       String        @map("title_th") @db.VarChar(50)
+  titleEn       String        @map("title_en") @db.VarChar(50)
+  firstNameTh   String        @map("first_name_th") @db.VarChar(100)
+  lastNameTh    String        @map("last_name_th") @db.VarChar(100)
+  firstNameEn   String        @map("first_name_en") @db.VarChar(100)
+  lastNameEn    String        @map("last_name_en") @db.VarChar(100)
+  positionTh    String        @map("position_th") @db.VarChar(200)
+  positionEn    String        @map("position_en") @db.VarChar(200)
+  academicRank  String?       @map("academic_rank") @db.VarChar(100)
+  departmentId  String        @map("department_id") @db.Uuid
+  personnelType PersonnelType @default(FULL_TIME) @map("personnel_type")
+  email         String        @db.VarChar(255)
+  phone         String?       @db.VarChar(50)
+  photoUrl      String?       @map("photo_url") @db.VarChar(500)
+  bioTh         String?       @map("bio_th") @db.Text
+  bioEn         String?       @map("bio_en") @db.Text
+  expertiseTags Json          @default("[]") @map("expertise_tags") @db.JsonB
+  isActive      Boolean       @default(true) @map("is_active")
+  sortOrder     Int           @default(0) @map("sort_order")
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt     DateTime      @updatedAt @map("updated_at") @db.Timestamptz()
+
+  tenant     Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user       User?                @relation(fields: [userId], references: [id], onDelete: SetNull)
+  department Department           @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  educations PersonnelEducation[]
+
+  ledProjects ResearchProject[] @relation("ResearchPI")
+  researchMembers ResearchMember[]
+
+    assets            Asset[]
+  transfersFrom     AssetTransfer[] @relation("AssetTransferFromCustodian")
+  transfersTo       AssetTransfer[] @relation("AssetTransferToCustodian")
+
+  @@unique([tenantId, employeeCode])
+  @@index([tenantId])
+  @@index([departmentId])
+  @@map("personnel_profiles")
+}
+
+model PersonnelEducation {
+  id             String   @id @default(uuid()) @db.Uuid
+  personnelId    String   @map("personnel_id") @db.Uuid
+  degree         String   @db.VarChar(100)
+  major          String   @db.VarChar(200)
+  institution    String   @db.VarChar(300)
+  graduationYear Int?     @map("graduation_year")
+  sortOrder      Int      @default(0) @map("sort_order")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  personnel PersonnelProfile @relation(fields: [personnelId], references: [id], onDelete: Cascade)
+
+  @@index([personnelId])
+  @@map("personnel_educations")
+}
+
+enum NewsPostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model NewsCategory {
+  id        String     @id @default(uuid()) @db.Uuid
+  tenantId  String     @map("tenant_id") @db.Uuid
+  code      String     @db.VarChar(50)
+  nameTh    String     @map("name_th") @db.VarChar(100)
+  nameEn    String     @map("name_en") @db.VarChar(100)
+  slug      String     @db.VarChar(120)
+  sortOrder Int        @default(0) @map("sort_order")
+  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime   @updatedAt @map("updated_at") @db.Timestamptz()
+
+  tenant Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  posts  NewsPost[]
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@map("news_categories")
+}
+
+model NewsPost {
+  id            String         @id @default(uuid()) @db.Uuid
+  tenantId      String         @map("tenant_id") @db.Uuid
+  titleTh       String         @map("title_th") @db.VarChar(500)
+  titleEn       String         @map("title_en") @db.VarChar(500)
+  slug          String         @db.VarChar(600)
+  bodyTh        String         @map("body_th") @db.Text
+  bodyEn        String         @map("body_en") @db.Text
+  excerptTh     String?        @map("excerpt_th") @db.Text
+  excerptEn     String?        @map("excerpt_en") @db.Text
+  coverImageUrl String?        @map("cover_image_url") @db.VarChar(500)
+  categoryId    String         @map("category_id") @db.Uuid
+  status        NewsPostStatus @default(DRAFT)
+  isPinned      Boolean        @default(false) @map("is_pinned")
+  publishedAt   DateTime?      @map("published_at") @db.Timestamptz()
+  authorId      String?        @map("author_id") @db.Uuid
+  viewCount     Int            @default(0) @map("view_count")
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt     DateTime       @updatedAt @map("updated_at") @db.Timestamptz()
+
+  tenant      Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  category    NewsCategory     @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  author      User?            @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  attachments NewsAttachment[]
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@index([categoryId])
+  @@index([status])
+  @@map("news_posts")
+}
+
+model NewsAttachment {
+  id        String   @id @default(uuid()) @db.Uuid
+  postId    String   @map("post_id") @db.Uuid
+  fileName  String   @map("file_name") @db.VarChar(255)
+  fileUrl   String   @map("file_url") @db.VarChar(500)
+  fileSize  Int?     @map("file_size")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  post NewsPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+  @@map("news_attachments")
+}
+
+enum DegreeLevel {
+  BACHELOR
+  MASTER
+  DOCTORAL
+  CERTIFICATE
+}
+
+model Curriculum {
+  id                String      @id @default(uuid()) @db.Uuid
+  tenantId          String      @map("tenant_id") @db.Uuid
+  departmentId      String      @map("department_id") @db.Uuid
+  code              String      @db.VarChar(50)
+  nameTh            String      @map("name_th") @db.VarChar(255)
+  nameEn            String      @map("name_en") @db.VarChar(255)
+  degreeLevel       DegreeLevel @default(BACHELOR) @map("degree_level")
+  totalCredits      Int         @map("total_credits")
+  curriculumYear    Int         @map("curriculum_year")
+  philosophyTh      String?     @map("philosophy_th") @db.Text
+  philosophyEn      String?     @map("philosophy_en") @db.Text
+  careerProspectsTh String?     @map("career_prospects_th") @db.Text
+  careerProspectsEn String?     @map("career_prospects_en") @db.Text
+  tuitionFee        Int?        @map("tuition_fee")
+  studyPeriodYears  Int         @default(4) @map("study_period_years")
+  isActive          Boolean     @default(true) @map("is_active")
+  sortOrder         Int         @default(0) @map("sort_order")
+  createdAt         DateTime    @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt         DateTime    @updatedAt @map("updated_at") @db.Timestamptz()
+
+  tenant     Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  department Department       @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  plans      CurriculumPlan[]
+  admissionRounds AdmissionRound[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId])
+  @@index([departmentId])
+  @@index([degreeLevel])
+  @@map("curriculums")
+}
+
+model CurriculumPlan {
+  id           String   @id @default(uuid()) @db.Uuid
+  curriculumId String   @map("curriculum_id") @db.Uuid
+  academicYear Int      @map("academic_year")
+  semester     Int
+  courseCode   String   @map("course_code") @db.VarChar(50)
+  courseNameTh String   @map("course_name_th") @db.VarChar(200)
+  courseNameEn String   @map("course_name_en") @db.VarChar(200)
+  credits      Int
+  courseType   String   @map("course_type") @db.VarChar(50)
+  sortOrder    Int      @default(0) @map("sort_order")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  curriculum Curriculum @relation(fields: [curriculumId], references: [id], onDelete: Cascade)
+
+  @@index([curriculumId])
+  @@map("curriculum_plans")
+}
+
+// ---------------------------------------------------------------------------
+// Feature 4: Document Management
+// ---------------------------------------------------------------------------
+
+enum DocumentStatus {
+  DRAFT
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum DocumentAction {
+  APPROVED
+  REJECTED
+  RETURNED
+}
+
+model DocumentType {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  code          String   @db.VarChar(50)
+  nameTh        String   @map("name_th") @db.VarChar(200)
+  nameEn        String   @map("name_en") @db.VarChar(200)
+  approvalSteps Json     @default("[]") @map("approval_steps") @db.JsonB
+  templateUrl   String?  @map("template_url") @db.VarChar(500)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  tenant    Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  documents Document[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId])
+  @@map("document_types")
+}
+
+model Document {
+  id             String         @id @default(uuid()) @db.Uuid
+  tenantId       String         @map("tenant_id") @db.Uuid
+  docNumber      String         @unique @map("doc_number") @db.VarChar(100)
+  documentTypeId String         @map("document_type_id") @db.Uuid
+  title          String         @db.VarChar(500)
+  createdById    String         @map("created_by_id") @db.Uuid
+  status         DocumentStatus @default(DRAFT)
+  currentStep    Int            @default(1) @map("current_step")
+  fileUrl        String?        @map("file_url") @db.VarChar(500)
+  metadata       Json           @default("{}") @db.JsonB
+  submittedAt    DateTime?      @map("submitted_at") @db.Timestamptz()
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt      DateTime       @updatedAt @map("updated_at") @db.Timestamptz()
+
+  tenant       Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  documentType DocumentType       @relation(fields: [documentTypeId], references: [id], onDelete: Restrict)
+  createdBy    User               @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  approvals    DocumentApproval[]
+
+  @@index([tenantId])
+  @@index([documentTypeId])
+  @@index([createdById])
+  @@map("documents")
+}
+
+model DocumentApproval {
+  id         String         @id @default(uuid()) @db.Uuid
+  documentId String         @map("document_id") @db.Uuid
+  step       Int
+  approverId String         @map("approver_id") @db.Uuid
+  action     DocumentAction
+  comment    String?        @db.Text
+  actionAt   DateTime       @default(now()) @map("action_at") @db.Timestamptz()
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  approver User     @relation(fields: [approverId], references: [id], onDelete: Restrict)
+
+  @@index([documentId])
+  @@index([approverId])
+  @@map("document_approvals")
+}
+
+// ---------------------------------------------------------------------------
+// Feature 5: Admission
+// ---------------------------------------------------------------------------
+
+enum AdmissionRoundStatus {
+  UPCOMING
+  OPEN
+  CLOSED
+  ANNOUNCED
+}
+
+enum ApplicationStatus {
+  SUBMITTED
+  UNDER_REVIEW
+  PASSED
+  FAILED
+  WAITLISTED
+}
+
+model AdmissionRound {
+  id           String               @id @default(uuid()) @db.Uuid
+  tenantId     String               @map("tenant_id") @db.Uuid
+  nameTh       String               @map("name_th") @db.VarChar(200)
+  nameEn       String               @map("name_en") @db.VarChar(200)
+  academicYear Int                  @map("academic_year")
+  curriculumId String               @map("curriculum_id") @db.Uuid
+  openDate     DateTime?            @map("open_date") @db.Timestamptz()
+  closeDate    DateTime?            @map("close_date") @db.Timestamptz()
+  announceDate DateTime?            @map("announce_date") @db.Timestamptz()
+  quota        Int                  @default(0)
+  status       AdmissionRoundStatus @default(UPCOMING)
+  requirements Json                 @default("{}") @db.JsonB
+  createdAt    DateTime             @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt    DateTime             @updatedAt @map("updated_at") @db.Timestamptz()
+
+  tenant       Tenant                 @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  curriculum   Curriculum             @relation(fields: [curriculumId], references: [id], onDelete: Restrict)
+  applications AdmissionApplication[]
+
+  @@index([tenantId])
+  @@index([curriculumId])
+  @@map("admission_rounds")
+}
+
+model AdmissionApplication {
+  id              String            @id @default(uuid()) @db.Uuid
+  tenantId        String            @map("tenant_id") @db.Uuid
+  roundId         String            @map("round_id") @db.Uuid
+  appNumber       String            @unique @map("app_number") @db.VarChar(50)
+  applicantNameTh String            @map("applicant_name_th") @db.VarChar(200)
+  applicantNameEn String            @map("applicant_name_en") @db.VarChar(200)
+  idCard          String            @map("id_card") @db.VarChar(13)
+  email           String            @db.VarChar(255)
+  phone           String            @db.VarChar(30)
+  status          ApplicationStatus @default(SUBMITTED)
+  score           Decimal?          @db.Decimal(10, 2)
+  reviewerId      String?           @map("reviewer_id") @db.Uuid
+  reviewerNote    String?           @map("reviewer_note") @db.Text
+
+  documentsMeta   Json              @default("{}") @map("documents_meta") @db.JsonB
+  submittedAt     DateTime?         @map("submitted_at") @db.Timestamptz()
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt       DateTime          @updatedAt @map("updated_at") @db.Timestamptz()
+
+  tenant   Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  round    AdmissionRound @relation(fields: [roundId], references: [id], onDelete: Cascade)
+  reviewer User?          @relation(fields: [reviewerId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId])
+  @@index([roundId])
+  @@map("admission_applications")
+}
+
+// ---------------------------------------------------------------------------
+// Feature 6: Research
+// ---------------------------------------------------------------------------
+
+enum ResearchType {
+  BASIC
+  APPLIED
+  INNOVATION
+}
+
+enum ResearchStatus {
+  PROPOSED
+  APPROVED
+  IN_PROGRESS
+
+  CANCELLED
+}
+
+enum ResearchRole {
+  PI
+  CO_PI
+  RESEARCHER
+  ASSISTANT
+}
+
+enum PublicationType {
+  JOURNAL
+  CONFERENCE
+  BOOK_CHAPTER
+  PATENT
+}
+
+enum Quartile {
+  Q1
+  Q2
+  Q3
+  Q4
+}
+
+model ResearchProject {
+  id           String         @id @default(uuid()) @db.Uuid
+  tenantId     String         @map("tenant_id") @db.Uuid
+  titleTh      String         @map("title_th") @db.VarChar(1000)
+  titleEn      String?        @map("title_en") @db.VarChar(1000)
+  abstractTh   String?        @map("abstract_th") @db.Text
+  abstractEn   String?        @map("abstract_en") @db.Text
+  researchType ResearchType   @map("research_type")
+  status       ResearchStatus @default(PROPOSED)
+  principalId  String         @map("principal_investigator_id") @db.Uuid
+  budget       Decimal?       @db.Decimal(15, 2)
+  fundingSource String?       @map("funding_source") @db.VarChar(200)
+  startDate    DateTime?      @map("start_date") @db.Date
+  endDate      DateTime?      @map("end_date") @db.Date
+  keywords     String[]
+  approvedById String?        @map("approved_by") @db.Uuid
+  approvedAt   DateTime?      @map("approved_at") @db.Timestamptz()
+  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt    DateTime       @updatedAt @map("updated_at") @db.Timestamptz()
+
+  tenant      Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  principal   PersonnelProfile @relation("ResearchPI", fields: [principalId], references: [id], onDelete: Restrict)
+  approvedBy  User?            @relation("ResearchApprover", fields: [approvedById], references: [id], onDelete: SetNull)
+  members     ResearchMember[]
+  publications Publication[]
+
+  @@index([tenantId])
+  @@index([principalId])
+  @@map("research_projects")
+}
+
+model ResearchMember {
+  projectId   String       @map("project_id") @db.Uuid
+  personnelId String       @map("personnel_id") @db.Uuid
+  role        ResearchRole
+
+  project   ResearchProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  personnel PersonnelProfile @relation(fields: [personnelId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, personnelId])
+  @@map("research_members")
+}
+
+model Publication {
+  id              String          @id @default(uuid()) @db.Uuid
+  tenantId        String          @map("tenant_id") @db.Uuid
+  title           String          @db.VarChar(1000)
+  authors         String[]
+  journalName     String?         @map("journal_name") @db.VarChar(500)
+  publicationType PublicationType @map("publication_type")
+  doi             String?         @db.VarChar(200)
+  publishedYear   Int?            @map("published_year")
+  quartile        Quartile?
+  citationCount   Int             @default(0) @map("citation_count")
+  fileUrl         String?         @map("file_url") @db.VarChar(500)
+  externalUrl     String?         @map("external_url") @db.VarChar(500)
+  projectId       String?         @map("project_id") @db.Uuid
+  createdAt       DateTime        @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt       DateTime        @updatedAt @map("updated_at") @db.Timestamptz()
+
+  tenant  Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  project ResearchProject? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId])
+  @@index([projectId])
+  @@map("publications")
+}
+// ---------------------------------------------------------------------------
+// Feature 7: Petition System
+// ---------------------------------------------------------------------------
+
+enum PetitionStatus {
+  SUBMITTED
+  IN_REVIEW
+  APPROVED
+  REJECTED
+  COMPLETED
+}
+
+enum PetitionActionType {
+  APPROVED
+  REJECTED
+  COMMENTED
+  FORWARDED
+}
+
+model PetitionType {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  code         String   @db.VarChar(50)
+  nameTh       String   @map("name_th") @db.VarChar(200)
+  nameEn       String   @map("name_en") @db.VarChar(200)
+  description  String?  @db.Text
+  formSchema   Json     @default("{}") @map("form_schema") @db.JsonB
+  approvalFlow Json     @default("[]") @map("approval_flow") @db.JsonB
+  slaDays      Int      @default(3) @map("sla_days")
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  tenant    Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  petitions Petition[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId])
+  @@map("petition_types")
+}
+
+model Petition {
+  id              String         @id @default(uuid()) @db.Uuid
+  tenantId        String         @map("tenant_id") @db.Uuid
+  petitionNumber  String         @unique @map("petition_number") @db.VarChar(20)
+  petitionTypeId  String         @map("petition_type_id") @db.Uuid
+  studentId       String?        @map("student_id") @db.Uuid
+  studentName     String?        @map("student_name") @db.VarChar(200)
+  studentIdCard   String?        @map("student_id_card") @db.VarChar(20)
+  formData        Json           @default("{}") @map("form_data") @db.JsonB
+  status          PetitionStatus @default(SUBMITTED)
+  currentStep     Int            @default(1) @map("current_step")
+  attachments     Json           @default("[]") @db.JsonB
+  dueDate         DateTime?      @map("due_date") @db.Timestamptz()
+  submittedAt     DateTime?      @map("submitted_at") @db.Timestamptz()
+  createdAt       DateTime       @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt       DateTime       @updatedAt @map("updated_at") @db.Timestamptz()
+
+  tenant       Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  petitionType PetitionType     @relation(fields: [petitionTypeId], references: [id], onDelete: Restrict)
+  student      User?            @relation("PetitionStudent", fields: [studentId], references: [id], onDelete: SetNull)
+  actions      PetitionAction[]
+
+  @@index([tenantId])
+  @@index([petitionTypeId])
+  @@map("petitions")
+}
+
+model PetitionAction {
+  id         String             @id @default(uuid()) @db.Uuid
+  petitionId String             @map("petition_id") @db.Uuid
+  actorId    String             @map("actor_id") @db.Uuid
+  action     PetitionActionType
+  comment    String?            @db.Text
+  actionAt   DateTime           @default(now()) @map("action_at") @db.Timestamptz()
+
+  petition Petition @relation(fields: [petitionId], references: [id], onDelete: Cascade)
+  actor    User     @relation("PetitionActor", fields: [actorId], references: [id], onDelete: Restrict)
+
+  @@index([petitionId])
+  @@map("petition_actions")
+}
+// ---------------------------------------------------------------------------
+// Feature 8: Asset Management
+// ---------------------------------------------------------------------------
+
+enum AssetStatus {
+  ACTIVE
+  UNDER_REPAIR
+  DISPOSED
+  LOST
+}
+
+enum AssetCondition {
+  EXCELLENT
+  GOOD
+  FAIR
+  POOR
+}
+
+model AssetCategory {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  nameTh    String   @map("name_th") @db.VarChar(200)
+  nameEn    String   @map("name_en") @db.VarChar(200)
+  code      String   @db.VarChar(50)
+  parentId  String?  @map("parent_id") @db.Uuid
+
+  tenant    Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  parent    AssetCategory?  @relation("AssetCategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children  AssetCategory[] @relation("AssetCategoryHierarchy")
+  assets    Asset[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId])
+  @@map("asset_categories")
+}
+
+model AssetLocation {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  name      String   @db.VarChar(200)
+  building  String   @db.VarChar(100)
+  floor     String   @db.VarChar(50)
+  room      String   @db.VarChar(50)
+
+  tenant         Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  assets         Asset[]
+  transfersFrom  AssetTransfer[] @relation("AssetTransferFromLocation")
+  transfersTo    AssetTransfer[] @relation("AssetTransferToLocation")
+
+  @@index([tenantId])
+  @@map("asset_locations")
+}
+
+model Asset {
+  id             String         @id @default(uuid()) @db.Uuid
+  tenantId       String         @map("tenant_id") @db.Uuid
+  assetNumber    String         @unique @map("asset_number") @db.VarChar(100)
+  name           String         @db.VarChar(500)
+  categoryId     String         @map("category_id") @db.Uuid
+  serialNumber   String?        @map("serial_number") @db.VarChar(200)
+  brand          String?        @db.VarChar(200)
+  model          String?        @db.VarChar(200)
+  purchaseDate   DateTime?      @map("purchase_date") @db.Date
+  purchasePrice  Decimal?       @map("purchase_price") @db.Decimal(15,2)
+  locationId     String         @map("location_id") @db.Uuid
+  custodianId    String         @map("custodian_id") @db.Uuid
+  status         AssetStatus    @default(ACTIVE)
+  condition      AssetCondition @default(GOOD)
+  imageUrl       String?        @map("image_url") @db.VarChar(500)
+  notes          String?        @db.Text
+  warrantyExpiry DateTime?      @map("warranty_expiry") @db.Date
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt      DateTime       @updatedAt @map("updated_at") @db.Timestamptz()
+
+  tenant       Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  category     AssetCategory    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  location     AssetLocation    @relation(fields: [locationId], references: [id], onDelete: Restrict)
+  custodian    PersonnelProfile @relation(fields: [custodianId], references: [id], onDelete: Restrict)
+  transfers    AssetTransfer[]
+  inspections  AssetInspection[]
+
+  @@index([tenantId])
+  @@index([locationId])
+  @@index([custodianId])
+  @@map("assets")
+}
+
+model AssetTransfer {
+  id               String   @id @default(uuid()) @db.Uuid
+  assetId          String   @map("asset_id") @db.Uuid
+  fromLocationId   String?  @map("from_location_id") @db.Uuid
+  toLocationId     String   @map("to_location_id") @db.Uuid
+  fromCustodianId  String?  @map("from_custodian_id") @db.Uuid
+  toCustodianId    String   @map("to_custodian_id") @db.Uuid
+  transferredById  String   @map("transferred_by") @db.Uuid
+  transferredAt    DateTime @default(now()) @map("transferred_at") @db.Timestamptz()
+  reason           String?  @db.Text
+
+  asset         Asset            @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  fromLocation  AssetLocation?   @relation("AssetTransferFromLocation", fields: [fromLocationId], references: [id], onDelete: SetNull)
+  toLocation    AssetLocation    @relation("AssetTransferToLocation", fields: [toLocationId], references: [id], onDelete: Restrict)
+  fromCustodian PersonnelProfile? @relation("AssetTransferFromCustodian", fields: [fromCustodianId], references: [id], onDelete: SetNull)
+  toCustodian   PersonnelProfile @relation("AssetTransferToCustodian", fields: [toCustodianId], references: [id], onDelete: Restrict)
+  transferredBy User             @relation("AssetTransferredBy", fields: [transferredById], references: [id], onDelete: Restrict)
+
+  @@index([assetId])
+  @@map("asset_transfers")
+}
+
+model AssetInspection {
+  assetId        String         @map("asset_id") @db.Uuid
+  inspectorId    String         @map("inspector_id") @db.Uuid
+  inspectionDate DateTime       @default(now()) @map("inspection_date") @db.Date
+  condition      AssetCondition
+  notes          String?        @db.Text
+
+  asset     Asset @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  inspector User  @relation("AssetInspector", fields: [inspectorId], references: [id], onDelete: Restrict)
+
+  @@id([assetId, inspectorId, inspectionDate])
+  @@map("asset_inspections")
 }

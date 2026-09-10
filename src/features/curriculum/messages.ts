@@ -1,0 +1,69 @@
+﻿export const MESSAGES = {
+  // Navigation & General
+  "curriculum.nav": { th: "หลักสูตรการศึกษา", en: "Curriculums" },
+  "curriculum.nav.list": { th: "รายการหลักสูตร", en: "All Curriculums" },
+  "curriculum.title": { th: "ระบบจัดการหลักสูตรการศึกษา", en: "Curriculum Management" },
+  "curriculum.subtitle": { th: "บริหารจัดการหลักสูตร โครงสร้างหน่วยกิต และแผนการศึกษาตลอดหลักสูตร", en: "Manage programs, credit structures, and semester study plans" },
+
+  // Fields
+  "curriculum.code": { th: "รหัสหลักสูตร", en: "Curriculum Code" },
+  "curriculum.nameTh": { th: "ชื่อหลักสูตร (ภาษาไทย)", en: "Program Name (TH)" },
+  "curriculum.nameEn": { th: "ชื่อหลักสูตร (ภาษาอังกฤษ)", en: "Program Name (EN)" },
+  "curriculum.degreeLevel": { th: "ระดับการศึกษา", en: "Degree Level" },
+  "curriculum.level.BACHELOR": { th: "ปริญญาตรี", en: "Bachelor's Degree" },
+  "curriculum.level.MASTER": { th: "ปริญญาโท", en: "Master's Degree" },
+  "curriculum.level.DOCTORAL": { th: "ปริญญาเอก", en: "Doctoral Degree" },
+  "curriculum.level.CERTIFICATE": { th: "ประกาศนียบัตร / หลักสูตรระยะสั้น", en: "Certificate" },
+  "curriculum.department": { th: "ภาควิชา / หน่วยงาน", en: "Department" },
+  "curriculum.totalCredits": { th: "จำนวนหน่วยกิตรวม", en: "Total Credits" },
+  "curriculum.year": { th: "ปีหลักสูตร (พ.ศ.)", en: "Curriculum Year" },
+  "curriculum.studyPeriod": { th: "ระยะเวลาการศึกษา (ปี)", en: "Study Period (Years)" },
+  "curriculum.tuitionFee": { th: "ค่าธรรมเนียมต่อภาคการศึกษา (บาท)", en: "Tuition Fee / Semester (THB)" },
+  "curriculum.philosophyTh": { th: "ปรัชญาและความสำคัญ (ไทย)", en: "Philosophy (TH)" },
+  "curriculum.philosophyEn": { th: "ปรัชญาและความสำคัญ (อังกฤษ)", en: "Philosophy (EN)" },
+  "curriculum.careerProspectsTh": { th: "อาชีพที่สามารถประกอบได้ (ไทย)", en: "Career Opportunities (TH)" },
+  "curriculum.careerProspectsEn": { th: "อาชีพที่สามารถประกอบได้ (อังกฤษ)", en: "Career Opportunities (EN)" },
+  "curriculum.status": { th: "สถานะ", en: "Status" },
+  "curriculum.status.active": { th: "เปิดสอน / แสดงผล", en: "Active" },
+  "curriculum.status.inactive": { th: "ปิดปรับปรุง / ซ่อน", en: "Inactive" },
+
+  // Study Plan
+  "curriculum.plan.title": { th: "แผนการศึกษาตลอดหลักสูตร", en: "Study Plan & Courses" },
+  "curriculum.plan.manageBtn": { th: "จัดการแผนการเรียน", en: "Manage Study Plan" },
+  "curriculum.plan.year": { th: "ชั้นปีที่", en: "Year" },
+  "curriculum.plan.semester": { th: "ภาคการศึกษาที่", en: "Semester" },
+  "curriculum.plan.courseCode": { th: "รหัสวิชา", en: "Course Code" },
+  "curriculum.plan.courseNameTh": { th: "ชื่อวิชา (ภาษาไทย)", en: "Course Name (TH)" },
+  "curriculum.plan.courseNameEn": { th: "ชื่อวิชา (ภาษาอังกฤษ)", en: "Course Name (EN)" },
+  "curriculum.plan.credits": { th: "หน่วยกิต", en: "Credits" },
+  "curriculum.plan.courseType": { th: "กลุ่มวิชา", en: "Course Category" },
+  "curriculum.plan.addCourse": { th: "เพิ่มรายวิชาในแผน", en: "Add Course" },
+  "curriculum.plan.totalSemesterCredits": { th: "หน่วยกิตประจำภาค", en: "Semester Credits" },
+  "curriculum.plan.noCourses": { th: "ยังไม่มีรายวิชาในภาคการศึกษานี้", en: "No courses listed for this semester" },
+
+  // Actions & Buttons
+  "curriculum.create": { th: "เพิ่มหลักสูตรใหม่", en: "Create Curriculum" },
+  "curriculum.edit": { th: "แก้ไขหลักสูตร", en: "Edit Curriculum" },
+  "curriculum.delete": { th: "ลบหลักสูตร", en: "Delete Curriculum" },
+  "curriculum.deleteConfirm": { th: "ยืนยันการลบหลักสูตรนี้หรือไม่? (แผนการเรียนที่เกี่ยวข้องจะถูกลบทั้งหมด)", en: "Are you sure you want to delete this curriculum?" },
+  "curriculum.searchPlaceholder": { th: "ค้นหาชื่อหลักสูตร, รหัส, สาขา...", en: "Search curriculum name, code..." },
+  "curriculum.allLevels": { th: "ทุกระดับการศึกษา", en: "All Degree Levels" },
+
+  // Public Portal
+  "portal.nav.curriculum": { th: "หลักสูตรการศึกษา", en: "Academic Programs" },
+  "portal.curriculum.title": { th: "หลักสูตรการศึกษาประจำคณะ", en: "Academic Programs & Degrees" },
+  "portal.curriculum.subtitle": { th: "หลักสูตรที่ทันสมัย มาตรฐานสากล ผลิตบัณฑิตคุณภาพตอบโจทย์โลกยุคดิจิทัล", en: "Modern and internationally standardized programs producing future-ready graduates" },
+  "portal.curriculum.viewDetails": { th: "ดูรายละเอียดและแผนการเรียน", en: "View Details & Study Plan" },
+  "portal.curriculum.backToList": { th: "กลับไปหน้ารวมหลักสูตร", en: "Back to Programs" },
+  "portal.curriculum.yearsUnit": { th: "ปี", en: "Years" },
+  "portal.curriculum.creditsUnit": { th: "หน่วยกิต", en: "Credits" },
+  "portal.curriculum.feePerTerm": { th: "บาท / ภาคการศึกษา", en: "THB / Semester" },
+  "portal.curriculum.noCurriculum": { th: "ไม่พบหลักสูตรในระดับการศึกษานี้", en: "No programs found in this category" },
+
+  // Role Permissions
+  "roles.module.curriculum": { th: "ระบบจัดการหลักสูตร", en: "Curriculum Management" },
+  "perm.curriculum:read": { th: "ดูข้อมูลหลักสูตร", en: "View curriculums" },
+  "perm.curriculum:write": { th: "เพิ่ม/แก้ไขหลักสูตร", en: "Create & edit curriculums" },
+  "perm.curriculum:manage": { th: "จัดการแผนการเรียนรายวิชา", en: "Manage study plans" },
+  "perm.curriculum:delete": { th: "ลบหลักสูตร", en: "Delete curriculums" },
+} as const;

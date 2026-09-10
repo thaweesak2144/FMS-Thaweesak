@@ -1,6 +1,11 @@
-import { LayoutDashboard, Users, Settings, Layers, type LucideIcon } from "lucide-react";
+import { LayoutDashboard, Users, Settings, Layers, UserCheck, Building2, Newspaper, GraduationCap, FileText, UserPlus, FileSearch, Microscope, FileQuestion, Package, type LucideIcon } from "lucide-react";
 import { hasPermission, P } from "@/features/identity";
 import { SAMPLE_P } from "@/features/sample";
+import { PERSONNEL_P } from "@/features/personnel";
+import { NEWS_P } from "@/features/news";
+import { CURRICULUM_P } from "@/features/curriculum";
+import { DOCUMENT_P } from "@/features/document/permissions";
+import { ADMISSION_P } from "@/features/admission/permissions";
 
 export interface NavItem {
   /** i18n key */
@@ -16,6 +21,121 @@ export interface NavCrumb { title: string; href: string }
 
 export const sidebarGroups: NavGroup[] = [
   { label: "nav.group.overview", items: [{ title: "nav.dashboard", href: "/dashboard", icon: LayoutDashboard }] },
+  {
+    label: "curriculum.nav",
+    items: [
+      {
+        title: "curriculum.nav",
+        href: "/curriculum",
+        icon: GraduationCap,
+        permission: CURRICULUM_P.curriculumRead,
+        children: [
+          { title: "curriculum.nav.list", href: "/curriculum", permission: CURRICULUM_P.curriculumRead },
+        ],
+      },
+    ],
+  },
+  {
+    label: "admission.nav",
+    items: [
+      {
+        title: "admission.nav",
+        href: "/admission",
+        icon: UserPlus,
+        permission: ADMISSION_P.admissionRead,
+        children: [
+          { title: "admission.nav.list", href: "/admission", permission: ADMISSION_P.admissionRead },
+        ],
+      },
+    ],
+  },
+  {
+    label: "research.nav",
+    items: [
+      {
+        title: "research.nav",
+        href: "/research",
+        icon: FileText,
+        permission: "research:read",
+        children: [
+          { title: "research.nav.projects", href: "/research", permission: "research:read" },
+        ],
+      },
+    ],
+  },
+  {
+    label: "petition.nav",
+    items: [
+      {
+        title: "petition.nav",
+        href: "/petition",
+        icon: FileQuestion,
+        permission: "petition:read",
+        children: [
+          { title: "petition.nav", href: "/petition", permission: "petition:read" },
+        ],
+      },
+    ],
+  },
+  {
+    label: "asset.nav",
+    items: [
+      {
+        title: "asset.nav",
+        href: "/asset",
+        icon: Package,
+        permission: "asset:read",
+        children: [
+          { title: "asset.nav", href: "/asset", permission: "asset:read" },
+        ],
+      },
+    ],
+  },
+  {
+    label: "document.nav",
+    items: [
+      {
+        title: "document.nav",
+        href: "/document",
+        icon: FileText,
+        permission: DOCUMENT_P.documentRead,
+        children: [
+          { title: "document.title", href: "/document", permission: DOCUMENT_P.documentRead },
+          { title: "document.type.title", href: "/document/types", permission: DOCUMENT_P.documentManage },
+        ],
+      },
+    ],
+  },
+  {
+    label: "news.nav",
+    items: [
+      {
+        title: "news.nav",
+        href: "/news",
+        icon: Newspaper,
+        permission: NEWS_P.newsRead,
+        children: [
+          { title: "news.nav.list", href: "/news", permission: NEWS_P.newsRead },
+          { title: "news.nav.categories", href: "/news/categories", permission: NEWS_P.categoryManage },
+        ],
+      },
+    ],
+  },
+  {
+    label: "personnel.nav",
+    items: [
+      {
+        title: "personnel.nav",
+        href: "/personnel",
+        icon: UserCheck,
+        permission: PERSONNEL_P.personnelRead,
+        children: [
+          { title: "personnel.nav.list", href: "/personnel", permission: PERSONNEL_P.personnelRead },
+          { title: "personnel.nav.departments", href: "/personnel/departments", permission: PERSONNEL_P.departmentManage },
+        ],
+      },
+    ],
+  },
   {
     label: "nav.group.sample",
     items: [{ title: "sample.nav", href: "/sample", icon: Layers, permission: SAMPLE_P.sampleRead }],

@@ -1,0 +1,72 @@
+﻿export const MESSAGES = {
+  // Navigation & General
+  "news.nav": { th: "ข่าวสารประชาสัมพันธ์", en: "News & PR" },
+  "news.nav.list": { th: "รายการข่าว", en: "All News" },
+  "news.nav.categories": { th: "หมวดหมู่ข่าว", en: "News Categories" },
+  "news.title": { th: "ระบบจัดการข่าวสารและกิจกรรม", en: "News & Announcement Management" },
+  "news.subtitle": { th: "เผยแพร่ข่าวสาร ประชาสัมพันธ์กิจกรรม และประกาศสำคัญของคณะ", en: "Publish news, events, and important faculty announcements" },
+
+  // News Post Fields
+  "news.post.titleTh": { th: "หัวข้อข่าว (ภาษาไทย)", en: "Headline (TH)" },
+  "news.post.titleEn": { th: "หัวข้อข่าว (ภาษาอังกฤษ)", en: "Headline (EN)" },
+  "news.post.slug": { th: "ลิงก์ URL (Slug)", en: "URL Slug" },
+  "news.post.category": { th: "หมวดหมู่", en: "Category" },
+  "news.post.status": { th: "สถานะ", en: "Status" },
+  "news.post.status.DRAFT": { th: "ฉบับร่าง (Draft)", en: "Draft" },
+  "news.post.status.PUBLISHED": { th: "เผยแพร่แล้ว", en: "Published" },
+  "news.post.status.ARCHIVED": { th: "จัดเก็บแล้ว", en: "Archived" },
+  "news.post.isPinned": { th: "ปักหมุดข่าวเด่น", en: "Pin to Highlight" },
+  "news.post.pinnedBadge": { th: "ข่าวเด่น", en: "Pinned" },
+  "news.post.coverImage": { th: "รูปภาพปก (URL)", en: "Cover Image URL" },
+  "news.post.excerptTh": { th: "ย่อหน้านำ (ภาษาไทย)", en: "Excerpt (TH)" },
+  "news.post.excerptEn": { th: "ย่อหน้านำ (ภาษาอังกฤษ)", en: "Excerpt (EN)" },
+  "news.post.bodyTh": { th: "เนื้อหาข่าว (ภาษาไทย)", en: "Content (TH)" },
+  "news.post.bodyEn": { th: "เนื้อหาข่าว (ภาษาอังกฤษ)", en: "Content (EN)" },
+  "news.post.publishedAt": { th: "วันที่เผยแพร่", en: "Published Date" },
+  "news.post.viewCount": { th: "ยอดการอ่าน", en: "Views" },
+  "news.post.attachments": { th: "เอกสารแนบ", en: "Attachments" },
+  "news.post.addAttachment": { th: "เพิ่มเอกสารแนบ", en: "Add Attachment" },
+
+  // Actions & Buttons
+  "news.create": { th: "สร้างข่าวใหม่", en: "Create News" },
+  "news.edit": { th: "แก้ไขข่าว", en: "Edit News" },
+  "news.delete": { th: "ลบข่าว", en: "Delete News" },
+  "news.deleteConfirm": { th: "คุณแน่ใจหรือไม่ว่าต้องการลบข่าวนี้?", en: "Are you sure you want to delete this news article?" },
+  "news.publish": { th: "เผยแพร่ทันที", en: "Publish Now" },
+  "news.archive": { th: "จัดเก็บเข้ากรุ", en: "Archive" },
+  "news.togglePin": { th: "สลับสถานะปักหมุด", en: "Toggle Pin" },
+  "news.searchPlaceholder": { th: "ค้นหาหัวข้อข่าว, เนื้อหา...", en: "Search headline, content..." },
+  "news.allCategories": { th: "ทุกหมวดหมู่", en: "All Categories" },
+  "news.allStatuses": { th: "ทุกสถานะ", en: "All Statuses" },
+
+  // Categories
+  "news.cat.title": { th: "จัดการหมวดหมู่ข่าว", en: "News Categories" },
+  "news.cat.code": { th: "รหัสหมวดหมู่", en: "Code" },
+  "news.cat.nameTh": { th: "ชื่อหมวดหมู่ (ภาษาไทย)", en: "Category Name (TH)" },
+  "news.cat.nameEn": { th: "ชื่อหมวดหมู่ (ภาษาอังกฤษ)", en: "Category Name (EN)" },
+  "news.cat.slug": { th: "Slug", en: "Slug" },
+  "news.cat.create": { th: "เพิ่มหมวดหมู่", en: "Add Category" },
+  "news.cat.edit": { th: "แก้ไขหมวดหมู่", en: "Edit Category" },
+  "news.cat.delete": { th: "ลบหมวดหมู่", en: "Delete Category" },
+  "news.cat.deleteConfirm": { th: "คุณต้องการลบหมวดหมู่นี้หรือไม่?", en: "Are you sure you want to delete this category?" },
+  "news.cat.postCount": { th: "จำนวนข่าว", en: "Articles" },
+
+  // Public Portal
+  "portal.nav.news": { th: "ข่าวสารและกิจกรรม", en: "News & Events" },
+  "portal.news.title": { th: "ข่าวสารประชาสัมพันธ์และกิจกรรม", en: "News & Announcements" },
+  "portal.news.subtitle": { th: "อัปเดตข่าวสาร กิจกรรม งานวิชาการ และประกาศสำคัญล่าสุดจากคณะ", en: "Latest updates, events, academic news, and official announcements" },
+  "portal.news.filterAll": { th: "ข่าวทั้งหมด", en: "All News" },
+  "portal.news.readMore": { th: "อ่านต่อ", en: "Read More" },
+  "portal.news.backToList": { th: "กลับไปหน้ารวมข่าวสาร", en: "Back to All News" },
+  "portal.news.related": { th: "ข่าวสารอื่น ๆ ที่น่าสนใจ", en: "Related News" },
+  "portal.news.noNews": { th: "ยังไม่มีข่าวสารในหมวดหมู่นี้", en: "No news articles found" },
+  "portal.news.pinnedSection": { th: "ข่าวเด่นและประกาศสำคัญ", en: "Featured Highlights" },
+
+  // Role Permissions
+  "roles.module.news": { th: "ระบบข่าวสารประชาสัมพันธ์", en: "News & Announcements" },
+  "perm.news:read": { th: "ดูรายการข่าวสาร", en: "View news articles" },
+  "perm.news:write": { th: "สร้างและแก้ไขเนื้อหาข่าว", en: "Create & edit news" },
+  "perm.news:publish": { th: "เผยแพร่และจัดเก็บข่าว", en: "Publish & archive news" },
+  "perm.news:delete": { th: "ลบข่าวสาร", en: "Delete news" },
+  "perm.news:category:manage": { th: "จัดการหมวดหมู่ข่าว", en: "Manage news categories" },
+} as const;
