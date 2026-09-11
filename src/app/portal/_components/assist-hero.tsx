@@ -15,37 +15,34 @@ interface AssistHeroProps {
   locale: string;
 }
 
-// 8 poses from the new high-quality sprite sheet (2 rows × 4 cols)
+// Poses from the new 3D student mascot model
 const MASCOT_POSES = [
   { id: 1, titleTh: "ยินดีต้อนรับสู่ระบบ", titleEn: "Welcome to Academic Hub" },
   { id: 2, titleTh: "พร้อมเรียนรู้ 👍", titleEn: "Ready to Learn 👍" },
   { id: 3, titleTh: "สู้ๆ นะครับ ✌️", titleEn: "Keep it up ✌️" },
-  { id: 4, titleTh: "แนะนำบริการดิจิทัล 👆", titleEn: "Discover Services 👆" },
-  { id: 5, titleTh: "คิดหนักแต่มีคำตอบ 🤔", titleEn: "Smart Thinking 🤔" },
-  { id: 6, titleTh: "สำเร็จไปด้วยกัน 💪", titleEn: "Success Together 💪" },
-  { id: 7, titleTh: "ก้าวไปข้างหน้า 🚶", titleEn: "Moving Forward 🚶" },
-  { id: 8, titleTh: "สวัสดีครับ ยินดีให้บริการ 🙏", titleEn: "Sawasdee - Greeting 🙏" },
+  { id: 4, titleTh: "ค้นคว้าความรู้ 📖", titleEn: "Explore Knowledge 📖" },
+  { id: 5, titleTh: "แนะนำบริการดิจิทัล 👉", titleEn: "Discover Services 👉" },
 ];
 
 export function AssistHero({ orgName, locale }: AssistHeroProps) {
   const isTh = locale === "th";
   const [currentPoseIdx, setCurrentPoseIdx] = useState(0);
 
-  // Preload all 8 pose images on mount for instant zero-flicker transitions
+  // Preload pose images on mount for instant zero-flicker transitions
   useEffect(() => {
     if (typeof window !== "undefined") {
       MASCOT_POSES.forEach((p) => {
         const img = new Image();
-        img.src = `/images/mascot/pose-${p.id}.png?v=4`;
+        img.src = `/images/mascot/pose-${p.id}.png?v=5`;
       });
     }
   }, []);
 
-  // Continuous automatic animation cycle through all 8 poses sequentially
+  // Continuous automatic animation cycle through poses sequentially
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentPoseIdx((prev) => (prev + 1) % MASCOT_POSES.length);
-    }, 2200);
+    }, 2400);
     return () => clearInterval(timer);
   }, []);
 
@@ -221,7 +218,7 @@ export function AssistHero({ orgName, locale }: AssistHeroProps) {
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     key={pose.id}
-                    src={`/images/mascot/pose-${pose.id}.png?v=4`}
+                    src={`/images/mascot/pose-${pose.id}.png?v=5`}
                     alt={isTh ? pose.titleTh : pose.titleEn}
                     className={`absolute inset-0 m-auto max-h-[440px] w-auto object-contain transition-all duration-500 ease-out pointer-events-none ${
                       isCurrent
