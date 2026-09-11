@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { GraduationCap, LogIn, LayoutDashboard, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { useAppSession } from "@/hooks/use-session";
@@ -18,6 +19,7 @@ export default function PortalClientLayout({ children, logoUrl }: { children: Re
   const locale = useLocale();
   const { user, status } = useAppSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   const initials = (user?.name ?? "?").trim().charAt(0).toUpperCase() || "?";
 
@@ -56,6 +58,23 @@ export default function PortalClientLayout({ children, logoUrl }: { children: Re
 
           {/* Actions: Lang Switcher & Login / Admin Console */}
           <div className="right hidden sm:flex">
+            <button
+              type="button"
+              className="icon-btn"
+              aria-label={t("nav.themeToggle") || "Toggle theme"}
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            >
+              {theme === "dark" ? (
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="4" />
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+                </svg>
+              )}
+            </button>
             <LanguageSwitcher />
             {status === "authenticated" && user ? (
               <div className="acct">
@@ -114,6 +133,23 @@ export default function PortalClientLayout({ children, logoUrl }: { children: Re
 
           {/* Mobile Menu Button */}
           <div className="flex items-center gap-2 md:hidden ml-auto">
+            <button
+              type="button"
+              className="icon-btn"
+              aria-label={t("nav.themeToggle") || "Toggle theme"}
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            >
+              {theme === "dark" ? (
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="4" />
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+                </svg>
+              )}
+            </button>
             <LanguageSwitcher />
             <button type="button" className="icon-btn" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
