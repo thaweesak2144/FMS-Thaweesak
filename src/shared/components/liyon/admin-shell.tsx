@@ -114,14 +114,14 @@ export function AdminShell({
     <div className={cn("adm", collapsed && "narrow", drawerOpen && "drawer")}>
       <header className="adm-head">
         <Link className="brand-blk" href={brandHref}>
-          <i>
+          {brandLogo ? <img src={brandLogo} alt={brandName} style={{ height: "2.5rem", width: "2.5rem", objectFit: "contain" }} /> : <i>
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M22 10 12 5 2 10l10 5 10-5Z" />
               <path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5" />
             </svg>
-          </i>
+          </i>}
           <div className="t">
-            {brandLogo ? <img src={brandLogo} alt={brandName} style={{ height: "2rem", objectFit: "contain" }} /> : <b>{brandName}</b>}
+            <b>{brandName}</b>
             <span>{brandTagline}</span>
           </div>
         </Link>
