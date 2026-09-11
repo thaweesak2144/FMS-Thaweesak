@@ -15,7 +15,16 @@ async function main() {
     console.error("[seed] ปฏิเสธ: NODE_ENV=production — ใช้ npm run db:bootstrap แทน");
     process.exit(1);
   }
-  const core = await seedCore(prisma, { tenantCode: "DEMO", nameTh: "องค์กรตัวอย่าง", nameEn: "Sample Organization" });
+  const core = await seedCore(prisma, { tenantCode: "DEMO", nameTh: "วิทยาลัยสงฆ์ตาก", nameEn: "mcutak" });
+  await prisma.tenant.update({
+    where: { id: core.tenantId },
+    data: {
+      nameTh: "วิทยาลัยสงฆ์ตาก",
+      nameEn: "mcutak",
+      logoUrl: "/uploads/logo-1789115643437.png",
+      settings: { palette: "green" },
+    },
+  });
   const hash = await bcrypt.hash(DEV_PASSWORD, 12);
   const users = [
     { email: "admin@app.local", name: "ผู้ดูแลสูงสุด", roles: ["SUPER_ADMIN"] },
