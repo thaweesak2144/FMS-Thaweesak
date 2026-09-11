@@ -1,4 +1,5 @@
 import { prisma } from "@/shared/lib/infra/prisma";
+import type { Prisma } from "@/generated/prisma";
 import type {
   CreateDocumentTypeInput,
   UpdateDocumentTypeInput,
@@ -11,7 +12,7 @@ export interface DocumentTypeDto {
   code: string;
   nameTh: string;
   nameEn: string;
-  approvalSteps: any;
+  approvalSteps: unknown;
   createdAt: string;
 }
 
@@ -25,7 +26,7 @@ export interface DocumentDto {
   createdByName?: string;
   status: "DRAFT" | "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
   currentStep: number;
-  metadata: any;
+  metadata: Prisma.JsonValue;
   submittedAt: string | null;
   createdAt: string;
   updatedAt: string;
@@ -139,6 +140,8 @@ export async function getDocumentById(tenantId: string, id: string) {
   };
 }
 
+export type DocumentDetailDto = NonNullable<Awaited<ReturnType<typeof getDocumentById>>>;
+
 export async function createDocument(tenantId: string, userId: string, input: CreateDocumentInput): Promise<DocumentDto> {
   // Generate docNumber DOC-YYYY-MMDD-XXXX
   const dateStr = new Date().toISOString().slice(0,10).replace(/-/g, "");
@@ -154,7 +157,7 @@ export async function createDocument(tenantId: string, userId: string, input: Cr
       createdById: userId,
       status: "DRAFT",
       currentStep: 1,
-      metadata: input.metadata as any,
+      metadata: (input.metadata ?? {}) as Prisma.InputJsonValue,
     },
   });
 
@@ -193,7 +196,7 @@ export async function processDocumentApproval(tenantId: string, userId: string, 
   if (!doc) throw new Error("Document not found");
   if (doc.status !== "PENDING") throw new Error("Document is not pending");
 
-  const steps = doc.documentType.approvalSteps as any[];
+  const steps = (doc.documentType.approvalSteps as Array<{ step: number }>) ?? [];
   const currentStepDef = steps.find(s => s.step === doc.currentStep);
   if (!currentStepDef) throw new Error("Invalid current step");
 

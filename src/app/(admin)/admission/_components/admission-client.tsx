@@ -13,6 +13,7 @@ import {
   deleteRoundAction,
 } from "@/features/admission/actions";
 import type { AdmissionRoundDto } from "@/features/admission/server";
+import { AdmissionRoundStatus } from "@/generated/prisma";
 
 export function AdmissionClient({ 
   initialRounds, 
@@ -20,11 +21,11 @@ export function AdmissionClient({
   canManage 
 }: { 
   initialRounds: AdmissionRoundDto[];
-  curriculums: any[];
+  curriculums: { id: string; nameTh: string }[];
   canManage: boolean;
 }) {
   const t = useT();
-  const [items, setItems] = useState<AdmissionRoundDto[]>(initialRounds);
+  const items = initialRounds;
   const [isPending, startTransition] = useTransition();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -36,7 +37,7 @@ export function AdmissionClient({
   const [academicYear, setAcademicYear] = useState(new Date().getFullYear() + 543); // default Thai year
   const [curriculumId, setCurriculumId] = useState("");
   const [quota, setQuota] = useState(0);
-  const [status, setStatus] = useState("UPCOMING");
+  const [status, setStatus] = useState<AdmissionRoundStatus>(AdmissionRoundStatus.UPCOMING);
 
   const openCreate = () => {
     setEditingItem(null);
@@ -71,7 +72,7 @@ export function AdmissionClient({
       academicYear,
       curriculumId,
       quota,
-      status: status as any,
+      status,
     };
 
     startTransition(async () => {
@@ -110,12 +111,12 @@ export function AdmissionClient({
     });
   };
 
-  const getStatusTone = (s: string) => {
+  const getStatusTone = (s: string): "ok" | "warn" | "info" | "neutral" => {
     switch (s) {
       case "OPEN": return "ok";
       case "CLOSED": return "warn";
       case "ANNOUNCED": return "info";
-      default: return "off";
+      default: return "neutral";
     }
   };
 
@@ -138,7 +139,7 @@ export function AdmissionClient({
         <DataTable
           state={items.length === 0 ? "empty" : "data"}
           rows={items}
-          getRowId={(d: any) => d.id}
+          getRowId={(d: AdmissionRoundDto) => d.id}
           headHeading={t("admission.title")}
           empty={{ icon: <Users className="h-8 w-8" />, title: t("common.noData") }}
           error={{ icon: <Users className="h-8 w-8" />, title: t("common.error") }}
@@ -146,7 +147,7 @@ export function AdmissionClient({
             {
               key: "name",
               header: t("admission.round.nameTh"),
-              render: (d: any) => (
+              render: (d: AdmissionRoundDto) => (
                 <div className="font-medium text-sm">
                   <Link href={`/admission/${d.id}`} className="text-primary hover:underline">
                     {d.nameTh}
@@ -157,31 +158,31 @@ export function AdmissionClient({
             {
               key: "year",
               header: t("admission.round.academicYear"),
-              render: (d: any) => <div className="text-sm">{d.academicYear}</div>
+              render: (d: AdmissionRoundDto) => <div className="text-sm">{d.academicYear}</div>
             },
             {
               key: "curriculum",
               header: t("admission.round.curriculum"),
-              render: (d: any) => <div className="text-sm text-muted-foreground">{d.curriculum?.nameTh}</div>
+              render: (d: AdmissionRoundDto) => <div className="text-sm text-muted-foreground">{d.curriculum?.nameTh}</div>
             },
             {
               key: "quota",
               header: t("admission.round.quota"),
-              render: (d: any) => <div className="text-sm">{d.quota}</div>
+              render: (d: AdmissionRoundDto) => <div className="text-sm">{d.quota}</div>
             },
             {
               key: "status",
               header: t("admission.round.status"),
-              render: (d: any) => (
-                <StatusPill tone={getStatusTone(d.status) as any}>
-                  {t(`admission.status.${d.status}` as any) || d.status}
+              render: (d: AdmissionRoundDto) => (
+                <StatusPill tone={getStatusTone(d.status)}>
+                  {d.status}
                 </StatusPill>
               )
             },
             {
               key: "actions",
               header: "",
-              render: (d: any) => (
+              render: (d: AdmissionRoundDto) => (
                 canManage ? (
                   <div className="flex items-center justify-end gap-2">
                     <Button variant="ghost" size="sm" onClick={() => openEdit(d)}>
@@ -204,7 +205,7 @@ export function AdmissionClient({
           <LiyonField label={t("admission.round.nameTh")}>
             <input 
               value={nameTh} 
-              onChange={(e: any) => setNameTh(e.target.value)} 
+              onChange={(e) => setNameTh(e.target.value)} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </LiyonField>
@@ -212,7 +213,7 @@ export function AdmissionClient({
             <input 
               type="number"
               value={academicYear} 
-              onChange={(e: any) => setAcademicYear(Number(e.target.value))} 
+              onChange={(e) => setAcademicYear(Number(e.target.value))} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </LiyonField>
@@ -220,7 +221,7 @@ export function AdmissionClient({
             <select
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               value={curriculumId}
-              onChange={(e: any) => setCurriculumId(e.target.value)}
+              onChange={(e) => setCurriculumId(e.target.value)}
             >
               <option value="">{t("common.select")}</option>
               {curriculums.map(c => (
@@ -232,7 +233,7 @@ export function AdmissionClient({
             <input 
               type="number"
               value={quota} 
-              onChange={(e: any) => setQuota(Number(e.target.value))} 
+              onChange={(e) => setQuota(Number(e.target.value))} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </LiyonField>
@@ -240,7 +241,7 @@ export function AdmissionClient({
             <select
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               value={status}
-              onChange={(e: any) => setStatus(e.target.value)}
+              onChange={(e) => setStatus(e.target.value as AdmissionRoundStatus)}
             >
               <option value="UPCOMING">UPCOMING</option>
               <option value="OPEN">OPEN</option>

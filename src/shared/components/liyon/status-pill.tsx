@@ -1,6 +1,6 @@
 import { cn } from "@/shared/lib/utils";
 
-export type StatusPillTone = "ok" | "warn" | "bad" | "info" | "off";
+export type StatusPillTone = "ok" | "warn" | "bad" | "info" | "off" | "neutral";
 
 export interface StatusPillProps {
   tone: StatusPillTone;
@@ -13,5 +13,6 @@ export interface StatusPillProps {
  * ตารางฝั่ง admin (ผู้ใช้ คอร์ส ลงทะเบียน ชำระเงิน ใบรับรอง ฯลฯ)
  */
 export function StatusPill({ tone, children, className }: StatusPillProps) {
-  return <span className={cn("st", tone, className)}>{children}</span>;
+  const resolvedTone = tone === "neutral" ? "off" : tone;
+  return <span className={cn("st", resolvedTone, className)}>{children}</span>;
 }

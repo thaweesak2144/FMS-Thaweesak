@@ -14,6 +14,7 @@ import {
   deletePublicationAction
 } from "@/features/research/actions";
 import type { ResearchProjectDto, PublicationDto } from "@/features/research/server";
+import { ResearchType, ResearchStatus, PublicationType } from "@/generated/prisma";
 
 export function ResearchClient({ 
   initialProjects, 
@@ -37,20 +38,20 @@ export function ResearchClient({
 
   // Project Form
   const [titleTh, setTitleTh] = useState("");
-  const [researchType, setResearchType] = useState("BASIC");
-  const [status, setStatus] = useState("PROPOSED");
+  const [researchType, setResearchType] = useState<ResearchType>(ResearchType.BASIC);
+  const [status, setStatus] = useState<ResearchStatus>(ResearchStatus.PROPOSED);
   const [budget, setBudget] = useState(0);
 
   // Pub Form
   const [pubTitle, setPubTitle] = useState("");
-  const [pubType, setPubType] = useState("JOURNAL");
+  const [pubType, setPubType] = useState<PublicationType>(PublicationType.JOURNAL);
   const [pubYear, setPubYear] = useState(new Date().getFullYear());
 
   const openCreateProject = () => {
     setEditingProject(null);
     setTitleTh("");
-    setResearchType("BASIC");
-    setStatus("PROPOSED");
+    setResearchType(ResearchType.BASIC);
+    setStatus(ResearchStatus.PROPOSED);
     setBudget(0);
     setProjectModalOpen(true);
   };
@@ -71,9 +72,9 @@ export function ResearchClient({
     }
     const payload = {
       titleTh,
-      researchType: researchType as any,
+      researchType,
       budget,
-      status: status as any,
+      status,
       keywords: [],
     };
 
@@ -115,7 +116,7 @@ export function ResearchClient({
 
   const openCreatePub = () => {
     setPubTitle("");
-    setPubType("JOURNAL");
+    setPubType(PublicationType.JOURNAL);
     setPubYear(new Date().getFullYear());
     setPubModalOpen(true);
   };
@@ -127,7 +128,7 @@ export function ResearchClient({
       const res = await createPublicationAction({
         title: pubTitle,
         authors: ["Me"],
-        publicationType: pubType as any,
+        publicationType: pubType,
         publishedYear: pubYear,
       });
       if (res.ok) {
@@ -153,12 +154,12 @@ export function ResearchClient({
     });
   };
 
-  const getStatusTone = (s: string) => {
+  const getStatusTone = (s: string): "ok" | "bad" | "warn" | "neutral" => {
     switch (s) {
       case "APPROVED": case "COMPLETED": return "ok";
       case "CANCELLED": return "bad";
       case "PROPOSED": return "warn";
-      default: return "info";
+      default: return "neutral";
     }
   };
 
@@ -218,31 +219,31 @@ export function ResearchClient({
               {
                 key: "type",
                 header: t("research.project.researchType"),
-                render: (d: any) => <div className="text-sm">{d.researchType}</div>
+                render: (d: ResearchProjectDto) => <div className="text-sm">{d.researchType}</div>
               },
               {
                 key: "principal",
                 header: t("research.project.principal"),
-                render: (d: any) => <div className="text-sm">{d.principal ? `${d.principal.firstNameTh} ${d.principal.lastNameTh}` : "-"}</div>
+                render: (d: ResearchProjectDto) => <div className="text-sm">{d.principal ? `${d.principal.firstNameTh} ${d.principal.lastNameTh}` : "-"}</div>
               },
               {
                 key: "budget",
                 header: t("research.project.budget"),
-                render: (d: any) => <div className="text-sm">{d.budget ? Number(d.budget).toLocaleString() : "-"}</div>
+                render: (d: ResearchProjectDto) => <div className="text-sm">{d.budget ? Number(d.budget).toLocaleString() : "-"}</div>
               },
               {
                 key: "status",
                 header: t("research.project.status"),
-                render: (d: any) => (
-                  <StatusPill tone={getStatusTone(d.status) as any}>
-                    {t(`research.status.${d.status}` as any) || d.status}
+                render: (d: ResearchProjectDto) => (
+                  <StatusPill tone={getStatusTone(d.status)}>
+                    {d.status}
                   </StatusPill>
                 )
               },
               {
                 key: "actions",
                 header: "",
-                render: (d: any) => (
+                render: (d: ResearchProjectDto) => (
                   <div className="flex items-center justify-end gap-2">
                     {(canWrite || canManage) && (
                       <Button variant="ghost" size="sm" onClick={() => openEditProject(d)}>
@@ -280,17 +281,17 @@ export function ResearchClient({
               {
                 key: "type",
                 header: t("research.publication.type"),
-                render: (d: any) => <div className="text-sm">{d.publicationType}</div>
+                render: (d: PublicationDto) => <div className="text-sm">{d.publicationType}</div>
               },
               {
                 key: "year",
                 header: t("research.publication.year"),
-                render: (d: any) => <div className="text-sm">{d.publishedYear}</div>
+                render: (d: PublicationDto) => <div className="text-sm">{d.publishedYear ?? "-"}</div>
               },
               {
                 key: "actions",
                 header: "",
-                render: (d: any) => (
+                render: (d: PublicationDto) => (
                   <div className="flex items-center justify-end gap-2">
                     {canManage && (
                       <Button variant="ghost" size="sm" onClick={() => handleDeletePub(d.id)}>
@@ -320,7 +321,7 @@ export function ResearchClient({
             <select
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               value={researchType}
-              onChange={(e) => setResearchType(e.target.value)}
+              onChange={(e) => setResearchType(e.target.value as ResearchType)}
             >
               <option value="BASIC">BASIC</option>
               <option value="APPLIED">APPLIED</option>
@@ -340,7 +341,7 @@ export function ResearchClient({
               <select
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 value={status}
-                onChange={(e) => setStatus(e.target.value)}
+                onChange={(e) => setStatus(e.target.value as ResearchStatus)}
               >
                 <option value="PROPOSED">PROPOSED</option>
                 <option value="APPROVED">APPROVED</option>
@@ -376,7 +377,7 @@ export function ResearchClient({
             <select
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               value={pubType}
-              onChange={(e) => setPubType(e.target.value)}
+              onChange={(e) => setPubType(e.target.value as PublicationType)}
             >
               <option value="JOURNAL">JOURNAL</option>
               <option value="CONFERENCE">CONFERENCE</option>

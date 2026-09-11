@@ -18,10 +18,10 @@ export default async function AssetPage() {
 
   return (
     <AssetClient 
-      initialAssets={assets as any} 
-      locations={locations as any}
-      categories={categories as any}
-      custodians={custodians as any}
+      initialAssets={assets} 
+      locations={locations}
+      categories={categories}
+      custodians={custodians}
       canWrite={canWrite}
       canTransfer={canTransfer}
       canManage={canManage}

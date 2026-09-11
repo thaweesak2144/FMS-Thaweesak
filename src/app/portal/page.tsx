@@ -1,6 +1,5 @@
 import Link from "next/link";
 import {
-  GraduationCap,
   Users,
   BookOpen,
   Newspaper,
@@ -8,9 +7,6 @@ import {
   FileText,
   ArrowRight,
   Sparkles,
-  ShieldCheck,
-  Zap,
-  Star,
 } from "lucide-react";
 import { getT, getLocale } from "@/i18n/server";
 import { resolveTenantSettings } from "@/features/identity/server";

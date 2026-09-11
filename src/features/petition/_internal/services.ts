@@ -1,4 +1,5 @@
-﻿import { prisma as db } from "@/shared/lib/infra/prisma";
+import { prisma as db } from "@/shared/lib/infra/prisma";
+import type { Prisma } from "@/generated/prisma";
 import type { SessionContext } from "@/features/identity/server";
 import { createPetitionTypeSchema, submitPetitionSchema, processPetitionSchema } from "./validations";
 import { z } from "zod";
@@ -60,7 +61,7 @@ export async function submitPetition(ctx: SessionContext, data: z.infer<typeof s
       studentId: ctx.userId,
       studentName: parsed.studentName,
       studentIdCard: parsed.studentIdCard,
-      formData: parsed.formData as any,
+      formData: parsed.formData as Prisma.InputJsonValue,
       status: "SUBMITTED",
       dueDate,
       submittedAt: new Date(),
@@ -74,6 +75,7 @@ export async function processPetition(ctx: SessionContext, data: z.infer<typeof 
   const petition = await db.petition.findUnique({
     where: { id: parsed.petitionId, tenantId: ctx.tenantId },
   });
+
   if (!petition) throw new Error("Petition not found");
 
   let newStatus = petition.status;
@@ -87,7 +89,7 @@ export async function processPetition(ctx: SessionContext, data: z.infer<typeof 
     newStatus = "IN_REVIEW";
   }
 
-  const [updated, actionRecord] = await db.$transaction([
+  const [updated] = await db.$transaction([
     db.petition.update({
       where: { id: petition.id },
       data: { status: newStatus },

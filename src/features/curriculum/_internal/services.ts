@@ -1,4 +1,5 @@
-﻿import { prisma } from "@/shared/lib/infra/prisma";
+import { prisma } from "@/shared/lib/infra/prisma";
+import type { Prisma } from "@/generated/prisma";
 import type {
   CreateCurriculumInput,
   UpdateCurriculumInput,
@@ -65,7 +66,7 @@ export interface CurriculumFilter {
 }
 
 export async function listCurriculums(tenantId: string, filter?: CurriculumFilter): Promise<CurriculumDto[]> {
-  const where: any = { tenantId };
+  const where: Prisma.CurriculumWhereInput = { tenantId };
 
   if (filter?.degreeLevel) {
     where.degreeLevel = filter.degreeLevel;

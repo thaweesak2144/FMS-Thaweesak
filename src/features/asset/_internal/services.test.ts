@@ -1,4 +1,4 @@
-﻿import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { transferAsset } from "./services";
 import { prisma } from "@/shared/lib/infra/prisma";
 
@@ -28,6 +28,9 @@ describe("transferAsset", () => {
     email: "test@test.com",
     locale: "th" as const,
     roles: [],
+    permissions: [],
+    isSuperAdmin: false,
+    mustChangePassword: false,
   };
 
   it("should successfully transfer asset and create history record", async () => {
@@ -38,8 +41,8 @@ describe("transferAsset", () => {
       tenantId: "tenant-1"
     };
 
-    (prisma.asset.findUnique as any).mockResolvedValue(mockAsset);
-    (prisma.$transaction as any).mockResolvedValue([{ id: "123e4567-e89b-42d3-a456-426614174001", locationId: "123e4567-e89b-42d3-a456-426614174002" }]);
+    vi.mocked(prisma.asset.findUnique).mockResolvedValue(mockAsset as never);
+    vi.mocked(prisma.$transaction).mockResolvedValue([{ id: "123e4567-e89b-42d3-a456-426614174001", locationId: "123e4567-e89b-42d3-a456-426614174002" }] as never);
 
     const result = await transferAsset(mockCtx, {
       assetId: "123e4567-e89b-42d3-a456-426614174001",
@@ -56,7 +59,7 @@ describe("transferAsset", () => {
   });
 
   it("should throw error if asset not found", async () => {
-    (prisma.asset.findUnique as any).mockResolvedValue(null);
+    vi.mocked(prisma.asset.findUnique).mockResolvedValue(null);
 
     await expect(transferAsset(mockCtx, {
       assetId: "123e4567-e89b-42d3-a456-426614174404",

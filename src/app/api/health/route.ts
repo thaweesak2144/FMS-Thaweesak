@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/shared/lib/infra/prisma";
+import { logger } from "@/shared/lib/infra/logger";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +18,7 @@ export async function GET() {
       { status: 200 }
     );
   } catch (error) {
-    console.error("[Healthcheck Error]", error);
+    logger.error("[Healthcheck Error]", { error });
     return NextResponse.json(
       {
         status: "degraded",

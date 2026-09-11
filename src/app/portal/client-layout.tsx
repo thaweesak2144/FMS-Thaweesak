@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { GraduationCap, LogIn, LayoutDashboard, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { useAppSession } from "@/hooks/use-session";
 import { useT, useLocale } from "@/shared/lib/i18n/client";

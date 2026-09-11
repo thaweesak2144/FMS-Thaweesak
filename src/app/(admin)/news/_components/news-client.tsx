@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useTransition } from "react";
 import {
@@ -28,7 +28,9 @@ import {
   type DataTableColumn,
 } from "@/shared/components/liyon";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import type { NewsPostDto, NewsCategoryDto } from "@/features/news";
+import { NewsPostStatus } from "@/generated/prisma";
 import {
   createNewsPostAction,
   updateNewsPostAction,
@@ -61,7 +63,7 @@ export function NewsClient({
 
   // Filter states
   const [filterCategory, setFilterCategory] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
+  const [filterStatus, setFilterStatus] = useState<NewsPostStatus | "">("");
 
   // Dialog state
   const [modalOpen, setModalOpen] = useState(false);
@@ -73,7 +75,7 @@ export function NewsClient({
   const [formTitleEn, setFormTitleEn] = useState("");
   const [formSlug, setFormSlug] = useState("");
   const [formCategoryId, setFormCategoryId] = useState(categories[0]?.id ?? "");
-  const [formStatus, setFormStatus] = useState<"DRAFT" | "PUBLISHED" | "ARCHIVED">("DRAFT");
+  const [formStatus, setFormStatus] = useState<NewsPostStatus>(NewsPostStatus.DRAFT);
   const [formIsPinned, setFormIsPinned] = useState(false);
   const [formCoverImageUrl, setFormCoverImageUrl] = useState("");
   const [formExcerptTh, setFormExcerptTh] = useState("");
@@ -232,7 +234,7 @@ export function NewsClient({
   const refreshList = async () => {
     const res = await getNewsPostsAction({
       categoryId: filterCategory || undefined,
-      status: (filterStatus as any) || undefined,
+      status: filterStatus || undefined,
     });
     if (res.ok) {
       setItems(res.data);
@@ -254,9 +256,12 @@ export function NewsClient({
         return (
           <div className="flex items-center gap-3">
             {row.coverImageUrl ? (
-              <img
+              <Image
                 src={row.coverImageUrl}
                 alt={title}
+                width={56}
+                height={40}
+                unoptimized
                 className="h-10 w-14 rounded object-cover border flex-shrink-0"
               />
             ) : (
@@ -363,7 +368,7 @@ export function NewsClient({
 
         <select
           value={filterStatus}
-          onChange={(e) => setFilterStatus(e.target.value)}
+          onChange={(e) => setFilterStatus(e.target.value as NewsPostStatus | "")}
           className="h-9 px-3 rounded-md border text-xs bg-background"
         >
           <option value="">{t("news.allStatuses")}</option>
@@ -498,7 +503,7 @@ export function NewsClient({
               </label>
               <select
                 value={formStatus}
-                onChange={(e) => setFormStatus(e.target.value as any)}
+                onChange={(e) => setFormStatus(e.target.value as NewsPostStatus)}
                 className="w-full h-9 px-3 rounded-md border text-sm bg-background"
               >
                 <option value="DRAFT">{t("news.post.status.DRAFT")}</option>

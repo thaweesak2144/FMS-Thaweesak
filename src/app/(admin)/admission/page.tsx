@@ -12,8 +12,8 @@ export default async function AdmissionPage() {
 
   return (
     <AdmissionClient 
-      initialRounds={rounds as any} 
-      curriculums={curriculums as any}
+      initialRounds={rounds} 
+      curriculums={curriculums}
       canManage={canManage}
     />
   );

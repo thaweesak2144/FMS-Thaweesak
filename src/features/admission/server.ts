@@ -6,7 +6,7 @@ export * from "./_internal/validations";
 
 export type AdmissionRoundDto = AdmissionRound & {
   curriculum: { nameTh: string; nameEn: string };
-  _count: { applications: number };
+  _count?: { applications: number };
 };
 
 export type AdmissionApplicationDto = AdmissionApplication;

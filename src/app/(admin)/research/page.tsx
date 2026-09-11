@@ -13,8 +13,8 @@ export default async function ResearchPage() {
 
   return (
     <ResearchClient 
-      initialProjects={projects as any} 
-      initialPublications={publications as any}
+      initialProjects={projects} 
+      initialPublications={publications}
       canWrite={canWrite}
       canManage={canManage}
     />

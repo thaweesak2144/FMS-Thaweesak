@@ -8,7 +8,7 @@ export default async function RoundApplicationsPage({ params }: { params: { id: 
   let data;
   try {
     data = await getRoundDetails(ctx, params.id);
-  } catch (e) {
+  } catch {
     notFound();
   }
 
@@ -17,8 +17,8 @@ export default async function RoundApplicationsPage({ params }: { params: { id: 
 
   return (
     <ApplicationsClient 
-      round={data.round as any}
-      initialApplications={data.applications as any}
+      round={data.round}
+      initialApplications={data.applications}
       canReview={canReview}
       canWrite={canWrite}
     />

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useTransition } from "react";
 import { Plus, ArrowRightLeft, Package, MapPin } from "lucide-react";
@@ -25,7 +25,7 @@ export function AssetClient({
   initialAssets: AssetDto[];
   locations: AssetLocationDto[];
   categories: AssetCategoryDto[];
-  custodians: any[];
+  custodians: Array<{ id: string; firstNameTh: string; lastNameTh: string }>;
   canWrite: boolean;
   canTransfer: boolean;
   canManage: boolean;
@@ -124,12 +124,12 @@ export function AssetClient({
     });
   };
 
-  const getStatusTone = (s: string) => {
+  const getStatusTone = (s: string): "ok" | "bad" | "warn" | "neutral" => {
     switch (s) {
       case "ACTIVE": return "ok";
       case "DISPOSED": case "LOST": return "bad";
       case "UNDER_REPAIR": return "warn";
-      default: return "info";
+      default: return "neutral";
     }
   };
 
@@ -191,31 +191,31 @@ export function AssetClient({
               {
                 key: "name",
                 header: t("asset.col.name"),
-                render: (d: any) => <div className="text-sm">{d.name}</div>
+                render: (d: AssetDto) => <div className="text-sm">{d.name}</div>
               },
               {
                 key: "location",
                 header: t("asset.col.location"),
-                render: (d: any) => <div className="text-sm">{d.location?.name} ({d.location?.room})</div>
+                render: (d: AssetDto) => <div className="text-sm">{d.location?.name} ({d.location?.room})</div>
               },
               {
                 key: "custodian",
                 header: "Custodian",
-                render: (d: any) => <div className="text-sm">{d.custodian ? `${d.custodian.firstNameTh} ${d.custodian.lastNameTh}` : "-"}</div>
+                render: (d: AssetDto) => <div className="text-sm">{d.custodian ? `${d.custodian.firstNameTh} ${d.custodian.lastNameTh}` : "-"}</div>
               },
               {
                 key: "status",
                 header: t("asset.col.status"),
-                render: (d: any) => (
-                  <StatusPill tone={getStatusTone(d.status) as any}>
-                    {t(`asset.status.${d.status}` as any) || d.status}
+                render: (d: AssetDto) => (
+                  <StatusPill tone={getStatusTone(d.status)}>
+                    {t(`asset.status.${d.status}`) || d.status}
                   </StatusPill>
                 )
               },
               {
                 key: "actions",
                 header: "",
-                render: (d: any) => (
+                render: (d: AssetDto) => (
                   <div className="flex items-center justify-end gap-2">
                     {canTransfer && d.status === "ACTIVE" && (
                       <Button variant="ghost" size="sm" onClick={() => openTransfer(d)}>
@@ -248,12 +248,12 @@ export function AssetClient({
               {
                 key: "building",
                 header: "Building",
-                render: (d: any) => <div className="text-sm">{d.building}</div>
+                render: (d: AssetLocationDto) => <div className="text-sm">{d.building}</div>
               },
               {
                 key: "room",
                 header: "Room/Floor",
-                render: (d: any) => <div className="text-sm">{d.room} (Fl. {d.floor})</div>
+                render: (d: AssetLocationDto) => <div className="text-sm">{d.room} (Fl. {d.floor})</div>
               }
             ]}
           />
@@ -305,7 +305,7 @@ export function AssetClient({
               onChange={(e) => setCustodianId(e.target.value)}
             >
               <option value="">-- Select Custodian --</option>
-              {custodians.map((c: any) => <option key={c.id} value={c.id}>{c.firstNameTh} {c.lastNameTh}</option>)}
+              {custodians.map((c) => <option key={c.id} value={c.id}>{c.firstNameTh} {c.lastNameTh}</option>)}
             </select>
           </LiyonField>
         </div>
@@ -337,7 +337,7 @@ export function AssetClient({
               value={toCustodianId}
               onChange={(e) => setToCustodianId(e.target.value)}
             >
-              {custodians.map((c: any) => <option key={c.id} value={c.id}>{c.firstNameTh} {c.lastNameTh}</option>)}
+              {custodians.map((c) => <option key={c.id} value={c.id}>{c.firstNameTh} {c.lastNameTh}</option>)}
             </select>
           </LiyonField>
           <LiyonField label="Reason">

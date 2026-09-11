@@ -4,6 +4,13 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { GraduationCap, ArrowRight } from "lucide-react";
 
+const SUGGESTIONS = [
+  "ค้นหาหลักสูตรปริญญาตรี - โท...",
+  "ค้นหาทำเนียบคณาจารย์...",
+  "ค้นหาบริการคำร้องออนไลน์...",
+  "ค้นหาข่าวสารและประกาศ...",
+];
+
 export function HeroSearchBar({
   orgName,
   placeholder,
@@ -17,17 +24,10 @@ export function HeroSearchBar({
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
-  const suggestions = [
-    "ค้นหาหลักสูตรปริญญาตรี - โท...",
-    "ค้นหาทำเนียบคณาจารย์...",
-    "ค้นหาบริการคำร้องออนไลน์...",
-    "ค้นหาข่าวสารและประกาศ...",
-  ];
-
   useEffect(() => {
     if (query) return;
 
-    const currentWord = suggestions[placeholderIndex];
+    const currentWord = SUGGESTIONS[placeholderIndex];
     const typingSpeed = isDeleting ? 40 : 80;
 
     const timeout = setTimeout(() => {
@@ -40,7 +40,7 @@ export function HeroSearchBar({
         setDisplayText(currentWord.slice(0, displayText.length - 1));
         if (displayText.length === 0) {
           setIsDeleting(false);
-          setPlaceholderIndex((prev) => (prev + 1) % suggestions.length);
+          setPlaceholderIndex((prev) => (prev + 1) % SUGGESTIONS.length);
         }
       }
     }, typingSpeed);

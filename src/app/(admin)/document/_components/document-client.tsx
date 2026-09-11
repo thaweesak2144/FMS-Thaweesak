@@ -20,7 +20,7 @@ interface Props {
 
 export function DocumentClient({ initialDocuments, types, canWrite }: Props) {
   const t = useT();
-  const [items, setItems] = useState<DocumentDto[]>(initialDocuments);
+  const items = initialDocuments;
   const [isPending, startTransition] = useTransition();
 
   const [search, setSearch] = useState("");
@@ -57,14 +57,12 @@ export function DocumentClient({ initialDocuments, types, canWrite }: Props) {
     });
   };
 
-  const getStatusTone = (status: string) => {
+  const getStatusTone = (status: string): "ok" | "bad" | "warn" | "neutral" => {
     switch (status) {
-      case "DRAFT": return "off";
       case "PENDING": return "warn";
       case "APPROVED": return "ok";
-      case "REJECTED": return "bad";
-      case "CANCELLED": return "bad";
-      default: return "info";
+      case "REJECTED": case "CANCELLED": return "bad";
+      default: return "neutral";
     }
   };
 
@@ -101,7 +99,7 @@ export function DocumentClient({ initialDocuments, types, canWrite }: Props) {
         <DataTable
           state={filtered.length === 0 ? "empty" : "data"}
           rows={filtered}
-          getRowId={(d: any) => d.id}
+          getRowId={(d: DocumentDto) => d.id}
           headHeading={t("document.title")}
           empty={{ icon: <FileText className="h-8 w-8" />, title: t("common.noData") }}
           error={{ icon: <FileText className="h-8 w-8" />, title: t("common.error") }}
@@ -109,7 +107,7 @@ export function DocumentClient({ initialDocuments, types, canWrite }: Props) {
             {
               key: "docNumber",
               header: t("document.docNumber"),
-              render: (d: any) => (
+              render: (d: DocumentDto) => (
                 <div className="font-mono text-sm font-medium">
                   <Link href={`/document/${d.id}`} className="text-primary hover:underline">
                     {d.docNumber}
@@ -120,24 +118,24 @@ export function DocumentClient({ initialDocuments, types, canWrite }: Props) {
             {
               key: "type",
               header: t("document.type.title"),
-              render: (d: any) => <div className="text-sm">{d.documentTypeNameTh}</div>
+              render: (d: DocumentDto) => <div className="text-sm">{d.documentTypeNameTh}</div>
             },
             {
               key: "title",
               header: "Title",
-              render: (d: any) => <div className="text-sm">{d.title}</div>
+              render: (d: DocumentDto) => <div className="text-sm">{d.title}</div>
             },
             {
               key: "author",
               header: "Created By",
-              render: (d: any) => <div className="text-sm text-muted-foreground">{d.createdByName}</div>
+              render: (d: DocumentDto) => <div className="text-sm text-muted-foreground">{d.createdByName}</div>
             },
             {
               key: "status",
               header: t("common.status"),
-              render: (d: any) => (
-                <StatusPill tone={getStatusTone(d.status) as any}>
-                  {t(`document.status.${d.status}` as any) || d.status}
+              render: (d: DocumentDto) => (
+                <StatusPill tone={getStatusTone(d.status)}>
+                  {t(`document.status.${d.status}`) || d.status}
                 </StatusPill>
               )
             }

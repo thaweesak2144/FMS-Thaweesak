@@ -1,4 +1,4 @@
-﻿import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { submitPetition } from "./services";
 import { prisma } from "@/shared/lib/infra/prisma";
 
@@ -27,12 +27,15 @@ describe("submitPetition", () => {
     email: "test@test.com",
     locale: "th" as const,
     roles: [],
+    permissions: [],
+    isSuperAdmin: false,
+    mustChangePassword: false,
   };
 
   it("should generate correct petition number and save successfully", async () => {
-    (prisma.petitionType.findUnique as any).mockResolvedValue({ id: "123e4567-e89b-42d3-a456-426614174004", slaDays: 3 });
-    (prisma.petition.count as any).mockResolvedValue(5);
-    (prisma.petition.create as any).mockResolvedValue({ id: "pet-1", petitionNumber: "PET-202609-0006" });
+    vi.mocked(prisma.petitionType.findUnique).mockResolvedValue({ id: "123e4567-e89b-42d3-a456-426614174004", slaDays: 3 } as never);
+    vi.mocked(prisma.petition.count).mockResolvedValue(5);
+    vi.mocked(prisma.petition.create).mockResolvedValue({ id: "pet-1", petitionNumber: "PET-202609-0006" } as never);
 
     // Mock Date for consistent testing
     vi.useFakeTimers();
@@ -40,7 +43,7 @@ describe("submitPetition", () => {
 
     const result = await submitPetition(mockCtx, {
       petitionTypeId: "123e4567-e89b-42d3-a456-426614174004",
-      studentId: "123e4567-e89b-42d3-a456-426614174005",
+      studentIdCard: "123e4567-e89b-42d3-a456-426614174005",
       studentName: "John Doe",
       formData: { reason: "Sick leave" },
     });
@@ -49,8 +52,8 @@ describe("submitPetition", () => {
     expect(prisma.petition.count).toHaveBeenCalled();
     expect(prisma.petition.create).toHaveBeenCalled();
     
-    const createCall = (prisma.petition.create as any).mock.calls[0][0];
-    expect(createCall.data.petitionNumber).toBe("PET-202609-0006");
+    const createCalls = vi.mocked(prisma.petition.create).mock.calls;
+    expect((createCalls[0][0] as { data: { petitionNumber: string } }).data.petitionNumber).toBe("PET-202609-0006");
     expect(result.id).toBe("pet-1");
 
     vi.useRealTimers();

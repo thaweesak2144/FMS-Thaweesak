@@ -12,15 +12,22 @@ import {
   cancelDocumentAction,
   approveDocumentAction,
 } from "@/features/document/actions";
+import type { DocumentDetailDto } from "@/features/document/server";
+
+interface ApprovalStepDef {
+  step: number;
+  description: string;
+  roleCode: string;
+}
 
 interface Props {
-  doc: any; // Using any for brevity here, should be full Dto type
+  doc: DocumentDetailDto;
   currentUserId: string;
-  canWrite: boolean;
+  canWrite?: boolean;
   canApprove: boolean;
 }
 
-export function DocumentDetailClient({ doc, currentUserId, canWrite, canApprove }: Props) {
+export function DocumentDetailClient({ doc, currentUserId, canApprove }: Props) {
   const t = useT();
   const [isPending, startTransition] = useTransition();
 
@@ -31,8 +38,7 @@ export function DocumentDetailClient({ doc, currentUserId, canWrite, canApprove 
   const isAuthor = currentUserId === doc.createdById;
   const isPendingDoc = doc.status === "PENDING";
   
-  const steps = (doc.documentType.approvalSteps as any[]) || [];
-  const currentStepDef = steps.find((s: any) => s.step === doc.currentStep);
+  const steps = (doc.documentType.approvalSteps as unknown as ApprovalStepDef[]) || [];
   // Simplistic role check - in a real app we'd check if `currentUserId` actually has `roleCode`.
   // Here we just allow if they have `canApprove` and it's pending.
   const isApproverForStep = canApprove && isPendingDoc;
@@ -86,14 +92,12 @@ export function DocumentDetailClient({ doc, currentUserId, canWrite, canApprove 
     });
   };
 
-  const getStatusTone = (status: string) => {
+  const getStatusTone = (status: string): "ok" | "bad" | "warn" | "neutral" => {
     switch (status) {
-      case "DRAFT": return "off";
       case "PENDING": return "warn";
       case "APPROVED": return "ok";
-      case "REJECTED": return "bad";
-      case "CANCELLED": return "bad";
-      default: return "info";
+      case "REJECTED": case "CANCELLED": return "bad";
+      default: return "neutral";
     }
   };
 
@@ -108,8 +112,8 @@ export function DocumentDetailClient({ doc, currentUserId, canWrite, canApprove 
         <div>
           <div className="flex items-center gap-3 mb-2">
             <h1 className="text-2xl font-bold tracking-tight">{doc.docNumber}</h1>
-            <StatusPill tone={getStatusTone(doc.status) as any}>
-              {t(`document.status.${doc.status}` as any) || doc.status}
+            <StatusPill tone={getStatusTone(doc.status)}>
+              {t(`document.status.${doc.status}`) || doc.status}
             </StatusPill>
           </div>
           <p className="text-lg text-muted-foreground">{doc.title}</p>
@@ -190,8 +194,8 @@ export function DocumentDetailClient({ doc, currentUserId, canWrite, canApprove 
             </h3>
             
             <div className="space-y-4">
-              {steps.map((step: any, idx: number) => {
-                const approval = (doc.approvals as any[]).find(a => a.step === step.step);
+              {steps.map((step, idx) => {
+                const approval = doc.approvals.find(a => a.step === step.step);
                 const isCurrent = isPendingDoc && doc.currentStep === step.step;
                 const isPast = doc.currentStep > step.step || doc.status === "APPROVED";
                 
@@ -224,7 +228,7 @@ export function DocumentDetailClient({ doc, currentUserId, canWrite, canApprove 
                           </div>
                           {approval.comment && (
                             <div className="text-xs text-muted-foreground mt-1 italic">
-                              "{approval.comment}"
+                              &ldquo;{approval.comment}&rdquo;
                             </div>
                           )}
                         </div>
@@ -247,7 +251,7 @@ export function DocumentDetailClient({ doc, currentUserId, canWrite, canApprove 
           <LiyonField label="Comment (Optional for Approval, Required for Return/Reject)">
             <textarea 
               value={comment}
-              onChange={(e: any) => setComment(e.target.value)}
+              onChange={(e) => setComment(e.target.value)}
               placeholder="Leave a comment..."
               rows={4}
               className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"

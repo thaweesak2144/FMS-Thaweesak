@@ -8,6 +8,7 @@ import { useT, useLocale } from "@/shared/lib/i18n/client";
 import { DataTable, StatusPill, LiyonDialog, LiyonDialogHeader, LiyonDialogBody, LiyonDialogFooter, LiyonField, RowMenuItem, type DataTableColumn } from "@/shared/components/liyon";
 import { Button } from "@/components/ui/button";
 import type { CurriculumDto } from "@/features/curriculum";
+import { DegreeLevel } from "@/generated/prisma";
 import {
   createCurriculumAction,
   updateCurriculumAction,
@@ -43,7 +44,7 @@ export function CurriculumClient({
   const [isPending, startTransition] = useTransition();
 
   // Filter states
-  const [filterLevel, setFilterLevel] = useState("");
+  const [filterLevel, setFilterLevel] = useState<DegreeLevel | "">("");
   const [filterDepartment, setFilterDepartment] = useState("");
 
   // Dialog state
@@ -55,7 +56,7 @@ export function CurriculumClient({
   const [formCode, setFormCode] = useState("");
   const [formNameTh, setFormNameTh] = useState("");
   const [formNameEn, setFormNameEn] = useState("");
-  const [formDegreeLevel, setFormDegreeLevel] = useState("BACHELOR");
+  const [formDegreeLevel, setFormDegreeLevel] = useState<DegreeLevel>(DegreeLevel.BACHELOR);
   const [formDepartmentId, setFormDepartmentId] = useState(departments[0]?.id ?? "");
   const [formTotalCredits, setFormTotalCredits] = useState("120");
   const [formCurriculumYear, setFormCurriculumYear] = useState(new Date().getFullYear() + 543 + "");
@@ -71,7 +72,7 @@ export function CurriculumClient({
     setFormCode("");
     setFormNameTh("");
     setFormNameEn("");
-    setFormDegreeLevel("BACHELOR");
+    setFormDegreeLevel(DegreeLevel.BACHELOR);
     setFormDepartmentId(departments[0]?.id ?? "");
     setFormTotalCredits("120");
     setFormCurriculumYear(new Date().getFullYear() + 543 + "");
@@ -113,7 +114,7 @@ export function CurriculumClient({
         code: formCode.trim(),
         nameTh: formNameTh.trim(),
         nameEn: formNameEn.trim(),
-        degreeLevel: formDegreeLevel as any,
+        degreeLevel: formDegreeLevel,
         departmentId: formDepartmentId,
         totalCredits: parseInt(formTotalCredits) || 120,
         curriculumYear: parseInt(formCurriculumYear) || (new Date().getFullYear() + 543),
@@ -149,7 +150,7 @@ export function CurriculumClient({
     });
   };
 
-  const handleToggleActive = (id: string, current: boolean) => {
+  const handleToggleActive = (id: string, _current?: boolean) => {
     startTransition(async () => {
       const res = await toggleCurriculumActiveAction(id);
       if (res.ok) {
@@ -177,7 +178,7 @@ export function CurriculumClient({
 
   const refreshList = async () => {
     const res = await getCurriculumsAction({
-      degreeLevel: filterLevel ? (filterLevel as any) : undefined,
+      degreeLevel: filterLevel || undefined,
       departmentId: filterDepartment || undefined,
     });
     if (res.ok) {
@@ -216,7 +217,7 @@ export function CurriculumClient({
       header: t("curriculum.degreeLevel"),
       render: (row) => (
         <span className="text-xs">
-          {t(`curriculum.level.${row.degreeLevel}` as any)}
+          {t(`curriculum.level.${row.degreeLevel}`)}
         </span>
       ),
       sortable: true,
@@ -274,7 +275,7 @@ export function CurriculumClient({
       <div className="flex flex-wrap items-center gap-3">
         <select
           value={filterLevel}
-          onChange={(e) => setFilterLevel(e.target.value)}
+          onChange={(e) => setFilterLevel(e.target.value as DegreeLevel | "")}
           className="h-9 px-3 rounded-md border text-xs bg-background"
         >
           <option value="">{t("curriculum.allLevels")}</option>
@@ -409,7 +410,7 @@ export function CurriculumClient({
               </label>
               <select
                 value={formDegreeLevel}
-                onChange={(e) => setFormDegreeLevel(e.target.value)}
+                onChange={(e) => setFormDegreeLevel(e.target.value as DegreeLevel)}
                 className="w-full h-9 px-3 rounded-md border text-sm bg-background"
               >
                 <option value="BACHELOR">{t("curriculum.level.BACHELOR")}</option>

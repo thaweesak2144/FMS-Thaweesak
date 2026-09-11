@@ -15,7 +15,7 @@ import type { DocumentTypeDto } from "@/features/document/server";
 
 export function DocumentTypesClient({ initialTypes }: { initialTypes: DocumentTypeDto[] }) {
   const t = useT();
-  const [items, setItems] = useState<DocumentTypeDto[]>(initialTypes);
+  const items = initialTypes;
   const [isPending, startTransition] = useTransition();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -48,7 +48,7 @@ export function DocumentTypesClient({ initialTypes }: { initialTypes: DocumentTy
     let steps = [];
     try {
       steps = JSON.parse(stepsStr);
-    } catch (e) {
+    } catch {
       toast.error("Invalid JSON format for approval steps");
       return;
     }
@@ -107,7 +107,7 @@ export function DocumentTypesClient({ initialTypes }: { initialTypes: DocumentTy
         <DataTable
           state={items.length === 0 ? "empty" : "data"}
           rows={items}
-          getRowId={(d: any) => d.id}
+          getRowId={(d: DocumentTypeDto) => d.id}
           headHeading={t("document.type.title")}
           empty={{ icon: <Settings2 className="h-8 w-8" />, title: t("common.noData") }}
           error={{ icon: <Settings2 className="h-8 w-8" />, title: t("common.error") }}
@@ -115,22 +115,22 @@ export function DocumentTypesClient({ initialTypes }: { initialTypes: DocumentTy
             {
               key: "code",
               header: "Code",
-              render: (d: any) => <div className="font-mono text-sm">{d.code}</div>
+              render: (d: DocumentTypeDto) => <div className="font-mono text-sm">{d.code}</div>
             },
             {
               key: "nameTh",
               header: "Name (TH)",
-              render: (d: any) => <div className="text-sm font-medium">{d.nameTh}</div>
+              render: (d: DocumentTypeDto) => <div className="text-sm font-medium">{d.nameTh}</div>
             },
             {
               key: "steps",
               header: "Steps",
-              render: (d: any) => <div className="text-sm text-muted-foreground">{Array.isArray(d.approvalSteps) ? d.approvalSteps.length : 0} steps</div>
+              render: (d: DocumentTypeDto) => <div className="text-sm text-muted-foreground">{Array.isArray(d.approvalSteps) ? d.approvalSteps.length : 0} steps</div>
             },
             {
               key: "actions",
               header: "",
-              render: (d: any) => (
+              render: (d: DocumentTypeDto) => (
                 <div className="flex items-center justify-end gap-2">
                   <Button variant="ghost" size="sm" onClick={() => openEdit(d)}>
                     <Settings2 className="h-4 w-4 text-muted-foreground" />

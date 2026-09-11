@@ -14,8 +14,8 @@ export default async function PetitionPage() {
 
   return (
     <PetitionClient 
-      initialPetitions={petitions as any} 
-      types={types as any}
+      initialPetitions={petitions} 
+      types={types}
       canProcess={canProcess}
       canApprove={canApprove}
       canManage={canManage}

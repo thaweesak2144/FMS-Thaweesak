@@ -1,4 +1,4 @@
-﻿import { prisma as db } from "@/shared/lib/infra/prisma";
+import { prisma as db, type Db } from "@/shared/lib/infra/prisma";
 import type { SessionContext } from "@/features/identity/server";
 import { createRoundSchema, updateRoundSchema, createAppSchema, updateAppSchema } from "./validations";
 import { z } from "zod";
@@ -84,7 +84,7 @@ export async function createApplication(ctx: SessionContext, data: z.infer<typeo
   });
   if (!round) throw new Error("Round not found");
 
-  return db.$transaction(async (tx: any) => {
+  return db.$transaction(async (tx: Db) => {
     // Generate app number
     const count = await tx.admissionApplication.count({
       where: { tenantId: ctx.tenantId, round: { academicYear: round.academicYear } }

@@ -9,7 +9,7 @@ import { getT } from "@/i18n/server";
 import { UI_MESSAGES } from "@/i18n";
 import { getLocaleCookie } from "@/shared/lib/i18n/server";
 import { DEFAULT_LOCALE } from "@/shared/lib/i18n/config";
-import { auth, resolvePalette, resolveTenantSettings } from "@/features/identity/server";
+import { auth, resolvePalette } from "@/features/identity/server";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin", "latin-ext"] });
 const sarabun = Sarabun({ variable: "--font-sarabun", subsets: ["thai", "latin"], weight: ["300", "400", "500", "600", "700", "800"], display: "swap" });

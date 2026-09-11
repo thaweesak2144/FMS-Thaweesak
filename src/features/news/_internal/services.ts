@@ -1,4 +1,5 @@
-﻿import { prisma } from "@/shared/lib/infra/prisma";
+import { prisma } from "@/shared/lib/infra/prisma";
+import type { Prisma } from "@/generated/prisma";
 import type {
   CreateNewsCategoryInput,
   UpdateNewsCategoryInput,
@@ -155,7 +156,7 @@ export interface NewsFilter {
 }
 
 export async function listNewsPosts(tenantId: string, filter?: NewsFilter): Promise<NewsPostDto[]> {
-  const where: any = { tenantId };
+  const where: Prisma.NewsPostWhereInput = { tenantId };
 
   if (filter?.categoryId) {
     where.categoryId = filter.categoryId;

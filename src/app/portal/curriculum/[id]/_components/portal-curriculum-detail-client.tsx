@@ -46,7 +46,7 @@ export function PortalCurriculumDetailClient({ curriculum, plans }: Props) {
         <div className="flex flex-wrap items-center gap-2">
            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-primary/10 text-primary">
             <GraduationCap className="h-4 w-4" />
-            {t(`curriculum.level.${curriculum.degreeLevel}` as any)}
+            {t(`curriculum.level.${curriculum.degreeLevel}`)}
           </span>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-muted text-muted-foreground">
             <Building2 className="h-4 w-4" />

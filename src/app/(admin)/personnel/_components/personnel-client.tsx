@@ -24,7 +24,9 @@ import {
   type DataTableColumn,
 } from "@/shared/components/liyon";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import type { PersonnelDto, DepartmentDto } from "@/features/personnel";
+import { PersonnelType } from "@/generated/prisma";
 import {
   createPersonnelAction,
   updatePersonnelAction,
@@ -53,7 +55,7 @@ export function PersonnelClient({
 
   // Filters
   const [filterDepartment, setFilterDepartment] = useState("");
-  const [filterType, setFilterType] = useState("");
+  const [filterType, setFilterType] = useState<PersonnelType | "">("");
 
   // Dialog state
   const [modalOpen, setModalOpen] = useState(false);
@@ -72,7 +74,7 @@ export function PersonnelClient({
   const [formPositionTh, setFormPositionTh] = useState("");
   const [formPositionEn, setFormPositionEn] = useState("");
   const [formDepartmentId, setFormDepartmentId] = useState(departments[0]?.id ?? "");
-  const [formPersonnelType, setFormPersonnelType] = useState<"FULL_TIME" | "PART_TIME" | "EXTERNAL">("FULL_TIME");
+  const [formPersonnelType, setFormPersonnelType] = useState<PersonnelType>(PersonnelType.FULL_TIME);
   const [formEmail, setFormEmail] = useState("");
   const [formPhone, setFormPhone] = useState("");
   const [formPhotoUrl, setFormPhotoUrl] = useState("");
@@ -155,7 +157,7 @@ export function PersonnelClient({
     setFormEducations((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const updateEducationRow = (index: number, field: string, value: any) => {
+  const updateEducationRow = (index: number, field: string, value: string | number | null) => {
     setFormEducations((prev) =>
       prev.map((row, i) => (i === index ? { ...row, [field]: value } : row))
     );
@@ -254,7 +256,7 @@ export function PersonnelClient({
   const refreshList = async () => {
     const res = await getPersonnelListAction({
       departmentId: filterDepartment || undefined,
-      personnelType: (filterType as any) || undefined,
+      personnelType: filterType || undefined,
     });
     if (res.ok) {
       setItems(res.data);
@@ -278,9 +280,12 @@ export function PersonnelClient({
         return (
           <div className="flex items-center gap-3">
             {row.photoUrl ? (
-              <img
+              <Image
                 src={row.photoUrl}
                 alt={name}
+                width={32}
+                height={32}
+                unoptimized
                 className="h-8 w-8 rounded-full object-cover border"
               />
             ) : (
@@ -376,7 +381,7 @@ export function PersonnelClient({
 
         <select
           value={filterType}
-          onChange={(e) => setFilterType(e.target.value)}
+          onChange={(e) => setFilterType(e.target.value as PersonnelType | "")}
           className="h-9 px-3 rounded-md border text-xs bg-background"
         >
           <option value="">{t("personnel.allTypes")}</option>
@@ -454,7 +459,7 @@ export function PersonnelClient({
               </label>
               <select
                 value={formPersonnelType}
-                onChange={(e) => setFormPersonnelType(e.target.value as any)}
+                onChange={(e) => setFormPersonnelType(e.target.value as PersonnelType)}
                 className="w-full h-9 px-3 rounded-md border text-sm bg-background"
               >
                 <option value="FULL_TIME">{t("personnel.type.FULL_TIME")}</option>

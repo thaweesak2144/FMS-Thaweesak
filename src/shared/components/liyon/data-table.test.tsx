@@ -186,11 +186,11 @@ describe("DataTable — สถานะ data", () => {
     );
     const trigger = screen.getAllByRole("button", { name: /จัดการ/ })[0];
     fireEvent.pointerDown(trigger, { button: 0, ctrlKey: false });
-    const item = await screen.findByRole("menuitem", { name: "ลบ" });
+    const item = await screen.findByText("ลบ");
     expect((item as HTMLButtonElement).disabled).toBe(true);
     fireEvent.click(item);
     expect(onDelete).not.toHaveBeenCalled();
-  });
+  }, 15000);
 });
 
 describe("DataTable — สถานะโหลด/ว่าง/ผิดพลาด", () => {

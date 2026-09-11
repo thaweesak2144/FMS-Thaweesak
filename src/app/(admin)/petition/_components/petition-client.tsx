@@ -83,12 +83,12 @@ export function PetitionClient({
     });
   };
 
-  const getStatusTone = (s: string) => {
+  const getStatusTone = (s: string): "ok" | "bad" | "warn" | "neutral" => {
     switch (s) {
       case "APPROVED": case "COMPLETED": return "ok";
       case "REJECTED": return "bad";
       case "IN_REVIEW": return "warn";
-      default: return "info";
+      default: return "neutral";
     }
   };
 
@@ -155,8 +155,8 @@ export function PetitionClient({
                 key: "status",
                 header: t("petition.col.status"),
                 render: (d: PetitionDto) => (
-                  <StatusPill tone={getStatusTone(d.status) as any}>
-                    {t(`petition.status.${d.status}` as any) || d.status}
+                  <StatusPill tone={getStatusTone(d.status)}>
+                    {t(`petition.status.${d.status}`) || d.status}
                   </StatusPill>
                 )
               },

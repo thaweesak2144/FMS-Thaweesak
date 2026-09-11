@@ -397,7 +397,7 @@ Featured Sessions:
 
   const curriculumMasterCS = await prisma.curriculum.findFirst({ where: { tenantId: core.tenantId, code: "2567M1CS" } });
   if (!curriculumMasterCS) {
-    const mcs = await prisma.curriculum.create({
+    await prisma.curriculum.create({
       data: {
         tenantId: core.tenantId,
         departmentId: deptCS.id,

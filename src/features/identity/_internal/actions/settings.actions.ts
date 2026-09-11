@@ -21,7 +21,7 @@ export async function updateSettingsAction(input: unknown): Promise<ActionResult
   });
 }
 
-import { writeFile } from "fs/promises";
+import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 export async function uploadLogoAction(formData: FormData): Promise<ActionResult<string>> {
   return runAction(async () => {
@@ -47,7 +47,7 @@ export async function uploadLogoAction(formData: FormData): Promise<ActionResult
     const buffer = Buffer.from(bytes);
     const filename = `logo-${Date.now()}.${ext}`;
     const uploadDir = join(process.cwd(), "public/uploads");
-    require("fs").mkdirSync(uploadDir, { recursive: true });
+    await mkdir(uploadDir, { recursive: true });
     const filepath = join(uploadDir, filename);
     await writeFile(filepath, buffer);
     return `/uploads/${filename}`;

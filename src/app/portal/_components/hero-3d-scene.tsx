@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { Sparkles, Zap, Star, Award, BookOpen, GraduationCap, ArrowRight, CheckCircle2 } from "lucide-react";
+import { useState, useRef } from "react";
+import { Sparkles, Zap, Star, GraduationCap } from "lucide-react";
 
 export function Hero3DScene({
   orgName,

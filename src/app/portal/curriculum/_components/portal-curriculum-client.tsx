@@ -50,7 +50,7 @@ export function PortalCurriculumClient({ curriculums }: Props) {
                   : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
               }`}
             >
-              {t(`curriculum.level.${lvl}` as any)}
+              {t(`curriculum.level.${lvl}`)}
             </button>
           ))}
         </div>
@@ -78,7 +78,7 @@ export function PortalCurriculumClient({ curriculums }: Props) {
                   <div className="flex items-center gap-2 mb-2">
                     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-primary/10 text-primary">
                       <GraduationCap className="h-3 w-3" />
-                      {t(`curriculum.level.${item.degreeLevel}` as any)}
+                      {t(`curriculum.level.${item.degreeLevel}`)}
                     </span>
                     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-muted text-muted-foreground">
                       <Building2 className="h-3 w-3" />

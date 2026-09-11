@@ -1,4 +1,5 @@
-﻿import { prisma } from "@/shared/lib/infra/prisma";
+import { prisma } from "@/shared/lib/infra/prisma";
+import type { Prisma } from "@/generated/prisma";
 import type {
   CreateDepartmentInput,
   UpdateDepartmentInput,
@@ -152,7 +153,7 @@ export interface PersonnelFilter {
 }
 
 export async function listPersonnel(tenantId: string, filter?: PersonnelFilter): Promise<PersonnelDto[]> {
-  const where: any = { tenantId };
+  const where: Prisma.PersonnelProfileWhereInput = { tenantId };
 
   if (filter?.departmentId) {
     where.departmentId = filter.departmentId;
