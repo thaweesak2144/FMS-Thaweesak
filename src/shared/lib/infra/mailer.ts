@@ -23,9 +23,12 @@ export interface SmtpTransportConfig {
 
 export async function resolveSmtpConfig(tenantId?: string): Promise<SmtpTransportConfig | null> {
   try {
-    const tenant = tenantId
+    let tenant = tenantId
       ? await prisma.tenant.findUnique({ where: { id: tenantId }, select: { settings: true } })
-      : await prisma.tenant.findFirst({ orderBy: { createdAt: "asc" }, select: { settings: true } });
+      : null;
+    if (!tenant) {
+      tenant = await prisma.tenant.findFirst({ orderBy: { createdAt: "asc" }, select: { settings: true } });
+    }
 
     const smtp = (tenant?.settings as { smtp?: { enabled?: boolean; host?: string; port?: number; secure?: boolean; user?: string; pass?: string; from?: string } } | null)?.smtp;
     if (smtp && smtp.enabled && smtp.user && smtp.pass) {

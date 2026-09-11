@@ -37,7 +37,10 @@ export const defaultSmtp: SmtpSettings = {
 };
 
 async function readTenantSettings(tenantId: string, db: Db): Promise<TenantSettings> {
-  const t = await db.tenant.findUnique({ where: { id: tenantId } });
+  let t = await db.tenant.findUnique({ where: { id: tenantId } });
+  if (!t) {
+    t = await db.tenant.findFirst({ orderBy: { createdAt: "asc" } });
+  }
   if (!t) throw errors.not_found();
   const s = (t.settings as { palette?: unknown; smtp?: Partial<SmtpSettings> } | null) || {};
   const p = s.palette;
@@ -58,8 +61,17 @@ export async function getTenantSettings(tenantId: string): Promise<TenantSetting
 /** เก็บคีย์อื่น ๆ ใน settings JSON ไว้ทั้งหมด — merge เฉพาะ palette และ smtp ที่เปลี่ยน ไม่ทับทั้งก้อน */
 export async function updateTenantSettings(input: { tenantId: string; actorId: string } & UpdateSettingsInput): Promise<void> {
   await prisma.$transaction(async (tx) => {
-    const before = await readTenantSettings(input.tenantId, tx);
-    const t = await tx.tenant.findUniqueOrThrow({ where: { id: input.tenantId }, select: { settings: true } });
+    let targetTenantId = input.tenantId;
+    let t = await tx.tenant.findUnique({ where: { id: targetTenantId }, select: { id: true, settings: true } });
+    if (!t) {
+      const fallback = await tx.tenant.findFirst({ orderBy: { createdAt: "asc" }, select: { id: true, settings: true } });
+      if (fallback) {
+        t = fallback;
+        targetTenantId = fallback.id;
+      }
+    }
+    if (!t) throw errors.not_found();
+    const before = await readTenantSettings(targetTenantId, tx);
     const current = (t.settings as object) || {};
     const newSettings: Record<string, unknown> = {
       ...current,
@@ -69,15 +81,18 @@ export async function updateTenantSettings(input: { tenantId: string; actorId: s
       newSettings.smtp = input.smtp;
     }
     await tx.tenant.update({
-      where: { id: input.tenantId },
+      where: { id: targetTenantId },
       data: { nameTh: input.nameTh, nameEn: input.nameEn, logoUrl: input.logoUrl || null, settings: newSettings as Prisma.InputJsonObject },
     });
-    await writeAudit({ tenantId: input.tenantId, actorId: input.actorId, action: "tenant.settings_update", entity: "tenant", entityId: input.tenantId, before, after: input }, tx);
+    await writeAudit({ tenantId: targetTenantId, actorId: input.actorId, action: "tenant.settings_update", entity: "tenant", entityId: targetTenantId, before, after: input }, tx);
   });
 }
 
 export async function getTenantPalette(tenantId: string): Promise<PaletteId> {
-  const t = await prisma.tenant.findUnique({ where: { id: tenantId }, select: { settings: true } });
+  let t = await prisma.tenant.findUnique({ where: { id: tenantId }, select: { settings: true } });
+  if (!t) {
+    t = await prisma.tenant.findFirst({ orderBy: { createdAt: "asc" }, select: { settings: true } });
+  }
   const p = (t?.settings as { palette?: unknown } | null)?.palette;
   return isPalette(p) ? p : DEFAULT_PALETTE;
 }
