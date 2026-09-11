@@ -9,10 +9,7 @@ import {
   FileText,
   Sparkles,
   Play,
-  Pause,
   GraduationCap,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 
 interface AssistHeroProps {
@@ -21,56 +18,45 @@ interface AssistHeroProps {
 }
 
 const MASCOT_POSES = [
-  { id: 1, titleTh: "ยินดีต้อนรับสู่ระบบ", titleEn: "Welcome to Campus", tag: "Student" },
-  { id: 2, titleTh: "พร้อมเริ่มต้นเรียนรู้ ✌️", titleEn: "Ready to Learn ✌️", tag: "Energy" },
-  { id: 3, titleTh: "มั่นใจ ปลอดภัย 100%", titleEn: "Confident & Secure", tag: "Trusted" },
-  { id: 4, titleTh: "ค้นคว้าความรู้ 📖", titleEn: "Explore Knowledge 📖", tag: "Academic" },
-  { id: 5, titleTh: "สวัสดีครับ 👋", titleEn: "Hello & Greetings 👋", tag: "Friendly" },
-  { id: 6, titleTh: "แนะนำบริการดิจิทัล 👉", titleEn: "Discover Services 👉", tag: "Guide" },
-  { id: 7, titleTh: "ระบบยอดเยี่ยม 👍", titleEn: "Top Quality 👍", tag: "Quality" },
-  { id: 8, titleTh: "ให้คำปรึกษาตลอด 24 ชม. 🤔", titleEn: "Smart Guidance 🤔", tag: "Advising" },
-  { id: 9, titleTh: "นวัตกรรมดิจิทัล 💻", titleEn: "Digital Learning 💻", tag: "Tech" },
-  { id: 10, titleTh: "สำเร็จไปด้วยกัน 💪", titleEn: "Success Together 💪", tag: "Goal" },
-  { id: 11, titleTh: "มุ่งมั่นสู่อนาคต 🎒", titleEn: "Future Ready 🎒", tag: "Vision" },
-  { id: 12, titleTh: "ก้าวไปข้างหน้า 🚶", titleEn: "Step Forward 🚶", tag: "Progress" },
-  { id: 13, titleTh: "สวัสดีครับ ยินดีต้อนรับ 🙏", titleEn: "Sawasdee - Thai Greeting 🙏", tag: "Respect" },
-  { id: 14, titleTh: "ยินดีต้อนรับทุกคนครับ 🤗", titleEn: "Open Welcome to All 🤗", tag: "Community" },
+  { id: 1, titleTh: "ยินดีต้อนรับสู่ระบบ", titleEn: "Welcome to Campus" },
+  { id: 2, titleTh: "พร้อมเริ่มต้นเรียนรู้ ✌️", titleEn: "Ready to Learn ✌️" },
+  { id: 3, titleTh: "มั่นใจ ปลอดภัย 100%", titleEn: "Confident & Secure" },
+  { id: 4, titleTh: "ค้นคว้าความรู้ 📖", titleEn: "Explore Knowledge 📖" },
+  { id: 5, titleTh: "สวัสดีครับ 👋", titleEn: "Hello & Greetings 👋" },
+  { id: 6, titleTh: "แนะนำบริการดิจิทัล 👉", titleEn: "Discover Services 👉" },
+  { id: 7, titleTh: "ระบบยอดเยี่ยม 👍", titleEn: "Top Quality 👍" },
+  { id: 8, titleTh: "ให้คำปรึกษาตลอด 24 ชม. 🤔", titleEn: "Smart Guidance 🤔" },
+  { id: 9, titleTh: "นวัตกรรมดิจิทัล 💻", titleEn: "Digital Learning 💻" },
+  { id: 10, titleTh: "สำเร็จไปด้วยกัน 💪", titleEn: "Success Together 💪" },
+  { id: 11, titleTh: "มุ่งมั่นสู่อนาคต 🎒", titleEn: "Future Ready 🎒" },
+  { id: 12, titleTh: "ก้าวไปข้างหน้า 🚶", titleEn: "Step Forward 🚶" },
+  { id: 13, titleTh: "สวัสดีครับ ยินดีต้อนรับ 🙏", titleEn: "Sawasdee - Thai Greeting 🙏" },
+  { id: 14, titleTh: "ยินดีต้อนรับทุกคนครับ 🤗", titleEn: "Open Welcome to All 🤗" },
 ];
 
 export function AssistHero({ orgName, locale }: AssistHeroProps) {
   const isTh = locale === "th";
   const [currentPoseIdx, setCurrentPoseIdx] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [isHovered, setIsHovered] = useState(false);
 
-  // Preload all 14 pose images on mount for zero-flicker transitions
+  // Preload all 14 sharp pose images on mount for instant zero-flicker transitions
   useEffect(() => {
     if (typeof window !== "undefined") {
       MASCOT_POSES.forEach((p) => {
         const img = new Image();
-        img.src = `/images/mascot/pose-${p.id}.png`;
+        img.src = `/images/mascot/pose-${p.id}.png?v=2`;
       });
     }
   }, []);
 
-  // Sequential animation cycle (switch pose every 2.4s)
+  // Continuous automatic animation cycle through all 14 poses sequentially
   useEffect(() => {
-    if (!isPlaying || isHovered) return;
     const timer = setInterval(() => {
       setCurrentPoseIdx((prev) => (prev + 1) % MASCOT_POSES.length);
-    }, 2400);
+    }, 2000);
     return () => clearInterval(timer);
-  }, [isPlaying, isHovered]);
+  }, []);
 
   const activePose = MASCOT_POSES[currentPoseIdx];
-
-  const handleNext = () => {
-    setCurrentPoseIdx((prev) => (prev + 1) % MASCOT_POSES.length);
-  };
-
-  const handlePrev = () => {
-    setCurrentPoseIdx((prev) => (prev - 1 + MASCOT_POSES.length) % MASCOT_POSES.length);
-  };
 
   return (
     <section className="relative overflow-hidden w-full px-4 sm:px-8 lg:px-16 pt-12 pb-16 lg:py-20 flex items-center">
@@ -192,12 +178,8 @@ export function AssistHero({ orgName, locale }: AssistHeroProps) {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: 3D Animated Mascot Character (Cycling through all 14 poses) */}
-        <div
-          className="lg:col-span-7 relative flex items-center justify-center py-6 lg:py-0 select-none"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
+        {/* RIGHT COLUMN: 3D Animated Mascot Character (Continuous Automatic 14-Pose Cycling) */}
+        <div className="lg:col-span-7 relative flex items-center justify-center py-6 lg:py-0 select-none">
           {/* Decorative Orbital Concentric Rings */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10">
             <div
@@ -212,7 +194,7 @@ export function AssistHero({ orgName, locale }: AssistHeroProps) {
 
           {/* Centered Character Stage Box */}
           <div
-            className="relative w-full max-w-[460px] h-[520px] rounded-[32px] overflow-hidden border border-white/60 dark:border-border/60 backdrop-blur-xl flex flex-col items-center justify-between p-6 shadow-2xl transition-all duration-300 hover:shadow-primary/10"
+            className="relative w-full max-w-[460px] h-[530px] rounded-[32px] overflow-hidden border border-white/60 dark:border-border/60 backdrop-blur-xl flex flex-col items-center justify-between p-6 shadow-2xl transition-all duration-300"
             style={{
               background:
                 "radial-gradient(ellipse at 50% 30%, color-mix(in srgb, var(--brand-light, #38bdf8) 12%, var(--glass-strong)), color-mix(in srgb, var(--brand) 6%, var(--glass)))",
@@ -220,11 +202,10 @@ export function AssistHero({ orgName, locale }: AssistHeroProps) {
                 "0 25px 50px -12px color-mix(in srgb, var(--brand) 25%, transparent), inset 0 1px 2px rgba(255,255,255,0.8)",
             }}
           >
-            {/* Top Stage Header: Current Pose Bubble & Control Button */}
-            <div className="w-full flex items-center justify-between z-10">
-              {/* Dynamic Action Pill */}
+            {/* Top Stage Header: Current Pose Bubble (Clean without buttons) */}
+            <div className="w-full flex items-center justify-center z-10">
               <div
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full backdrop-blur-md border shadow-xs transition-all duration-300"
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full backdrop-blur-md border shadow-xs transition-all duration-300"
                 style={{
                   background: "color-mix(in srgb, var(--glass-strong) 85%, transparent)",
                   borderColor: "color-mix(in srgb, var(--brand) 30%, var(--glass-border))",
@@ -234,46 +215,17 @@ export function AssistHero({ orgName, locale }: AssistHeroProps) {
                 <span className="text-xs font-semibold text-foreground tracking-tight">
                   {isTh ? activePose.titleTh : activePose.titleEn}
                 </span>
-              </div>
-
-              {/* Controls: Prev, Play/Pause, Next */}
-              <div className="flex items-center gap-1 bg-background/60 backdrop-blur-md border border-border/50 rounded-full px-2 py-1 shadow-xs">
-                <button
-                  type="button"
-                  onClick={handlePrev}
-                  title="Previous Pose"
-                  className="w-6 h-6 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
-                >
-                  <ChevronLeft className="h-3.5 w-3.5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsPlaying(!isPlaying)}
-                  title={isPlaying ? "Pause Animation" : "Play Animation"}
-                  className="w-6 h-6 rounded-full flex items-center justify-center text-primary hover:bg-primary/10 transition-colors"
-                >
-                  {isPlaying ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3 fill-primary" />}
-                </button>
-                <button
-                  type="button"
-                  onClick={handleNext}
-                  title="Next Pose"
-                  className="w-6 h-6 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
-                >
-                  <ChevronRight className="h-3.5 w-3.5" />
-                </button>
+                <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-bold">
+                  {currentPoseIdx + 1}/14
+                </span>
               </div>
             </div>
 
-            {/* Central Mascot Figure with Floating Animation & Clickable Pose Switch */}
-            <div
-              className="relative flex-1 w-full flex items-center justify-center cursor-pointer group my-1"
-              onClick={handleNext}
-              title="Click to change pose"
-            >
+            {/* Central Mascot Figure with Floating Animation & Seamless Pose Switch */}
+            <div className="relative flex-1 w-full flex items-center justify-center my-1">
               {/* Ground Shadow & Light Pedestal */}
               <div
-                className="absolute bottom-2 w-48 h-8 rounded-full blur-md opacity-40 dark:opacity-60 transition-transform group-hover:scale-110"
+                className="absolute bottom-2 w-48 h-8 rounded-full blur-md opacity-40 dark:opacity-60"
                 style={{
                   background:
                     "radial-gradient(ellipse at center, color-mix(in srgb, var(--brand) 80%, black), transparent 70%)",
@@ -283,26 +235,28 @@ export function AssistHero({ orgName, locale }: AssistHeroProps) {
                 className="absolute bottom-1 w-56 h-3 rounded-full border opacity-50 dark:opacity-40"
                 style={{
                   borderColor: "var(--brand)",
-                  background: "radial-gradient(ellipse at center, color-mix(in srgb, var(--brand) 30%, transparent), transparent)",
+                  background:
+                    "radial-gradient(ellipse at center, color-mix(in srgb, var(--brand) 30%, transparent), transparent)",
                 }}
               />
 
-              {/* Mascot Pose Image with Smooth Crossfade */}
+              {/* Mascot Pose Image with Smooth Crossfade & Ultra-Sharp Rendering */}
               {MASCOT_POSES.map((pose, idx) => {
                 const isCurrent = idx === currentPoseIdx;
                 return (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     key={pose.id}
-                    src={`/images/mascot/pose-${pose.id}.png`}
+                    src={`/images/mascot/pose-${pose.id}.png?v=2`}
                     alt={isTh ? pose.titleTh : pose.titleEn}
-                    className={`absolute inset-0 m-auto max-h-[390px] w-auto object-contain transition-all duration-500 ease-out pointer-events-none drop-shadow-xl ${
+                    className={`absolute inset-0 m-auto max-h-[415px] w-auto object-contain transition-all duration-500 ease-out pointer-events-none ${
                       isCurrent
                         ? "opacity-100 scale-100 translate-y-0"
-                        : "opacity-0 scale-95 translate-y-2"
+                        : "opacity-0 scale-98 translate-y-1.5"
                     }`}
                     style={{
-                      filter: "drop-shadow(0 12px 24px rgba(0,0,0,0.15))",
+                      imageRendering: "crisp-edges",
+                      filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.12))",
                     }}
                   />
                 );
