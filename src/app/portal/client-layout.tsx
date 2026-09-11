@@ -205,19 +205,44 @@ export default function PortalClientLayout({ children, logoUrl }: { children: Re
       <main className="flex-1">{children}</main>
 
       {/* Footer */}
-      <footer className="border-t bg-muted/30 py-10 mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <GraduationCap className="h-4 w-4 text-primary" />
-            <span>© {new Date().getFullYear()} {t("app.name")}. All rights reserved.</span>
+      <footer>
+        <div className="foot-in">
+          <div>
+            <Link href="/portal" className="brand flex items-center">
+              {logoUrl ? <img src={logoUrl} alt="Logo" style={{ height: "2rem", width: "2rem", objectFit: "contain", marginRight: "10px" }} /> : <i><GraduationCap className="h-5 w-5" /></i>}
+              <div className="flex flex-col ml-1">
+                <span className="font-bold text-base tracking-tight leading-none">{t("app.name")}</span>
+              </div>
+            </Link>
+            <p className="foot-tag">{t("app.tagline")}</p>
           </div>
-          <div className="flex items-center gap-6">
-            <Link href="/portal/personnel" className="hover:underline">
-              {t("portal.nav.personnel")}
-            </Link>
-            <Link href="/login" className="hover:underline">
-              {locale === "th" ? "เข้าสู่ระบบ" : "Login"}
-            </Link>
+          
+          <div>
+            <h4>{locale === "th" ? "เมนูหลัก" : "Main Menu"}</h4>
+            <ul>
+              {navLinks.map(link => (
+                <li key={link.href}>
+                  <Link href={link.href}>{link.label}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4>{locale === "th" ? "สำหรับเจ้าหน้าที่" : "For Staff"}</h4>
+            <ul>
+              <li>
+                <Link href="/login">
+                  {locale === "th" ? "เข้าสู่ระบบ (Admin Console)" : "Staff Login (Admin Console)"}
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div className="foot-bottom">
+          <div className="foot-bottom-in">
+            <span>© {new Date().getFullYear()} {t("app.name")}. All rights reserved.</span>
           </div>
         </div>
       </footer>
