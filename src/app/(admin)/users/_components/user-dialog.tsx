@@ -29,7 +29,7 @@ export function UserDialog({
 }) {
   const t = useT();
   const locale = useLocale();
-  const canSubmit = form.name.trim() !== "" && form.email.trim() !== "" && form.roleIds.length > 0 && !isSubmitting;
+  const canSubmit = form.name.trim() !== "" && form.email.trim() !== "" && form.roleIds.length > 0 && (!form.password || form.password.length >= 8) && !isSubmitting;
 
   function toggleRole(roleId: string, checked: boolean) {
     setForm((f) => ({ ...f, roleIds: checked ? [...f.roleIds, roleId] : f.roleIds.filter((id) => id !== roleId) }));
@@ -51,11 +51,24 @@ export function UserDialog({
       <LiyonDialogBody>
         <div className="fields">
           <LiyonField label={t("users.name")} htmlFor="user-name">
-            <input id="user-name" value={form.name} placeholder={t("users.namePh")} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} required disabled={isSelf} />
+            <input id="user-name" value={form.name} placeholder={t("users.namePh")} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} required />
           </LiyonField>
           <LiyonField label={t("users.email")} htmlFor="user-email">
-            <input id="user-email" type="email" value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} required disabled={mode === "edit"} />
+            <input id="user-email" type="email" value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} required />
           </LiyonField>
+          {mode === "edit" && (
+            <LiyonField label={t("users.newPassword")} htmlFor="user-password" hint={t("users.newPasswordHint")}>
+              <input
+                id="user-password"
+                type="password"
+                value={form.password ?? ""}
+                placeholder={t("users.newPasswordPh")}
+                onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
+                minLength={8}
+                autoComplete="new-password"
+              />
+            </LiyonField>
+          )}
           <LiyonField label={t("users.roles")} hint={isSelf ? t("users.cannotEditSelf") : t("users.rolesHint")}>
             <div className="flex flex-col gap-2">
               {assignableRoles.map((role) => (

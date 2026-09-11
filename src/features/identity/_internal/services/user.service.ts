@@ -2,6 +2,7 @@ import { prisma, type Db } from "@/shared/lib/infra/prisma";
 import { env } from "@/shared/lib/infra/env";
 import { sendMail } from "@/shared/lib/infra/mailer";
 import { errors } from "@/shared/lib/errors";
+import { hashPassword } from "@/shared/lib/security/password";
 import { asLocale } from "@/shared/lib/i18n/config";
 import { logger } from "@/shared/lib/infra/logger";
 import { SUPER_ADMIN_CODE } from "../../permissions";
@@ -123,12 +124,27 @@ export async function createUser(input: Actor & { email: string; name: string; r
   return { user, rawToken, expiresAt, mailDelivered: delivered };
 }
 
-export async function updateUser(input: Actor & { userId: string; name?: string; roles?: RoleAssignment[]; mustChangePassword?: boolean }) {
-  if (input.userId === input.actorId && (input.roles !== undefined || input.mustChangePassword !== undefined)) throw errors.forbidden("cannot_edit_self");
+export async function updateUser(input: Actor & {
+  userId: string;
+  name?: string;
+  email?: string;
+  password?: string;
+  roles?: RoleAssignment[];
+  mustChangePassword?: boolean;
+}) {
+  if (input.userId === input.actorId && (input.roles !== undefined || input.mustChangePassword !== undefined)) {
+    throw errors.forbidden("cannot_edit_self");
+  }
   await prisma.$transaction(async (tx) => {
     const ut = await membership(input.userId, input.tenantId, tx);
     assertCanActOnTarget(ut.userRoles, input);
-    const before = { name: ut.user.name, roles: ut.userRoles.map((r) => ({ roleId: r.roleId, scopeType: r.scopeType, scopeId: r.scopeId })), mustChangePassword: ut.user.mustChangePassword };
+    const before = {
+      name: ut.user.name,
+      email: ut.user.email,
+      roles: ut.userRoles.map((r) => ({ roleId: r.roleId, scopeType: r.scopeType, scopeId: r.scopeId })),
+      mustChangePassword: ut.user.mustChangePassword,
+    };
+
     if (input.roles) {
       await assertRolesInTenant(input.roles, input.tenantId, tx);
       await assertCanAssignRoles(input.roles, input, tx);
@@ -139,10 +155,51 @@ export async function updateUser(input: Actor & { userId: string; name?: string;
       await tx.userRole.deleteMany({ where: { userTenantId: ut.id } });
       await tx.userRole.createMany({ data: input.roles.map((r) => ({ userTenantId: ut.id, ...r })) });
     }
-    if (input.name !== undefined || input.mustChangePassword !== undefined) {
-      await tx.user.update({ where: { id: input.userId }, data: { name: input.name, mustChangePassword: input.mustChangePassword } });
+
+    const dataToUpdate: {
+      name?: string;
+      email?: string;
+      passwordHash?: string;
+      mustChangePassword?: boolean;
+    } = {};
+
+    if (input.name !== undefined) {
+      dataToUpdate.name = input.name;
     }
-    await writeAudit({ tenantId: input.tenantId, actorId: input.actorId, action: "user.update", entity: "user", entityId: input.userId, before, after: { name: input.name, roles: input.roles, mustChangePassword: input.mustChangePassword } }, tx);
+    if (input.mustChangePassword !== undefined) {
+      dataToUpdate.mustChangePassword = input.mustChangePassword;
+    }
+    if (input.email !== undefined) {
+      const newEmail = input.email.toLowerCase().trim();
+      if (newEmail !== ut.user.email) {
+        const existing = await tx.user.findUnique({ where: { email: newEmail } });
+        if (existing && existing.id !== input.userId) throw errors.conflict("email_taken");
+        dataToUpdate.email = newEmail;
+      }
+    }
+    if (input.password && input.password.trim() !== "") {
+      dataToUpdate.passwordHash = await hashPassword(input.password);
+    }
+
+    if (Object.keys(dataToUpdate).length > 0) {
+      await tx.user.update({ where: { id: input.userId }, data: dataToUpdate });
+    }
+
+    await writeAudit({
+      tenantId: input.tenantId,
+      actorId: input.actorId,
+      action: "user.update",
+      entity: "user",
+      entityId: input.userId,
+      before,
+      after: {
+        name: input.name,
+        email: dataToUpdate.email ?? ut.user.email,
+        roles: input.roles,
+        mustChangePassword: input.mustChangePassword,
+        passwordChanged: Boolean(input.password && input.password.trim() !== ""),
+      },
+    }, tx);
   });
 }
 

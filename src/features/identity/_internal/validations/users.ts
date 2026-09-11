@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { emailSchema } from "./auth";
+import { emailSchema, passwordSchema } from "./auth";
 
 export const roleAssignmentSchema = z.object({
   roleId: z.string().uuid(),
@@ -35,6 +35,8 @@ export const createUserSchema = z.object({
 export const updateUserSchema = z.object({
   userId: z.string().uuid(),
   name: z.string().trim().min(1).max(255).optional(),
+  email: emailSchema.optional(),
+  password: passwordSchema.optional().or(z.literal("")),
   roles: roleAssignmentsSchema.optional(),
   mustChangePassword: z.boolean().optional(),
 });

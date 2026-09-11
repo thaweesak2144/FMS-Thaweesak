@@ -20,6 +20,12 @@ const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
   experimental: { serverActions: { bodySizeLimit: "10mb" } },
+  async redirects() {
+    return [
+      { source: "/User", destination: "/users", permanent: true },
+      { source: "/user", destination: "/users", permanent: true },
+    ];
+  },
   async headers() {
     return [
       { source: "/(.*)", headers: securityHeaders },

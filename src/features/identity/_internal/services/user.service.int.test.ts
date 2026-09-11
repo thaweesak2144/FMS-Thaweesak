@@ -3,6 +3,7 @@ import { prisma } from "@/shared/lib/infra/prisma";
 import { seedCore, seedUser } from "../../../../../prisma/lib/seed-core";
 import { listUsers, createUser, updateUser, setUserActive, issuePasswordSetupLink, requestEmailChange, confirmEmailChange } from "./user.service";
 import { consumeToken } from "../tokens";
+import { verifyPassword } from "@/shared/lib/security/password";
 
 vi.mock("@/shared/lib/infra/mailer", () => ({ sendMail: vi.fn(async () => ({ delivered: false })) }));
 
@@ -91,6 +92,53 @@ describe("user.service", () => {
     const r = await issuePasswordSetupLink({ tenantId, actorId: adminId, isSuperAdmin: true, permissions: [], userId: uid });
     expect(r.expiresAt.getTime() - Date.now()).toBeGreaterThan(71 * 3600 * 1000);
     expect(await prisma.auditLog.count({ where: { action: "user.password_link", entityId: uid } })).toBe(1);
+  });
+  it("updateUser แก้ไขชื่อ อีเมล และรหัสผ่านโดยตรงได้ และแก้ไขชื่อของตนเองได้", async () => {
+    const { core, adminId, tenantId } = await setup();
+    const uid = await seedUser(prisma, tenantId, { email: "editme@t.t", name: "BeforeEdit", passwordHash: "x", roleIds: [core.roleIds.VIEWER] });
+
+    // แก้ไขชื่อ อีเมล และรหัสผ่าน
+    await updateUser({
+      tenantId,
+      actorId: adminId,
+      isSuperAdmin: true,
+      permissions: [],
+      userId: uid,
+      name: "AfterEdit",
+      email: "afteredit@t.t",
+      password: "NewPassword123!",
+    });
+
+    const updatedUser = await prisma.user.findUniqueOrThrow({ where: { id: uid } });
+    expect(updatedUser.name).toBe("AfterEdit");
+    expect(updatedUser.email).toBe("afteredit@t.t");
+    expect(await verifyPassword("NewPassword123!", updatedUser.passwordHash!)).toBe(true);
+
+    // แก้ไขชื่อและอีเมลของตนเอง (isSelf) สำเร็จเมื่อไม่แตะบทบาทหรือสถานะ
+    await updateUser({
+      tenantId,
+      actorId: adminId,
+      isSuperAdmin: true,
+      permissions: [],
+      userId: adminId,
+      name: "SuperAdmin Renamed",
+      email: "newadmin@t.t",
+    });
+    const updatedAdmin = await prisma.user.findUniqueOrThrow({ where: { id: adminId } });
+    expect(updatedAdmin.name).toBe("SuperAdmin Renamed");
+    expect(updatedAdmin.email).toBe("newadmin@t.t");
+
+    // อีเมลซ้ำกับคนอื่น → reject conflict
+    await expect(
+      updateUser({
+        tenantId,
+        actorId: adminId,
+        isSuperAdmin: true,
+        permissions: [],
+        userId: uid,
+        email: "newadmin@t.t",
+      }),
+    ).rejects.toMatchObject({ code: "conflict", message: "email_taken" });
   });
 });
 

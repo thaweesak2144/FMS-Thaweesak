@@ -72,7 +72,27 @@ export function UsersClient({ canManage, selfId }: { canManage: boolean; selfId:
   }
   function submitEdit(user: UserListItem) {
     start(async () => {
-      const r = await updateUserAction({ userId: user.id, name: form.name, roles: form.roleIds.map((id) => ({ roleId: id, scopeType: "ALL", scopeId: null })), mustChangePassword: form.mustChangePassword });
+      const isSelf = user.id === selfId;
+      const payload: {
+        userId: string;
+        name: string;
+        email: string;
+        password?: string;
+        roles?: { roleId: string; scopeType: "ALL"; scopeId: null }[];
+        mustChangePassword?: boolean;
+      } = {
+        userId: user.id,
+        name: form.name,
+        email: form.email,
+        ...(form.password && form.password.trim() !== "" ? { password: form.password } : {}),
+      };
+
+      if (!isSelf) {
+        payload.roles = form.roleIds.map((id) => ({ roleId: id, scopeType: "ALL", scopeId: null }));
+        payload.mustChangePassword = form.mustChangePassword;
+      }
+
+      const r = await updateUserAction(payload);
       if (!r.ok) return fail(r.error, t("users.editFail"));
       toast.success(t("users.editOk")); setDialog(null); void load();
     });
@@ -127,7 +147,7 @@ export function UsersClient({ canManage, selfId }: { canManage: boolean; selfId:
         roleId={roleId} roles={roles} onRoleChange={(r) => { setRoleId(r); setPage(1); }}
         onPrev={() => setPage((p) => Math.max(1, p - 1))} onNext={() => setPage((p) => p + 1)}
         canManage={canManage && dialog === null} selfId={selfId} selected={selected} onSelectedChange={setSelected}
-        onEdit={(u) => { setForm({ name: u.name, email: u.email, roleIds: u.roles.map((r) => r.id), mustChangePassword: u.mustChangePassword }); setDialog({ kind: "edit", user: u }); }}
+        onEdit={(u) => { setForm({ name: u.name, email: u.email, password: "", roleIds: u.roles.map((r) => r.id), mustChangePassword: u.mustChangePassword }); setDialog({ kind: "edit", user: u }); }}
         onIssueLink={issueLink} onChangeEmail={(u) => setDialog({ kind: "email", user: u })}
         onSuspend={(list) => setDialog({ kind: "suspend", users: list })} onActivate={(u) => toggleActive([u], true)}
         onRetry={load}

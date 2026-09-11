@@ -24,5 +24,9 @@ describe("roleAssignments — กันบทบาทซ้ำในคำข�
   it("updateUser: กฎเดียวกันเมื่อส่ง roles มาด้วย และไม่บังคับเมื่อไม่ส่ง", () => {
     expect(updateUserSchema.safeParse({ userId: ROLE_A, roles: [assign(ROLE_B), assign(ROLE_B)] }).success).toBe(false);
     expect(updateUserSchema.safeParse({ userId: ROLE_A, name: "A" }).success).toBe(true);
+    expect(updateUserSchema.safeParse({ userId: ROLE_A, email: "valid@email.com", password: "Password123!" }).success).toBe(true);
+    expect(updateUserSchema.safeParse({ userId: ROLE_A, password: "short" }).success).toBe(false);
+    expect(updateUserSchema.safeParse({ userId: ROLE_A, email: "invalid-email" }).success).toBe(false);
+    expect(updateUserSchema.safeParse({ userId: ROLE_A, password: "" }).success).toBe(true);
   });
 });
