@@ -205,7 +205,7 @@ export function ResearchClient({
           <DataTable
             state={initialProjects.length === 0 ? "empty" : "data"}
             rows={initialProjects}
-            getRowId={(d: any) => d.id}
+            getRowId={(d: ResearchProjectDto) => d.id}
             headHeading={t("research.projects")}
             empty={{ icon: <Microscope className="h-8 w-8" />, title: t("common.noData") }}
             error={{ icon: <Microscope className="h-8 w-8" />, title: t("common.error") }}
@@ -213,7 +213,7 @@ export function ResearchClient({
               {
                 key: "title",
                 header: t("research.project.titleTh"),
-                render: (d: any) => <div className="font-medium text-sm max-w-md truncate">{d.titleTh}</div>
+                render: (d: ResearchProjectDto) => <div className="font-medium text-sm max-w-md truncate">{d.titleTh}</div>
               },
               {
                 key: "type",
@@ -267,7 +267,7 @@ export function ResearchClient({
           <DataTable
             state={initialPublications.length === 0 ? "empty" : "data"}
             rows={initialPublications}
-            getRowId={(d: any) => d.id}
+            getRowId={(d: PublicationDto) => d.id}
             headHeading={t("research.publications")}
             empty={{ icon: <BookOpen className="h-8 w-8" />, title: t("common.noData") }}
             error={{ icon: <BookOpen className="h-8 w-8" />, title: t("common.error") }}
@@ -275,7 +275,7 @@ export function ResearchClient({
               {
                 key: "title",
                 header: t("research.publication.title"),
-                render: (d: any) => <div className="font-medium text-sm max-w-md truncate">{d.title}</div>
+                render: (d: PublicationDto) => <div className="font-medium text-sm max-w-md truncate">{d.title}</div>
               },
               {
                 key: "type",
@@ -312,7 +312,7 @@ export function ResearchClient({
           <LiyonField label={t("research.project.titleTh")}>
             <input 
               value={titleTh} 
-              onChange={(e: any) => setTitleTh(e.target.value)} 
+              onChange={(e) => setTitleTh(e.target.value)} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </LiyonField>
@@ -320,7 +320,7 @@ export function ResearchClient({
             <select
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               value={researchType}
-              onChange={(e: any) => setResearchType(e.target.value)}
+              onChange={(e) => setResearchType(e.target.value)}
             >
               <option value="BASIC">BASIC</option>
               <option value="APPLIED">APPLIED</option>
@@ -331,7 +331,7 @@ export function ResearchClient({
             <input 
               type="number"
               value={budget} 
-              onChange={(e: any) => setBudget(Number(e.target.value))} 
+              onChange={(e) => setBudget(Number(e.target.value))} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </LiyonField>
@@ -340,7 +340,7 @@ export function ResearchClient({
               <select
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 value={status}
-                onChange={(e: any) => setStatus(e.target.value)}
+                onChange={(e) => setStatus(e.target.value)}
               >
                 <option value="PROPOSED">PROPOSED</option>
                 <option value="APPROVED">APPROVED</option>
@@ -368,7 +368,7 @@ export function ResearchClient({
           <LiyonField label={t("research.publication.title")}>
             <input 
               value={pubTitle} 
-              onChange={(e: any) => setPubTitle(e.target.value)} 
+              onChange={(e) => setPubTitle(e.target.value)} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </LiyonField>
@@ -376,7 +376,7 @@ export function ResearchClient({
             <select
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               value={pubType}
-              onChange={(e: any) => setPubType(e.target.value)}
+              onChange={(e) => setPubType(e.target.value)}
             >
               <option value="JOURNAL">JOURNAL</option>
               <option value="CONFERENCE">CONFERENCE</option>
@@ -388,7 +388,7 @@ export function ResearchClient({
             <input 
               type="number"
               value={pubYear} 
-              onChange={(e: any) => setPubYear(Number(e.target.value))} 
+              onChange={(e) => setPubYear(Number(e.target.value))} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </LiyonField>

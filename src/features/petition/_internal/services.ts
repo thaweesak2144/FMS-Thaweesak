@@ -1,8 +1,7 @@
-import { prisma as db } from "@/shared/lib/infra/prisma";
-import type { SessionContext } from "@/features/identity/_internal/session";
+﻿import { prisma as db } from "@/shared/lib/infra/prisma";
+import type { SessionContext } from "@/features/identity/server";
 import { createPetitionTypeSchema, submitPetitionSchema, processPetitionSchema } from "./validations";
 import { z } from "zod";
-import { PetitionStatus } from "@/generated/prisma";
 
 export async function getPetitionTypes(ctx: SessionContext) {
   return db.petitionType.findMany({

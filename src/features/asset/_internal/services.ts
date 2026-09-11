@@ -1,5 +1,5 @@
-import { prisma as db } from "@/shared/lib/infra/prisma";
-import type { SessionContext } from "@/features/identity/_internal/session";
+﻿import { prisma as db } from "@/shared/lib/infra/prisma";
+import type { SessionContext } from "@/features/identity/server";
 import { createLocationSchema, createAssetSchema, transferAssetSchema } from "./validations";
 import { z } from "zod";
 

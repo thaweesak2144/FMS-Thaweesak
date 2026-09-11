@@ -1,6 +1,6 @@
-import { prisma as db } from "@/shared/lib/infra/prisma";
-import type { SessionContext } from "@/features/identity/_internal/session";
-import { createProjectSchema, updateProjectSchema, createPublicationSchema, updatePublicationSchema } from "./validations";
+﻿import { prisma as db } from "@/shared/lib/infra/prisma";
+import type { SessionContext } from "@/features/identity/server";
+import { createProjectSchema, updateProjectSchema, createPublicationSchema } from "./validations";
 import { z } from "zod";
 
 export async function getProjects(ctx: SessionContext) {

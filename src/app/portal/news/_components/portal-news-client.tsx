@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Search, Calendar, Eye, Tag, ArrowRight, Newspaper, Pin } from "lucide-react";
+import { Search, Calendar, Eye, ArrowRight, Newspaper, Pin } from "lucide-react";
 import { useT, useLocale } from "@/shared/lib/i18n/client";
 import { formatDate } from "@/shared/lib/format";
 import type { NewsPostDto, NewsCategoryDto } from "@/features/news";

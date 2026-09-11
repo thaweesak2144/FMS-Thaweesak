@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Plus, Pencil, Trash2, GraduationCap, Link as LinkIcon, BookOpen, AlertCircle, FileText, CheckCircle2, XCircle } from "lucide-react";
+import { Plus, Pencil, Trash2, GraduationCap, BookOpen, AlertCircle, CheckCircle2, XCircle } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 import { useT, useLocale } from "@/shared/lib/i18n/client";

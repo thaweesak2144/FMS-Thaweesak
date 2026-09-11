@@ -92,7 +92,7 @@ export function DocumentClient({ initialDocuments, types, canWrite }: Props) {
             <input 
               placeholder={t("common.search")}
               value={search}
-              onChange={(e: any) => setSearch(e.target.value)}
+              onChange={(e) => setSearch(e.target.value)}
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-9"
             />
           </div>
@@ -152,7 +152,7 @@ export function DocumentClient({ initialDocuments, types, canWrite }: Props) {
             <select
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               value={formTypeId}
-              onChange={(e: any) => setFormTypeId(e.target.value)}
+              onChange={(e) => setFormTypeId(e.target.value)}
             >
               <option value="">{t("common.select")}</option>
               {types.map(t => (
@@ -163,7 +163,7 @@ export function DocumentClient({ initialDocuments, types, canWrite }: Props) {
           <LiyonField label="Title">
             <input 
               value={formTitle} 
-              onChange={(e: any) => setFormTitle(e.target.value)} 
+              onChange={(e) => setFormTitle(e.target.value)} 
               placeholder="e.g. Request for equipment purchase"
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />

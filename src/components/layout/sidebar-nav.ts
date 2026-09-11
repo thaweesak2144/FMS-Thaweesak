@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, Settings, Layers, UserCheck, Building2, Newspaper, GraduationCap, FileText, UserPlus, FileSearch, Microscope, FileQuestion, Package, type LucideIcon } from "lucide-react";
+import { LayoutDashboard, Users, Settings, Layers, UserCheck, Newspaper, GraduationCap, FileText, UserPlus, FileQuestion, Package, type LucideIcon } from "lucide-react";
 import { hasPermission, P } from "@/features/identity";
 import { SAMPLE_P } from "@/features/sample";
 import { PERSONNEL_P } from "@/features/personnel";

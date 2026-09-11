@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { GraduationCap, ArrowRight, BookOpen, Clock, Banknote, Building2 } from "lucide-react";
+import { GraduationCap, ArrowRight, BookOpen, Clock, Building2 } from "lucide-react";
 import { useT, useLocale } from "@/shared/lib/i18n/client";
 import { Button } from "@/components/ui/button";
-import type { CurriculumDto, CurriculumPlanDto } from "@/features/curriculum";
+import type { CurriculumDto } from "@/features/curriculum";
 
 interface Props {
   curriculums: CurriculumDto[];

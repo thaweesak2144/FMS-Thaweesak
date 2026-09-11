@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { AssetStatus, AssetCondition } from "@/generated/prisma";
 
 export const createLocationSchema = z.object({
   name: z.string().min(1),

@@ -17,7 +17,6 @@ import {
   createDocumentType,
   updateDocumentType,
   deleteDocumentType,
-  listDocuments,
   createDocument,
   submitDocument,
   cancelDocument,

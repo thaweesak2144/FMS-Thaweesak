@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Search, Mail, Phone, Building2, User, ArrowRight, GraduationCap } from "lucide-react";
+import { Search, Mail, Building2, User, ArrowRight } from "lucide-react";
 import { useT, useLocale } from "@/shared/lib/i18n/client";
-import { Button } from "@/components/ui/button";
 import type { PersonnelDto, DepartmentDto } from "@/features/personnel";
 
 interface Props {

@@ -131,7 +131,7 @@ export function PetitionClient({
           <DataTable
             state={initialPetitions.length === 0 ? "empty" : "data"}
             rows={initialPetitions}
-            getRowId={(d: any) => d.id}
+            getRowId={(d: PetitionDto) => d.id}
             headHeading={t("petition.tab.requests")}
             empty={{ icon: <FileQuestion className="h-8 w-8" />, title: t("common.noData") }}
             error={{ icon: <FileQuestion className="h-8 w-8" />, title: t("common.error") }}
@@ -139,22 +139,22 @@ export function PetitionClient({
               {
                 key: "number",
                 header: t("petition.col.number"),
-                render: (d: any) => <div className="font-medium text-sm">{d.petitionNumber}</div>
+                render: (d: PetitionDto) => <div className="font-medium text-sm">{d.petitionNumber}</div>
               },
               {
                 key: "student",
                 header: t("petition.col.student"),
-                render: (d: any) => <div className="text-sm">{d.student?.name || d.studentName || "-"}</div>
+                render: (d: PetitionDto) => <div className="text-sm">{d.student?.name || d.studentName || "-"}</div>
               },
               {
                 key: "type",
                 header: t("petition.tab.types"),
-                render: (d: any) => <div className="text-sm">{d.petitionType?.nameTh}</div>
+                render: (d: PetitionDto) => <div className="text-sm">{d.petitionType?.nameTh}</div>
               },
               {
                 key: "status",
                 header: t("petition.col.status"),
-                render: (d: any) => (
+                render: (d: PetitionDto) => (
                   <StatusPill tone={getStatusTone(d.status) as any}>
                     {t(`petition.status.${d.status}` as any) || d.status}
                   </StatusPill>
@@ -163,7 +163,7 @@ export function PetitionClient({
               {
                 key: "actions",
                 header: "",
-                render: (d: any) => (
+                render: (d: PetitionDto) => (
                   <div className="flex items-center justify-end gap-2">
                     {canProcess && (
                       <Button variant="ghost" size="sm" onClick={() => openReview(d)}>
@@ -202,21 +202,21 @@ export function PetitionClient({
           <LiyonField label="Code">
             <input 
               value={typeCode} 
-              onChange={(e: any) => setTypeCode(e.target.value)} 
+              onChange={(e) => setTypeCode(e.target.value)} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </LiyonField>
           <LiyonField label="Name (TH)">
             <input 
               value={typeNameTh} 
-              onChange={(e: any) => setTypeNameTh(e.target.value)} 
+              onChange={(e) => setTypeNameTh(e.target.value)} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </LiyonField>
           <LiyonField label="Name (EN)">
             <input 
               value={typeNameEn} 
-              onChange={(e: any) => setTypeNameEn(e.target.value)} 
+              onChange={(e) => setTypeNameEn(e.target.value)} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </LiyonField>
@@ -224,7 +224,7 @@ export function PetitionClient({
             <input 
               type="number"
               value={typeSla} 
-              onChange={(e: any) => setTypeSla(Number(e.target.value))} 
+              onChange={(e) => setTypeSla(Number(e.target.value))} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </LiyonField>
@@ -247,7 +247,7 @@ export function PetitionClient({
           <LiyonField label="Review Note">
             <textarea 
               value={reviewComment} 
-              onChange={(e: any) => setReviewComment(e.target.value)} 
+              onChange={(e) => setReviewComment(e.target.value)} 
               className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </LiyonField>

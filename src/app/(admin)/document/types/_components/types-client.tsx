@@ -151,7 +151,7 @@ export function DocumentTypesClient({ initialTypes }: { initialTypes: DocumentTy
           <LiyonField label="Code">
             <input 
               value={code} 
-              onChange={(e: any) => setCode(e.target.value)} 
+              onChange={(e) => setCode(e.target.value)} 
               placeholder="e.g. REQ-01" 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
@@ -159,21 +159,21 @@ export function DocumentTypesClient({ initialTypes }: { initialTypes: DocumentTy
           <LiyonField label="Name (TH)">
             <input 
               value={nameTh} 
-              onChange={(e: any) => setNameTh(e.target.value)} 
+              onChange={(e) => setNameTh(e.target.value)} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </LiyonField>
           <LiyonField label="Name (EN)">
             <input 
               value={nameEn} 
-              onChange={(e: any) => setNameEn(e.target.value)} 
+              onChange={(e) => setNameEn(e.target.value)} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </LiyonField>
           <LiyonField label="Approval Steps (JSON)">
             <textarea 
               value={stepsStr} 
-              onChange={(e: any) => setStepsStr(e.target.value)} 
+              onChange={(e) => setStepsStr(e.target.value)} 
               className="flex min-h-[150px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 font-mono text-xs"
             />
           </LiyonField>

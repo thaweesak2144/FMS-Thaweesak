@@ -4,10 +4,8 @@ import {
   Users,
   BookOpen,
   Newspaper,
-  FileCheck,
   Award,
   FileText,
-  PackageCheck,
   ArrowRight,
   Sparkles,
 } from "lucide-react";

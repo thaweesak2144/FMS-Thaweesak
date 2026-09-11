@@ -6,15 +6,9 @@ import {
   Pencil,
   Trash2,
   UserCheck,
-  Building2,
-  GraduationCap,
   AlertCircle,
   Eye,
   EyeOff,
-  User,
-  Mail,
-  Phone,
-  Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useT, useLocale } from "@/shared/lib/i18n/client";

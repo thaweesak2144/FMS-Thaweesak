@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ResearchType, ResearchStatus, PublicationType, Quartile, ResearchRole } from "@/generated/prisma";
+import { ResearchType, ResearchStatus, PublicationType, Quartile } from "@/generated/prisma";
 
 export const createProjectSchema = z.object({
   titleTh: z.string().min(1),

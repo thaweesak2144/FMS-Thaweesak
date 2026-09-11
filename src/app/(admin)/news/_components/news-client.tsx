@@ -12,9 +12,6 @@ import {
   Send,
   Archive,
   AlertCircle,
-  FileText,
-  Calendar,
-  ExternalLink,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useT, useLocale } from "@/shared/lib/i18n/client";

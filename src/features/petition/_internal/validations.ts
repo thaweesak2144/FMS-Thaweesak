@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { PetitionStatus, PetitionActionType } from "@/generated/prisma";
+import { PetitionActionType } from "@/generated/prisma";
 
 export const createPetitionTypeSchema = z.object({
   code: z.string().min(1),

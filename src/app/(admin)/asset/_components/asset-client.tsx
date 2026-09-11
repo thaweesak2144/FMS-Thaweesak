@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useTransition } from "react";
 import { Plus, ArrowRightLeft, Package, MapPin } from "lucide-react";
@@ -178,7 +178,7 @@ export function AssetClient({
           <DataTable
             state={initialAssets.length === 0 ? "empty" : "data"}
             rows={initialAssets}
-            getRowId={(d: any) => d.id}
+            getRowId={(d: AssetDto) => d.id}
             headHeading={t("asset.tab.assets")}
             empty={{ icon: <Package className="h-8 w-8" />, title: t("common.noData") }}
             error={{ icon: <Package className="h-8 w-8" />, title: t("common.error") }}
@@ -186,7 +186,7 @@ export function AssetClient({
               {
                 key: "number",
                 header: t("asset.col.number"),
-                render: (d: any) => <div className="font-medium text-sm">{d.assetNumber}</div>
+                render: (d: AssetDto) => <div className="font-medium text-sm">{d.assetNumber}</div>
               },
               {
                 key: "name",
@@ -235,7 +235,7 @@ export function AssetClient({
           <DataTable
             state={locations.length === 0 ? "empty" : "data"}
             rows={locations}
-            getRowId={(d: any) => d.id}
+            getRowId={(d: AssetLocationDto) => d.id}
             headHeading={t("asset.tab.locations")}
             empty={{ icon: <MapPin className="h-8 w-8" />, title: t("common.noData") }}
             error={{ icon: <MapPin className="h-8 w-8" />, title: t("common.error") }}
@@ -243,7 +243,7 @@ export function AssetClient({
               {
                 key: "name",
                 header: "Location Name",
-                render: (d: any) => <div className="font-medium text-sm">{d.name}</div>
+                render: (d: AssetLocationDto) => <div className="font-medium text-sm">{d.name}</div>
               },
               {
                 key: "building",
@@ -267,14 +267,14 @@ export function AssetClient({
           <LiyonField label={t("asset.col.number")}>
             <input 
               value={assetNumber} 
-              onChange={(e: any) => setAssetNumber(e.target.value)} 
+              onChange={(e) => setAssetNumber(e.target.value)} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </LiyonField>
           <LiyonField label={t("asset.col.name")}>
             <input 
               value={assetName} 
-              onChange={(e: any) => setAssetName(e.target.value)} 
+              onChange={(e) => setAssetName(e.target.value)} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             />
           </LiyonField>
@@ -282,7 +282,7 @@ export function AssetClient({
             <select
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
               value={categoryId}
-              onChange={(e: any) => setCategoryId(e.target.value)}
+              onChange={(e) => setCategoryId(e.target.value)}
             >
               <option value="">-- Select Category --</option>
               {categories.map(c => <option key={c.id} value={c.id}>{c.nameTh}</option>)}
@@ -292,7 +292,7 @@ export function AssetClient({
             <select
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
               value={locationId}
-              onChange={(e: any) => setLocationId(e.target.value)}
+              onChange={(e) => setLocationId(e.target.value)}
             >
               <option value="">-- Select Location --</option>
               {locations.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
@@ -302,7 +302,7 @@ export function AssetClient({
             <select
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
               value={custodianId}
-              onChange={(e: any) => setCustodianId(e.target.value)}
+              onChange={(e) => setCustodianId(e.target.value)}
             >
               <option value="">-- Select Custodian --</option>
               {custodians.map((c: any) => <option key={c.id} value={c.id}>{c.firstNameTh} {c.lastNameTh}</option>)}
@@ -326,7 +326,7 @@ export function AssetClient({
             <select
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
               value={toLocationId}
-              onChange={(e: any) => setToLocationId(e.target.value)}
+              onChange={(e) => setToLocationId(e.target.value)}
             >
               {locations.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
@@ -335,7 +335,7 @@ export function AssetClient({
             <select
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
               value={toCustodianId}
-              onChange={(e: any) => setToCustodianId(e.target.value)}
+              onChange={(e) => setToCustodianId(e.target.value)}
             >
               {custodians.map((c: any) => <option key={c.id} value={c.id}>{c.firstNameTh} {c.lastNameTh}</option>)}
             </select>
@@ -343,7 +343,7 @@ export function AssetClient({
           <LiyonField label="Reason">
             <input 
               value={transferReason} 
-              onChange={(e: any) => setTransferReason(e.target.value)} 
+              onChange={(e) => setTransferReason(e.target.value)} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
             />
           </LiyonField>
@@ -361,28 +361,28 @@ export function AssetClient({
           <LiyonField label="Name">
             <input 
               value={locName} 
-              onChange={(e: any) => setLocName(e.target.value)} 
+              onChange={(e) => setLocName(e.target.value)} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
             />
           </LiyonField>
           <LiyonField label="Building">
             <input 
               value={locBuilding} 
-              onChange={(e: any) => setLocBuilding(e.target.value)} 
+              onChange={(e) => setLocBuilding(e.target.value)} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
             />
           </LiyonField>
           <LiyonField label="Floor">
             <input 
               value={locFloor} 
-              onChange={(e: any) => setLocFloor(e.target.value)} 
+              onChange={(e) => setLocFloor(e.target.value)} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
             />
           </LiyonField>
           <LiyonField label="Room">
             <input 
               value={locRoom} 
-              onChange={(e: any) => setLocRoom(e.target.value)} 
+              onChange={(e) => setLocRoom(e.target.value)} 
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
             />
           </LiyonField>

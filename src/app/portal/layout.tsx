@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { GraduationCap, LogIn, LayoutDashboard, UserCheck, BookOpen, Newspaper, FileText, FileCheck, Award, PackageCheck, Menu, X } from "lucide-react";
+import { GraduationCap, LogIn, LayoutDashboard, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";

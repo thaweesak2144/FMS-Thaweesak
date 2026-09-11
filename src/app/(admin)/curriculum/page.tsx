@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import { requirePermission, hasPermission } from "@/features/identity/server";
 import { CURRICULUM_P, listCurriculums } from "@/features/curriculum/server";
 import { CurriculumClient } from "./_components/curriculum-client";

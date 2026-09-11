@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, GraduationCap, Building2, Clock, BookOpen, Banknote, CheckCircle2, LayoutList } from "lucide-react";
 import { useT, useLocale } from "@/shared/lib/i18n/client";
-import { Button } from "@/components/ui/button";
 import type { CurriculumDto, CurriculumPlanDto } from "@/features/curriculum";
 
 interface Props {

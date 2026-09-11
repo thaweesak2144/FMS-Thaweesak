@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import Link from "next/link";
-import { ArrowLeft, Plus, CheckCircle2, XCircle, Clock, Save } from "lucide-react";
+import { ArrowLeft, Plus } from "lucide-react";
 import { useT } from "@/shared/lib/i18n/client";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";

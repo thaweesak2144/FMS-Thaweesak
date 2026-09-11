@@ -4,12 +4,9 @@ import {
   ArrowLeft,
   Calendar,
   Eye,
-  Tag,
   Download,
   FileText,
   User,
-  Share2,
-  Newspaper,
 } from "lucide-react";
 import { getT, getLocale } from "@/i18n/server";
 import { formatDate } from "@/shared/lib/format";

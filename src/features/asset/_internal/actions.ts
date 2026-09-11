@@ -6,7 +6,6 @@ import { ASSET_P } from "../permissions";
 import {
   getLocations,
   createLocation,
-  getCategories,
   getAssets,
   createAsset,
   transferAsset,
