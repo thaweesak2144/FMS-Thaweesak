@@ -58,6 +58,7 @@ export default function PortalClientLayout({ children, logoUrl }: { children: Re
           <div className="right hidden sm:flex">
             <LanguageSwitcher />
             {status === "authenticated" && user ? (
+              <div className="acct">
               <DropdownMenuPrimitive.Root>
                 <DropdownMenuPrimitive.Trigger asChild>
                   <button type="button">
@@ -102,6 +103,7 @@ export default function PortalClientLayout({ children, logoUrl }: { children: Re
                   </DropdownMenuPrimitive.Content>
                 </DropdownMenuPrimitive.Portal>
               </DropdownMenuPrimitive.Root>
+            </div>
             ) : (
               <Link href="/login" className="btn-outline text-xs px-3 py-1.5 rounded-md flex items-center gap-1.5 font-medium transition-all">
                 <LogIn className="h-3.5 w-3.5" />
