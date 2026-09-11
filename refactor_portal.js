@@ -1,32 +1,9 @@
-"use client";
+const fs = require('fs');
+let content = fs.readFileSync('src/app/portal/client-layout.tsx', 'utf8');
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { GraduationCap, LogIn, LayoutDashboard, Menu, X } from "lucide-react";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { LanguageSwitcher } from "@/components/layout/language-switcher";
-import { useAppSession } from "@/hooks/use-session";
-import { useT, useLocale } from "@/shared/lib/i18n/client";
-
-export default function PortalClientLayout({ children, logoUrl }: { children: React.ReactNode; logoUrl?: string | null }) {
-  const pathname = usePathname();
-  const t = useT();
-  const locale = useLocale();
-  const { user, status } = useAppSession();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const navLinks = [
-    { href: "/portal", label: locale === "th" ? "หน้าหลัก" : "Home" },
-    { href: "/portal/news", label: t("portal.nav.news") },
-    { href: "/portal/personnel", label: t("portal.nav.personnel") },
-    { href: "/portal/curriculum", label: t("portal.nav.curriculum") },
-  ];
-
-  return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
-      {/* Top Banner / Navbar */}
-      <header className="nav glass">
+// Replace header block
+content = content.replace(/<header className="sticky top-0 z-40 w-full border-b bg-background\/85 backdrop-blur-md">[\s\S]*?<\/header>/, 
+`<header className="nav glass">
         <div className="nav-in">
           {/* Brand Logo */}
           <Link href="/portal" className="brand group flex items-center">
@@ -102,28 +79,6 @@ export default function PortalClientLayout({ children, logoUrl }: { children: Re
             </div>
           </div>
         )}
-      </header>
+      </header>`);
 
-      {/* Main Content */}
-      <main className="flex-1">{children}</main>
-
-      {/* Footer */}
-      <footer className="border-t bg-muted/30 py-10 mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <GraduationCap className="h-4 w-4 text-primary" />
-            <span>© {new Date().getFullYear()} {t("app.name")}. All rights reserved.</span>
-          </div>
-          <div className="flex items-center gap-6">
-            <Link href="/portal/personnel" className="hover:underline">
-              {t("portal.nav.personnel")}
-            </Link>
-            <Link href="/login" className="hover:underline">
-              {locale === "th" ? "เข้าสู่ระบบ" : "Login"}
-            </Link>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-}
+fs.writeFileSync('src/app/portal/client-layout.tsx', content, 'utf8');
