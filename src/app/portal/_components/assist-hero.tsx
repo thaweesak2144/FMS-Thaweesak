@@ -6,7 +6,6 @@ import {
   Users,
   ArrowRight,
   FileText,
-  Sparkles,
   Play,
   GraduationCap,
 } from "lucide-react";
@@ -16,46 +15,39 @@ interface AssistHeroProps {
   locale: string;
 }
 
+// 8 poses from the new high-quality sprite sheet (2 rows × 4 cols)
 const MASCOT_POSES = [
   { id: 1, titleTh: "ยินดีต้อนรับสู่ระบบ", titleEn: "Welcome to Academic Hub" },
-  { id: 5, titleTh: "สวัสดีครับชาวคณะ 👋", titleEn: "Hello & Greetings 👋" },
-  { id: 13, titleTh: "สวัสดีครับ ยินดีให้บริการ 🙏", titleEn: "Sawasdee - Thai Greeting 🙏" },
-  { id: 7, titleTh: "ระบบได้มาตรฐาน 100% 👍", titleEn: "Quality & Standards 👍" },
-  { id: 2, titleTh: "พร้อมเริ่มต้นเรียนรู้ ✌️", titleEn: "Ready to Learn ✌️" },
-  { id: 9, titleTh: "นวัตกรรมและเทคโนโลยี 💻", titleEn: "Digital Innovation 💻" },
-  { id: 6, titleTh: "แนะนำบริการดิจิทัล 👉", titleEn: "Discover Services 👉" },
-  { id: 4, titleTh: "ค้นคว้าความรู้ใหม่ 📖", titleEn: "Explore Knowledge 📖" },
-  { id: 8, titleTh: "ให้คำปรึกษาตลอด 24 ชม. 🤔", titleEn: "Smart Guidance 🤔" },
-  { id: 10, titleTh: "สำเร็จไปด้วยกัน 💪", titleEn: "Success Together 💪" },
-  { id: 14, titleTh: "ยินดีต้อนรับทุกคนครับ 🤗", titleEn: "Open Welcome to All 🤗" },
-  { id: 12, titleTh: "ก้าวไปข้างหน้าอย่างมั่นคง 🚶", titleEn: "Step Forward 🚶" },
-  { id: 3, titleTh: "มั่นใจ ปลอดภัย 100%", titleEn: "Confident & Secure" },
-  { id: 11, titleTh: "มุ่งมั่นสู่อนาคต 🎒", titleEn: "Future Ready 🎒" },
+  { id: 2, titleTh: "พร้อมเรียนรู้ 👍", titleEn: "Ready to Learn 👍" },
+  { id: 3, titleTh: "สู้ๆ นะครับ ✌️", titleEn: "Keep it up ✌️" },
+  { id: 4, titleTh: "แนะนำบริการดิจิทัล 👆", titleEn: "Discover Services 👆" },
+  { id: 5, titleTh: "คิดหนักแต่มีคำตอบ 🤔", titleEn: "Smart Thinking 🤔" },
+  { id: 6, titleTh: "สำเร็จไปด้วยกัน 💪", titleEn: "Success Together 💪" },
+  { id: 7, titleTh: "ก้าวไปข้างหน้า 🚶", titleEn: "Moving Forward 🚶" },
+  { id: 8, titleTh: "สวัสดีครับ ยินดีให้บริการ 🙏", titleEn: "Sawasdee - Greeting 🙏" },
 ];
 
 export function AssistHero({ orgName, locale }: AssistHeroProps) {
   const isTh = locale === "th";
   const [currentPoseIdx, setCurrentPoseIdx] = useState(0);
 
-  // Preload all 14 pose images on mount for instant zero-flicker transitions
+  // Preload all 8 pose images on mount for instant zero-flicker transitions
   useEffect(() => {
     if (typeof window !== "undefined") {
       MASCOT_POSES.forEach((p) => {
         const img = new Image();
-        img.src = `/images/mascot/pose-${p.id}.png?v=3`;
+        img.src = `/images/mascot/pose-${p.id}.png?v=4`;
       });
     }
   }, []);
 
-  // Continuous automatic animation cycle through all 14 poses sequentially
+  // Continuous automatic animation cycle through all 8 poses sequentially
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentPoseIdx((prev) => (prev + 1) % MASCOT_POSES.length);
     }, 2200);
     return () => clearInterval(timer);
   }, []);
-
-  const activePose = MASCOT_POSES[currentPoseIdx];
 
   return (
     <section className="relative overflow-hidden w-full px-4 sm:px-8 lg:px-16 pt-12 pb-16 lg:py-20 flex items-center">
@@ -201,24 +193,7 @@ export function AssistHero({ orgName, locale }: AssistHeroProps) {
                 "0 25px 50px -12px color-mix(in srgb, var(--brand) 25%, transparent), inset 0 1px 2px rgba(255,255,255,0.8)",
             }}
           >
-            {/* Top Stage Header: Current Pose Bubble */}
-            <div className="w-full flex items-center justify-center z-10">
-              <div
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full backdrop-blur-md border shadow-xs transition-all duration-300"
-                style={{
-                  background: "color-mix(in srgb, var(--glass-strong) 88%, transparent)",
-                  borderColor: "color-mix(in srgb, var(--brand) 35%, var(--glass-border))",
-                }}
-              >
-                <Sparkles className="h-3.5 w-3.5 text-primary animate-pulse" />
-                <span className="text-xs font-semibold text-foreground tracking-tight">
-                  {isTh ? activePose.titleTh : activePose.titleEn}
-                </span>
-                <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-bold">
-                  {currentPoseIdx + 1}/{MASCOT_POSES.length}
-                </span>
-              </div>
-            </div>
+
 
             {/* Central Mascot Figure with Seamless Crossfade Pose Transitions */}
             <div className="relative flex-1 w-full flex items-center justify-center my-1 overflow-visible">
@@ -239,14 +214,14 @@ export function AssistHero({ orgName, locale }: AssistHeroProps) {
                 }}
               />
 
-              {/* 14 High-Res Character Poses with Smooth Crossfade */}
+              {/* 8 High-Res Character Poses with Smooth Crossfade */}
               {MASCOT_POSES.map((pose, idx) => {
                 const isCurrent = idx === currentPoseIdx;
                 return (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     key={pose.id}
-                    src={`/images/mascot/pose-${pose.id}.png?v=3`}
+                    src={`/images/mascot/pose-${pose.id}.png?v=4`}
                     alt={isTh ? pose.titleTh : pose.titleEn}
                     className={`absolute inset-0 m-auto max-h-[440px] w-auto object-contain transition-all duration-500 ease-out pointer-events-none ${
                       isCurrent
