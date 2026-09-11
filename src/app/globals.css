@@ -147,3 +147,49 @@
 .animate-conveyor {
   animation: conveyorMove 12s linear infinite;
 }
+
+/* ═══ Conveyor Belt Items Float Up ═══ */
+@keyframes conveyorFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-3px); }
+}
+
+.animate-conveyor-item {
+  animation: conveyorFloat 2s ease-in-out infinite;
+}
+
+.animate-conveyor-item-delay-1 {
+  animation: conveyorFloat 2s ease-in-out 0.4s infinite;
+}
+
+.animate-conveyor-item-delay-2 {
+  animation: conveyorFloat 2s ease-in-out 0.8s infinite;
+}
+
+.animate-conveyor-item-delay-3 {
+  animation: conveyorFloat 2s ease-in-out 1.2s infinite;
+}
+
+.animate-conveyor-item-delay-4 {
+  animation: conveyorFloat 2s ease-in-out 1.6s infinite;
+}
+
+/* Conveyor Belt Roller Spin */
+@keyframes rollerSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-roller {
+  animation: rollerSpin 1.5s linear infinite;
+}
+
+/* Conveyor Belt Surface Scroll */
+@keyframes beltScroll {
+  0% { background-position: 0 0; }
+  100% { background-position: -60px 0; }
+}
+
+.animate-belt-scroll {
+  animation: beltScroll 1s linear infinite;
+}
