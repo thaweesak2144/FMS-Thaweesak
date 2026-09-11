@@ -33,7 +33,7 @@ export function AssistHero({ orgName, locale }: AssistHeroProps) {
     if (typeof window !== "undefined") {
       MASCOT_POSES.forEach((p) => {
         const img = new Image();
-        img.src = `/images/mascot/pose-${p.id}.png?v=5`;
+        img.src = `/images/mascot/pose-${p.id}.webp?v=6`;
       });
     }
   }, []);
@@ -218,7 +218,7 @@ export function AssistHero({ orgName, locale }: AssistHeroProps) {
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     key={pose.id}
-                    src={`/images/mascot/pose-${pose.id}.png?v=5`}
+                    src={`/images/mascot/pose-${pose.id}.webp?v=6`}
                     alt={isTh ? pose.titleTh : pose.titleEn}
                     className={`absolute inset-0 m-auto max-h-[440px] w-auto object-contain transition-all duration-500 ease-out pointer-events-none ${
                       isCurrent
