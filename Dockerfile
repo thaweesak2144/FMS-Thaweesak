@@ -8,9 +8,10 @@ WORKDIR /app
 # Copy dependency definition files
 COPY package.json package-lock.json ./
 COPY prisma ./prisma/
+COPY .npmrc ./
 
 # Install exact production & build dependencies
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 
 # ══════════════════════════════════════════════════════════
 # Stage 2: Builder
@@ -22,12 +23,16 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# Build-time environment variables for static code generation and bundle build
+ENV DATABASE_URL="postgresql://postgres:postgres@localhost:5432/dummy?schema=public"
+ENV AUTH_SECRET="build_dummy_secret_32_chars_long_for_nextjs"
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
+
 # Generate Prisma Client (outputs to src/generated/prisma)
 RUN npx prisma generate
 
 # Build Next.js with standalone output
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV NODE_ENV=production
 RUN npm run build
 
 # ══════════════════════════════════════════════════════════
@@ -59,6 +64,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Copy Prisma schema and generated client for migrations and runtime queries
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/src/generated ./src/generated
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules/prisma ./node_modules/prisma
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules/.bin ./node_modules/.bin
+ENV PATH="/app/node_modules/.bin:${PATH}"
 COPY --chmod=755 docker-entrypoint.sh ./
 
 USER nextjs
