@@ -28,9 +28,23 @@ export async function uploadLogoAction(formData: FormData): Promise<ActionResult
     await requirePermission(P.settingsManage);
     const file = formData.get("file") as File;
     if (!file) throw new Error("No file uploaded");
+
+    // Security: Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      throw new Error("File size exceeds 5MB limit");
+    }
+
+    // Security: Whitelist allowed image extensions and MIME types
+    const ALLOWED_EXTS = ["png", "jpg", "jpeg", "webp"];
+    const ALLOWED_MIMES = ["image/png", "image/jpeg", "image/webp"];
+    const ext = (file.name.split('.').pop() || "").toLowerCase();
+    
+    if (!ALLOWED_EXTS.includes(ext) || (file.type && !ALLOWED_MIMES.includes(file.type))) {
+      throw new Error("Invalid file type. Only PNG, JPG, and WEBP images are allowed.");
+    }
+
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    const ext = file.name.split('.').pop() || "png";
     const filename = `logo-${Date.now()}.${ext}`;
     const uploadDir = join(process.cwd(), "public/uploads");
     require("fs").mkdirSync(uploadDir, { recursive: true });
