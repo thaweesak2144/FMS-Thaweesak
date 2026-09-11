@@ -404,3 +404,43 @@
 .animate-window-warmth {
   animation: windowWarmth 3.2s ease-in-out infinite;
 }
+
+/* ═══════════ Assist Hero Micro-Animations ═══════════ */
+@keyframes heroFloat1 {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-9px) rotate(0.6deg);
+  }
+}
+
+@keyframes heroFloat2 {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(8px) rotate(-0.6deg);
+  }
+}
+
+@keyframes heroFloat3 {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-11px) rotate(0.8deg);
+  }
+}
+
+.animate-hero-float-1 {
+  animation: heroFloat1 5s ease-in-out infinite;
+}
+
+.animate-hero-float-2 {
+  animation: heroFloat2 5.6s ease-in-out infinite;
+}
+
+.animate-hero-float-3 {
+  animation: heroFloat3 4.8s ease-in-out infinite;
+}
