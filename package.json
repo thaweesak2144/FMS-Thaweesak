@@ -16,7 +16,7 @@
     "test:integration": "vitest run --config vitest.integration.config.ts",
     "e2e:reset": "tsx scripts/e2e-reset.ts",
     "test:e2e": "npm run e2e:reset && npm run db:seed && playwright test",
-    "check": "npm run type-check && npm run type-check:tests && npm run lint && npm run deps:check && npm run test && npm run test:integration",
+    "check": "npm run type-check && npm run type-check:tests && npm run lint && npm run deps:check && npm run test && npm run test:integration && npm run db:seed",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
     "db:migrate:dev": "prisma migrate dev",
