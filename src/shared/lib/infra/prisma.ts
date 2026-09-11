@@ -13,3 +13,4 @@ if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 /** ใช้เป็นชนิดของพารามิเตอร์ db ใน service เพื่อรับทั้ง client และ transaction */
 export type Db = PrismaClient | Prisma.TransactionClient;
+export type { Prisma } from "@/generated/prisma";
