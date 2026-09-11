@@ -90,7 +90,7 @@ export function SettingsForm({ initial }: { initial: TenantSettings }) {
         port: Number(form.smtp.port) || 465,
         secure: form.smtp.secure ?? true,
         user: form.smtp.user.trim(),
-        pass: form.smtp.pass.trim(),
+        pass: form.smtp.pass.replace(/\s/g, ""),
         from: form.smtp.from.trim() || form.smtp.user.trim(),
         testTo: targetEmail,
       });
