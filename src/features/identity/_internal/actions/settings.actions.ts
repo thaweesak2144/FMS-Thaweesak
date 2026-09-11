@@ -30,7 +30,9 @@ export async function uploadLogoAction(formData: FormData): Promise<ActionResult
     const buffer = Buffer.from(bytes);
     const ext = file.name.split('.').pop() || "png";
     const filename = `logo-${Date.now()}.${ext}`;
-    const filepath = join(process.cwd(), "public/uploads", filename);
+    const uploadDir = join(process.cwd(), "public/uploads");
+    require("fs").mkdirSync(uploadDir, { recursive: true });
+    const filepath = join(uploadDir, filename);
     await writeFile(filepath, buffer);
     return `/uploads/${filename}`;
   });
