@@ -10,8 +10,17 @@ export async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
   if (PUBLIC_PREFIXES.some((p) => pathname.startsWith(p))) return NextResponse.next();
 
-  const secureCookie = (process.env.APP_URL ?? "").startsWith("https://");
-  const token = await getToken({ req, secret: process.env.AUTH_SECRET, secureCookie });
+  const secureCookie =
+    req.cookies.has("__Secure-authjs.session-token") ||
+    req.headers.get("x-forwarded-proto") === "https" ||
+    req.nextUrl.protocol === "https:" ||
+    (process.env.APP_URL ?? "").startsWith("https://");
+  let token = await getToken({ req, secret: process.env.AUTH_SECRET, secureCookie });
+  if (!token && !secureCookie && req.cookies.has("__Secure-authjs.session-token")) {
+    token = await getToken({ req, secret: process.env.AUTH_SECRET, secureCookie: true });
+  } else if (!token && secureCookie && req.cookies.has("authjs.session-token")) {
+    token = await getToken({ req, secret: process.env.AUTH_SECRET, secureCookie: false });
+  }
   const loggedIn = !!token && !token.invalid && !!token.userId;
 
   if (GUEST_ONLY.includes(pathname)) {
