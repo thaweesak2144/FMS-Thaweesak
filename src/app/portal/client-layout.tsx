@@ -56,19 +56,28 @@ export default function PortalClientLayout({
           </Link>
 
           {/* Desktop Navigation */}
-          <ul className="hidden md:flex">
+          <ul className="hidden md:flex items-center gap-1.5 lg:gap-3 list-none text-sm font-medium">
             {navLinks.map((link) => {
               const active = pathname === link.href || (link.href !== "/portal" && pathname.startsWith(link.href));
               return (
-                <li key={link.href} className={active ? "on" : ""}>
-                  <Link href={link.href}>{link.label}</Link>
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className={`px-3.5 py-1.5 rounded-full transition-all text-sm font-medium ${
+                      active
+                        ? "text-primary font-bold bg-primary/10 shadow-xs"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
                 </li>
               );
             })}
           </ul>
 
           {/* Actions: Lang Switcher & Login / Admin Console */}
-          <div className="right hidden sm:flex">
+          <div className="right hidden sm:flex items-center gap-2.5">
             <button
               type="button"
               className="icon-btn"
