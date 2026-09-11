@@ -26,6 +26,7 @@ export interface SiteNavAccount {
 export interface AdminShellProps {
   brandName: string;
   brandTagline: string;
+  brandLogo?: string | null;
   brandHref: string;
   /** ชื่อหน้าปัจจุบัน (`.tenant` ใน navbar) — ว่างได้ถ้าหาไม่เจอ (ไม่ fallback เป็นค่าปลอม) */
   /** breadcrumb บน navbar — ขั้นสุดท้ายเป็น span[aria-current=page] (h1 เป็นของหัวหน้าในเนื้อหา) ขั้นก่อนหน้าเป็นลิงก์ · ว่าง = ไม่แสดง */
@@ -85,6 +86,7 @@ export interface AdminShellProps {
 export function AdminShell({
   brandName,
   brandTagline,
+  brandLogo,
   brandHref,
   breadcrumb,
   breadcrumbLabel,
@@ -119,7 +121,7 @@ export function AdminShell({
             </svg>
           </i>
           <div className="t">
-            <b>{brandName}</b>
+            {brandLogo ? <img src={brandLogo} alt={brandName} style={{ height: "2rem", objectFit: "contain" }} /> : <b>{brandName}</b>}
             <span>{brandTagline}</span>
           </div>
         </Link>

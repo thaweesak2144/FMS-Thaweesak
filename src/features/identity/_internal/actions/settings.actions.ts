@@ -18,3 +18,20 @@ export async function updateSettingsAction(input: unknown): Promise<ActionResult
     revalidatePath("/", "layout"); // data-palette บน <html> อ่านใหม่
   });
 }
+
+import { writeFile } from "fs/promises";
+import { join } from "path";
+export async function uploadLogoAction(formData: FormData): Promise<ActionResult<string>> {
+  return runAction(async () => {
+    await requirePermission(P.settingsManage);
+    const file = formData.get("file") as File;
+    if (!file) throw new Error("No file uploaded");
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    const ext = file.name.split('.').pop() || "png";
+    const filename = `logo-${Date.now()}.${ext}`;
+    const filepath = join(process.cwd(), "public/uploads", filename);
+    await writeFile(filepath, buffer);
+    return `/uploads/${filename}`;
+  });
+}
