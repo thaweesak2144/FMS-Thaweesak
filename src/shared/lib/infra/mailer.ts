@@ -36,8 +36,9 @@ export async function resolveSmtpConfig(tenantId?: string): Promise<SmtpTranspor
         host: smtp.host || "smtp.gmail.com",
         port: smtp.port || 465,
         secure: smtp.secure !== false,
-        user: smtp.user,
-        pass: smtp.pass,
+        user: smtp.user.trim(),
+        // Google App Password อาจมีช่องว่าง เช่น "xxxx xxxx xxxx xxxx" — ลบออกก่อนใช้
+        pass: smtp.pass.replace(/\s/g, ""),
         from: smtp.from || smtp.user,
       };
     }

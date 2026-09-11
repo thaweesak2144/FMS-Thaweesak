@@ -18,12 +18,14 @@ export async function testSmtpAction(input: unknown): Promise<ActionResult<{ suc
   return runAction(async () => {
     await requirePermission(P.settingsManage);
     const data = testSmtpSchema.parse(input, { error: zodErrorMap(await getLocale()) });
+    // Google App Password มักถูกแสดงเป็น "xxxx xxxx xxxx xxxx" พร้อมช่องว่าง — ลบออกก่อนใช้
+    const cleanPass = data.pass.replace(/\s/g, "");
     try {
       const transport = nodemailer.createTransport({
         host: data.host,
         port: data.port,
         secure: data.secure,
-        auth: data.user ? { user: data.user, pass: data.pass } : undefined,
+        auth: data.user ? { user: data.user, pass: cleanPass } : undefined,
         connectionTimeout: 10000,
         greetingTimeout: 10000,
       });
