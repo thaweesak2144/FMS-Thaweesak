@@ -44,8 +44,8 @@ export default function PortalClientLayout({
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
       {/* Top Banner / Navbar */}
-      <header className="nav glass">
-        <div className="nav-in">
+      <header className="sticky top-3 sm:top-5 z-40 px-4 sm:px-8 w-full">
+        <div className="max-w-6xl mx-auto rounded-full bg-card/90 dark:bg-card/95 backdrop-blur-xl border border-border/80 shadow-md px-6 sm:px-8 py-2.5 flex items-center justify-between">
           {/* Brand Logo */}
           <Link href="/portal" className="brand group flex items-center">
             {logoUrl ? <img src={logoUrl} alt="Logo" style={{ height: "2rem", width: "2rem", objectFit: "contain", marginRight: "10px" }} className="group-hover:scale-105 transition-transform" /> : <i className="group-hover:scale-105 transition-transform"><GraduationCap className="h-5 w-5" /></i>}
