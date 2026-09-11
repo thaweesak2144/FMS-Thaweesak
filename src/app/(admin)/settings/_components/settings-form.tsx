@@ -27,6 +27,9 @@ export function SettingsForm({ initial }: { initial: TenantSettings }) {
       if (!r.ok) { setErrors(r.error.fieldErrors ?? {}); if (!r.error.fieldErrors) toast.error(t(`error.${r.error.code}`)); return; }
       setErrors({});
       toast.success(t("settings.saveOk"));
+      if (typeof document !== "undefined") {
+        document.documentElement.setAttribute("data-palette", form.palette);
+      }
       router.refresh();
     });
   }
@@ -52,7 +55,7 @@ export function SettingsForm({ initial }: { initial: TenantSettings }) {
         <LiyonCard>
           <h2>{t("settings.brandTitle")}</h2>
           <p>{t("settings.brandDesc")}</p>
-          <PalettePicker value={form.palette} onChange={(p) => setForm({ ...form, palette: p })} label={t("settings.paletteLabel")} />
+          <PalettePicker value={form.palette} onChange={(p) => { setForm({ ...form, palette: p }); if (typeof document !== "undefined") { document.documentElement.setAttribute("data-palette", p); } }} label={t("settings.paletteLabel")} />
           {form.palette === "coral" && <p className="warn" role="note">{t("settings.coralWarn")}</p>}
         </LiyonCard>
         <div className="savebar"><Button type="button" onClick={save} disabled={pending}>{t("common.save")}</Button></div>

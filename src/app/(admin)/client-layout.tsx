@@ -13,13 +13,24 @@ import { useT, useLocale } from "@/shared/lib/i18n/client";
 import { localizedName } from "@/shared/lib/format";
 import { hasPermission, P } from "@/features/identity";
 
-export default function AdminClientLayout({ children, logoUrl }: { children: React.ReactNode; logoUrl?: string | null }) {
+export default function AdminClientLayout({
+  children,
+  logoUrl,
+  orgNameTh,
+  orgNameEn,
+}: {
+  children: React.ReactNode;
+  logoUrl?: string | null;
+  orgNameTh?: string | null;
+  orgNameEn?: string | null;
+}) {
   const pathname = usePathname();
   const t = useT();
   const locale = useLocale();
   const tail = useBreadcrumbTailItems();
   const { status, user, roles, permissions, isSuperAdmin } = useAppSession();
   const { collapsed, toggleCollapsed } = useSidebarStore();
+  const orgName = (locale === "th" ? orgNameTh : orgNameEn) || orgNameTh || orgNameEn || t("app.name");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [prev, setPrev] = useState(pathname);
   const [mounted, setMounted] = useState(false);
@@ -44,7 +55,7 @@ export default function AdminClientLayout({ children, logoUrl }: { children: Rea
 
   return (
     <AdminShell
-      brandName={t("app.name")} brandLogo={logoUrl} brandTagline={t("app.tagline")} brandHref="/dashboard"
+      brandName={orgName} brandLogo={logoUrl} brandTagline={t("app.tagline")} brandHref="/dashboard"
       breadcrumb={breadcrumb} breadcrumbLabel={t("common.breadcrumb")}
       roleLabel={roles[0] ? localizedName(roles[0], locale) : null}
       languageSwitcher={<LanguageSwitcher className="lang" />}

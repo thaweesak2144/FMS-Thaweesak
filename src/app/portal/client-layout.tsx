@@ -13,7 +13,17 @@ import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui";
 import { signOut } from "next-auth/react";
 import { User, LogOut } from "lucide-react";
 
-export default function PortalClientLayout({ children, logoUrl }: { children: React.ReactNode; logoUrl?: string | null }) {
+export default function PortalClientLayout({
+  children,
+  logoUrl,
+  orgNameTh,
+  orgNameEn,
+}: {
+  children: React.ReactNode;
+  logoUrl?: string | null;
+  orgNameTh?: string | null;
+  orgNameEn?: string | null;
+}) {
   const pathname = usePathname();
   const t = useT();
   const locale = useLocale();
@@ -22,6 +32,7 @@ export default function PortalClientLayout({ children, logoUrl }: { children: Re
   const { theme, setTheme } = useTheme();
 
   const initials = (user?.name ?? "?").trim().charAt(0).toUpperCase() || "?";
+  const orgName = (locale === "th" ? orgNameTh : orgNameEn) || orgNameTh || orgNameEn || t("app.name");
 
   const navLinks = [
     { href: "/portal", label: locale === "th" ? "หน้าหลัก" : "Home" },
@@ -39,7 +50,7 @@ export default function PortalClientLayout({ children, logoUrl }: { children: Re
           <Link href="/portal" className="brand group flex items-center">
             {logoUrl ? <img src={logoUrl} alt="Logo" style={{ height: "2rem", width: "2rem", objectFit: "contain", marginRight: "10px" }} className="group-hover:scale-105 transition-transform" /> : <i className="group-hover:scale-105 transition-transform"><GraduationCap className="h-5 w-5" /></i>}
             <div className="flex flex-col ml-1">
-              <span className="font-bold text-base tracking-tight leading-none group-hover:text-primary transition-colors">{t("app.name")}</span>
+              <span className="font-bold text-base tracking-tight leading-none group-hover:text-primary transition-colors">{orgName}</span>
               <span className="text-xs text-muted-foreground mt-0.5 font-normal">{t("app.tagline")}</span>
             </div>
           </Link>
@@ -211,7 +222,7 @@ export default function PortalClientLayout({ children, logoUrl }: { children: Re
             <Link href="/portal" className="brand flex items-center">
               {logoUrl ? <img src={logoUrl} alt="Logo" style={{ height: "2rem", width: "2rem", objectFit: "contain", marginRight: "10px" }} /> : <i><GraduationCap className="h-5 w-5" /></i>}
               <div className="flex flex-col ml-1">
-                <span className="font-bold text-base tracking-tight leading-none">{t("app.name")}</span>
+                <span className="font-bold text-base tracking-tight leading-none">{orgName}</span>
               </div>
             </Link>
             <p className="foot-tag">{t("app.tagline")}</p>
@@ -242,7 +253,7 @@ export default function PortalClientLayout({ children, logoUrl }: { children: Re
         
         <div className="foot-bottom">
           <div className="foot-bottom-in">
-            <span>© {new Date().getFullYear()} {t("app.name")}. All rights reserved.</span>
+            <span>© {new Date().getFullYear()} {orgName}. All rights reserved.</span>
           </div>
         </div>
       </footer>

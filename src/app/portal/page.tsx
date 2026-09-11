@@ -10,11 +10,14 @@ import {
   Sparkles,
 } from "lucide-react";
 import { getT, getLocale } from "@/i18n/server";
+import { resolveTenantSettings } from "@/features/identity/server";
 import { Button } from "@/components/ui/button";
 
 export default async function PortalHomePage() {
   const t = await getT();
   const locale = await getLocale();
+  const settings = await resolveTenantSettings();
+  const orgName = (locale === "th" ? settings?.nameTh : settings?.nameEn) || settings?.nameTh || settings?.nameEn || t("app.name");
 
   const features = [
     {
@@ -74,7 +77,7 @@ export default async function PortalHomePage() {
         <div className="max-w-3xl mx-auto space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">
             <GraduationCap className="h-4 w-4" />
-            {t("app.name")}
+            {orgName}
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
             {locale === "th" ? "ศูนย์กลางข้อมูลและบริการดิจิทัลระดับองค์กร" : "Enterprise Faculty Portal & Digital Services"}
