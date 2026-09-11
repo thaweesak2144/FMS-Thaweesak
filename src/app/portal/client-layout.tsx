@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { GraduationCap, LogIn, LayoutDashboard, Menu, X } from "lucide-react";
+import { GraduationCap, LogIn, LayoutDashboard, Menu, X, User, LogOut, MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "next-themes";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
@@ -10,7 +10,6 @@ import { useAppSession } from "@/hooks/use-session";
 import { useT, useLocale } from "@/shared/lib/i18n/client";
 import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui";
 import { signOut } from "next-auth/react";
-import { User, LogOut } from "lucide-react";
 
 export default function PortalClientLayout({
   children,
@@ -298,48 +297,215 @@ export default function PortalClientLayout({
       {/* Main Content (With top padding so it floats beneath capsule navbar) */}
       <main className="flex-1 pt-24 sm:pt-28">{children}</main>
 
-      {/* Footer */}
-      <footer>
-        <div className="foot-in">
-          <div>
-            <Link href="/portal" className="brand flex items-center">
-              {logoUrl ? <img src={logoUrl} alt="Logo" style={{ height: "2.25rem", width: "2.25rem", objectFit: "contain", marginRight: "10px" }} /> : <i><GraduationCap className="h-5 w-5" /></i>}
-              <div className="flex flex-col ml-1">
-                <span className="font-bold text-base tracking-tight leading-tight">{orgName}</span>
-                {(locale === "th" ? orgNameEn : orgNameTh) && (
-                  <span className="text-xs text-muted-foreground mt-0.5">{locale === "th" ? orgNameEn : orgNameTh}</span>
+      {/* Footer (Modern Premium University/Enterprise Portal Style) */}
+      <footer className="mt-24 border-t border-border/60 bg-gradient-to-b from-slate-50 to-slate-100 dark:from-card/90 dark:to-background text-foreground relative overflow-hidden">
+        {/* Subtle decorative glow */}
+        <div
+          className="absolute -bottom-24 left-1/2 -translate-x-1/2 w-[700px] h-[250px] rounded-full blur-[140px] opacity-20 dark:opacity-10 pointer-events-none"
+          style={{ background: "var(--brand)" }}
+        />
+
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-16 sm:py-20 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-10">
+            {/* Column 1: Brand, Tagline, Mission & Social (span 4) */}
+            <div className="lg:col-span-4 space-y-5">
+              <Link href="/portal" className="inline-flex items-center gap-3 group">
+                {logoUrl ? (
+                  <img
+                    src={logoUrl}
+                    alt="Logo"
+                    className="h-10 w-10 object-contain rounded-xl shadow-xs group-hover:scale-105 transition-transform"
+                  />
+                ) : (
+                  <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold text-base group-hover:scale-105 transition-transform">
+                    <GraduationCap className="h-5 w-5" />
+                  </div>
                 )}
+                <div className="flex flex-col">
+                  <span className="font-extrabold text-lg tracking-tight leading-tight group-hover:text-primary transition-colors">
+                    {orgName}
+                  </span>
+                  {(locale === "th" ? orgNameEn : orgNameTh) && (
+                    <span className="text-xs font-medium text-muted-foreground leading-tight mt-0.5">
+                      {locale === "th" ? orgNameEn : orgNameTh}
+                    </span>
+                  )}
+                </div>
+              </Link>
+
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
+                {locale === "th"
+                  ? "ศูนย์กลางการศึกษา นวัตกรรมดิจิทัล และการบริหารจัดการวิชาการที่ทันสมัย เพื่อพัฒนาศักยภาพผู้เรียนสู่ความเป็นเลิศในระดับสากล"
+                  : "Empowering academic excellence, continuous learning, and digital innovation for our faculty community."}
+              </p>
+
+              {/* Status Badge */}
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-medium">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                {locale === "th" ? "ระบบบริการออนไลน์เปิดทำการปกติ" : "All Services Operational"}
               </div>
-            </Link>
-            <p className="foot-tag">{t("app.tagline")}</p>
-          </div>
-          
-          <div>
-            <h4>{locale === "th" ? "เมนูหลัก" : "Main Menu"}</h4>
-            <ul>
-              {navLinks.map(link => (
-                <li key={link.href}>
-                  <Link href={link.href}>{link.label}</Link>
+
+              {/* Social Channels */}
+              <div className="pt-1 flex items-center gap-2.5">
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="h-8 w-8 rounded-full bg-background border border-border/80 hover:border-primary hover:bg-primary hover:text-white flex items-center justify-center text-muted-foreground transition-all shadow-2xs"
+                  aria-label="Facebook"
+                >
+                  <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                  </svg>
+                </a>
+                <a
+                  href="https://youtube.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="h-8 w-8 rounded-full bg-background border border-border/80 hover:border-red-600 hover:bg-red-600 hover:text-white flex items-center justify-center text-muted-foreground transition-all shadow-2xs"
+                  aria-label="YouTube"
+                >
+                  <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                  </svg>
+                </a>
+                <a
+                  href="https://line.me"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="h-8 w-8 rounded-full bg-background border border-border/80 hover:border-emerald-500 hover:bg-emerald-500 hover:text-white flex items-center justify-center text-muted-foreground transition-all shadow-2xs"
+                  aria-label="LINE Official"
+                >
+                  <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
+                    <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.499.254l2.457 3.328V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            {/* Column 2: Navigation & Services (span 3) */}
+            <div className="lg:col-span-3 space-y-4">
+              <h4 className="text-sm font-bold text-foreground tracking-wider uppercase">
+                {locale === "th" ? "เมนูและบริการ" : "Explore & Services"}
+              </h4>
+              <ul className="space-y-2.5 text-sm">
+                <li>
+                  <Link href="/portal" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group">
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary/40 group-hover:bg-primary transition-colors"></span>
+                    {locale === "th" ? "หน้าหลักพอร์ทัล" : "Portal Home"}
+                  </Link>
                 </li>
-              ))}
-            </ul>
+                <li>
+                  <Link href="/portal/news" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group">
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary/40 group-hover:bg-primary transition-colors"></span>
+                    {t("portal.nav.news")}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/portal/personnel" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group">
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary/40 group-hover:bg-primary transition-colors"></span>
+                    {t("portal.nav.personnel")}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/portal/curriculum" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group">
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary/40 group-hover:bg-primary transition-colors"></span>
+                    {t("portal.nav.curriculum")}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/dashboard" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group">
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary/40 group-hover:bg-primary transition-colors"></span>
+                    {locale === "th" ? "ระบบจัดการหลังบ้าน" : "Management Console"}
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 3: Quick Links & Support (span 2) */}
+            <div className="lg:col-span-2 space-y-4">
+              <h4 className="text-sm font-bold text-foreground tracking-wider uppercase">
+                {locale === "th" ? "ลิงก์ด่วน" : "Quick Links"}
+              </h4>
+              <ul className="space-y-2.5 text-sm">
+                <li>
+                  <Link href="/portal" className="text-muted-foreground hover:text-primary transition-colors">
+                    {locale === "th" ? "เกี่ยวกับองค์กร" : "About Us"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/portal/personnel" className="text-muted-foreground hover:text-primary transition-colors">
+                    {locale === "th" ? "รับสมัครนักศึกษา" : "Admissions"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/portal/news" className="text-muted-foreground hover:text-primary transition-colors">
+                    {locale === "th" ? "งานวิจัยและวิชาการ" : "Research & Grants"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/portal/curriculum" className="text-muted-foreground hover:text-primary transition-colors">
+                    {locale === "th" ? "ปฏิทินการศึกษา" : "Academic Calendar"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/portal" className="text-muted-foreground hover:text-primary transition-colors">
+                    {locale === "th" ? "ดาวน์โหลดแบบฟอร์ม" : "Downloads"}
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 4: Contact & Location (span 3) */}
+            <div className="lg:col-span-3 space-y-4">
+              <h4 className="text-sm font-bold text-foreground tracking-wider uppercase">
+                {locale === "th" ? "ติดต่อสอบถาม" : "Contact & Office"}
+              </h4>
+              <div className="space-y-3 text-sm text-muted-foreground">
+                <div className="flex items-start gap-2.5">
+                  <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <span className="leading-snug">
+                    {orgName} อ.เมือง จ.ตาก 63000
+                  </span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Phone className="h-4 w-4 text-primary shrink-0" />
+                  <span>055-512-345, 055-512-346</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Mail className="h-4 w-4 text-primary shrink-0" />
+                  <a href="mailto:ragnaroknaja888@gmail.com" className="hover:text-primary transition-colors truncate">
+                    ragnaroknaja888@gmail.com
+                  </a>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Clock className="h-4 w-4 text-primary shrink-0" />
+                  <span>{locale === "th" ? "จันทร์ - ศุกร์: 08:30 - 16:30 น." : "Mon - Fri: 08:30 - 16:30"}</span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div>
-            <h4>{locale === "th" ? "สำหรับเจ้าหน้าที่" : "For Staff"}</h4>
-            <ul>
-              <li>
-                <Link href="/login">
-                  {locale === "th" ? "เข้าสู่ระบบ (Admin Console)" : "Staff Login (Admin Console)"}
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-        
-        <div className="foot-bottom">
-          <div className="foot-bottom-in">
-            <span>© {new Date().getFullYear()} {orgName}. All rights reserved.</span>
+          {/* Bottom Bar: Copyright, Legal, Staff Console Pill */}
+          <div className="mt-14 pt-8 border-t border-border/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2 text-center sm:text-left">
+              <span>
+                © {new Date().getFullYear()} {orgName} ({orgNameEn || "Tak Sangha College"}). สงวนลิขสิทธิ์ทุกประการ
+              </span>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <Link
+                href="/login"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-1.5 rounded-full bg-background border border-border/80 hover:border-primary hover:text-primary shadow-2xs transition-colors"
+              >
+                <LogIn className="h-3.5 w-3.5" />
+                {locale === "th" ? "เข้าสู่ระบบบุคลากร (Staff Login)" : "Staff Login"}
+              </Link>
+            </div>
           </div>
         </div>
       </footer>
