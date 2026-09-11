@@ -57,6 +57,20 @@ services:
     networks:
       - app-network
 
+  # ══════════════════════════════════════════════════════════
+  # Public HTTPS Tunnel (Cloudflare Tunnel - Method 2)
+  # ══════════════════════════════════════════════════════════
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: fms-tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate --url http://app:3010
+    depends_on:
+      app:
+        condition: service_healthy
+    networks:
+      - app-network
+
 # ══════════════════════════════════════════════════════════
 # Persistent Storage Volumes
 # ══════════════════════════════════════════════════════════
