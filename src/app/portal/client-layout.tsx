@@ -51,16 +51,23 @@ export default function PortalClientLayout({
               <img
                 src={logoUrl}
                 alt="Logo"
-                className="h-8 w-8 object-contain rounded-lg group-hover:scale-105 transition-transform"
+                className="h-9 w-9 object-contain rounded-lg group-hover:scale-105 transition-transform"
               />
             ) : (
-              <div className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm group-hover:scale-105 transition-transform">
-                <GraduationCap className="h-4 w-4" />
+              <div className="h-9 w-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm group-hover:scale-105 transition-transform">
+                <GraduationCap className="h-5 w-5" />
               </div>
             )}
-            <span className="font-extrabold text-lg sm:text-xl tracking-tight text-slate-900 dark:text-white group-hover:text-primary transition-colors">
-              {orgName}
-            </span>
+            <div className="flex flex-col">
+              <span className="font-extrabold text-base sm:text-lg tracking-tight text-slate-900 dark:text-white group-hover:text-primary transition-colors leading-tight">
+                {orgName}
+              </span>
+              {(locale === "th" ? orgNameEn : orgNameTh) && (
+                <span className="text-[11px] font-medium text-muted-foreground leading-none mt-0.5">
+                  {locale === "th" ? orgNameEn : orgNameTh}
+                </span>
+              )}
+            </div>
           </Link>
 
           {/* Desktop Navigation Links (Centered, clean text like About / Features / Pricing) */}
@@ -296,9 +303,12 @@ export default function PortalClientLayout({
         <div className="foot-in">
           <div>
             <Link href="/portal" className="brand flex items-center">
-              {logoUrl ? <img src={logoUrl} alt="Logo" style={{ height: "2rem", width: "2rem", objectFit: "contain", marginRight: "10px" }} /> : <i><GraduationCap className="h-5 w-5" /></i>}
+              {logoUrl ? <img src={logoUrl} alt="Logo" style={{ height: "2.25rem", width: "2.25rem", objectFit: "contain", marginRight: "10px" }} /> : <i><GraduationCap className="h-5 w-5" /></i>}
               <div className="flex flex-col ml-1">
-                <span className="font-bold text-base tracking-tight leading-none">{orgName}</span>
+                <span className="font-bold text-base tracking-tight leading-tight">{orgName}</span>
+                {(locale === "th" ? orgNameEn : orgNameTh) && (
+                  <span className="text-xs text-muted-foreground mt-0.5">{locale === "th" ? orgNameEn : orgNameTh}</span>
+                )}
               </div>
             </Link>
             <p className="foot-tag">{t("app.tagline")}</p>

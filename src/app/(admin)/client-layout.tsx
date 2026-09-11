@@ -31,6 +31,7 @@ export default function AdminClientLayout({
   const { status, user, roles, permissions, isSuperAdmin } = useAppSession();
   const { collapsed, toggleCollapsed } = useSidebarStore();
   const orgName = (locale === "th" ? orgNameTh : orgNameEn) || orgNameTh || orgNameEn || t("app.name");
+  const secondaryName = (locale === "th" ? orgNameEn : orgNameTh) || t("app.tagline");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [prev, setPrev] = useState(pathname);
   const [mounted, setMounted] = useState(false);
@@ -55,7 +56,7 @@ export default function AdminClientLayout({
 
   return (
     <AdminShell
-      brandName={orgName} brandLogo={logoUrl} brandTagline={t("app.tagline")} brandHref="/dashboard"
+      brandName={orgName} brandLogo={logoUrl} brandTagline={secondaryName} brandHref="/dashboard"
       breadcrumb={breadcrumb} breadcrumbLabel={t("common.breadcrumb")}
       roleLabel={roles[0] ? localizedName(roles[0], locale) : null}
       languageSwitcher={<LanguageSwitcher className="lang" />}

@@ -113,7 +113,10 @@ async function sessionTenantId(): Promise<string | null> {
 /** ใช้โดย root layout ทุก request — tenant จาก session ถ้ามี ไม่งั้น tenant แรก (หน้า login ยังไม่มี session) · ไม่ throw */
 export const resolvePalette = cache(async (): Promise<PaletteId> => {
   try {
-    const tenantId = (await sessionTenantId()) || (await prisma.tenant.findFirst({ orderBy: { createdAt: "asc" }, select: { id: true } }))?.id;
+    const tenantId =
+      (await sessionTenantId()) ||
+      (await prisma.tenant.findFirst({ where: { isActive: true }, orderBy: { updatedAt: "desc" }, select: { id: true } }))?.id ||
+      (await prisma.tenant.findFirst({ orderBy: { createdAt: "asc" }, select: { id: true } }))?.id;
     return tenantId ? await getTenantPalette(tenantId) : DEFAULT_PALETTE;
   } catch {
     return DEFAULT_PALETTE;
@@ -122,7 +125,10 @@ export const resolvePalette = cache(async (): Promise<PaletteId> => {
 
 export const resolveTenantSettings = cache(async (): Promise<TenantSettings | null> => {
   try {
-    const tenantId = (await sessionTenantId()) || (await prisma.tenant.findFirst({ orderBy: { createdAt: "asc" }, select: { id: true } }))?.id;
+    const tenantId =
+      (await sessionTenantId()) ||
+      (await prisma.tenant.findFirst({ where: { isActive: true }, orderBy: { updatedAt: "desc" }, select: { id: true } }))?.id ||
+      (await prisma.tenant.findFirst({ orderBy: { createdAt: "asc" }, select: { id: true } }))?.id;
     return tenantId ? await getTenantSettings(tenantId) : null;
   } catch {
     return null;

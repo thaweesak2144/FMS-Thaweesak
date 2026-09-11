@@ -66,6 +66,11 @@ export function SettingsForm({ initial }: { initial: TenantSettings }) {
         document.documentElement.setAttribute("data-palette", form.palette);
       }
       router.refresh();
+      if (typeof window !== "undefined") {
+        setTimeout(() => {
+          window.location.reload();
+        }, 600);
+      }
     });
   }
 
