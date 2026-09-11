@@ -12,6 +12,7 @@ services:
       POSTGRES_DB: ${DB_NAME:-ums_prod}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./prisma/database-backup.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
     ports:
       - "${DB_HOST_PORT:-5433}:5432" # Use 5433 to avoid conflict if host already has postgres on 5432
     healthcheck:
