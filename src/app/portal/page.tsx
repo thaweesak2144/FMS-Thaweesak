@@ -8,6 +8,9 @@ import {
   FileText,
   ArrowRight,
   Sparkles,
+  ShieldCheck,
+  Zap,
+  Star,
 } from "lucide-react";
 import { getT, getLocale } from "@/i18n/server";
 import { resolveTenantSettings } from "@/features/identity/server";
@@ -72,27 +75,18 @@ export default async function PortalHomePage() {
 
   return (
     <div className="space-y-16 py-4 sm:py-6">
-      {/* 3D Etail Style Hero Section */}
-      <section className="relative overflow-hidden rounded-[2.5rem] mx-4 sm:mx-8 border border-border/60 bg-[#f8f9fa] dark:bg-card/40 shadow-2xl min-h-[580px] lg:min-h-[660px] flex items-center">
-        {/* 3D Background Image */}
-        <div
-          className="absolute inset-0 bg-no-repeat bg-cover pointer-events-none"
-          style={{
-            backgroundImage: "url('/images/hero_3d_campus.jpg')",
-            backgroundPosition: "right 15% center",
-          }}
-        />
-        {/* Soft Vignette / Gradient Overlay to ensure text readability on the left */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#f8f9fa] via-[#f8f9fa]/85 to-transparent/10 dark:from-background dark:via-background/90 dark:to-transparent/30 pointer-events-none" />
-
-        {/* Ambient Theme Glow on bottom left */}
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-primary/20 rounded-full blur-3xl pointer-events-none animate-pulse-glow" />
+      {/* 3D Etail Animated Hero Section */}
+      <section className="relative overflow-hidden rounded-[2.5rem] mx-4 sm:mx-8 border border-slate-200/80 dark:border-border/60 bg-[#fbfbfd] dark:bg-card/40 shadow-2xl min-h-[580px] lg:min-h-[640px] flex items-center">
+        {/* Background Ambient Studio Light Glows */}
+        <div className="absolute -top-32 -left-32 w-[30rem] h-[30rem] bg-primary/15 rounded-full blur-3xl pointer-events-none animate-pulse-glow" />
+        <div className="absolute top-1/2 -right-32 w-[34rem] h-[34rem] bg-primary/20 rounded-full blur-3xl pointer-events-none animate-pulse-glow" style={{ animationDelay: "2s" }} />
 
         {/* Content Container */}
-        <div className="relative z-10 px-6 sm:px-12 lg:px-20 py-16 sm:py-24 max-w-7xl w-full">
-          <div className="max-w-xl space-y-6 text-left">
-            {/* Top Pill Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold backdrop-blur-md shadow-sm">
+        <div className="relative z-10 px-6 sm:px-12 lg:px-16 py-12 sm:py-16 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          {/* Left Column: Typography, Tagline, and Interactive Pill Search */}
+          <div className="lg:col-span-6 space-y-6 text-left">
+            {/* Top Live Badge */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold backdrop-blur-md shadow-xs">
               <span className="flex h-2 w-2 rounded-full bg-primary animate-ping" />
               <GraduationCap className="h-3.5 w-3.5" />
               <span>{orgName}</span>
@@ -101,12 +95,12 @@ export default async function PortalHomePage() {
             </div>
 
             {/* Giant Bold Headline matching Etail reference */}
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-foreground leading-[1.06]">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.06]">
               {locale === "th" ? (
                 <>
                   ก้าวสู่ <br />
                   <span className="text-primary">อนาคตใหม่</span> <br />
-                  การศึกษาดิจิทัล
+                  การศึกษาดิจิทัล!
                 </>
               ) : (
                 <>
@@ -118,18 +112,86 @@ export default async function PortalHomePage() {
             </h1>
 
             {/* Subtitle */}
-            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-md">
+            <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-md font-normal">
               {locale === "th"
                 ? "เชื่อมต่อทุกมิติการเรียนรู้ ข้อมูลหลักสูตร บุคลากร และบริการคำร้องออนไลน์แบบครบวงจร สะดวก รวดเร็ว ตลอด 24 ชั่วโมง"
                 : "Comprehensive academic management, research programs, staff directory, and online digital services all in one place."}
             </p>
 
-            {/* Bottom Floating Pill Input Search Bar (matching Etail reference) */}
+            {/* Interactive Floating Pill Search Bar (matching Etail reference) */}
             <div className="pt-2">
               <HeroSearchBar
                 orgName={orgName}
                 placeholder={locale === "th" ? "ค้นหาหลักสูตร, บุคลากร, ข่าวสาร..." : "Search courses, staff, news..."}
               />
+            </div>
+          </div>
+
+          {/* Right Column: 3D Animated Scene with Floating Elements (Etail Style) */}
+          <div className="lg:col-span-6 relative [perspective:1200px] flex items-center justify-center">
+            {/* Main 3D Card Display */}
+            <div className="relative w-full rounded-3xl overflow-hidden border border-slate-200/90 dark:border-white/10 shadow-2xl shadow-slate-900/15 bg-white dark:bg-card/90 transition-all duration-700 hover:scale-[1.02] group">
+              {/* Shimmer Light Reflection Animation Sweep */}
+              <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
+                <div className="w-[150%] h-[150%] bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-shimmer" />
+              </div>
+
+              {/* 3D Render Image */}
+              <div className="relative w-full aspect-[16/10] overflow-hidden">
+                <img
+                  src="/images/portal-hero-3d.jpg"
+                  alt="3D Campus Scene"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+              </div>
+
+              {/* Bottom Subtle Bar inside 3D Card */}
+              <div className="px-5 py-3 bg-white/90 dark:bg-card/90 border-t border-slate-100 dark:border-border/40 flex items-center justify-between backdrop-blur-md">
+                <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    {locale === "th" ? "ระบบพร้อมให้บริการตลอด 24 ชม." : "Active 24/7 Digital Services"}
+                  </span>
+                </div>
+                <span className="text-[11px] font-mono text-muted-foreground flex items-center gap-1">
+                  <ShieldCheck className="h-3 w-3 text-primary" />
+                  Uptime 99.9%
+                </span>
+              </div>
+            </div>
+
+            {/* Floating Satellite 3D Badge 1 (Top-Right): 3D Animation Bob */}
+            <div className="absolute -top-4 -right-2 sm:-right-4 px-4 py-2.5 rounded-2xl bg-white/95 dark:bg-card/95 border border-primary/25 shadow-xl shadow-slate-900/10 backdrop-blur-xl animate-float-slow z-30 flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-primary to-primary/80 text-primary-foreground flex items-center justify-center shrink-0 shadow-sm shadow-primary/20">
+                <Zap className="h-4 w-4" />
+              </div>
+              <div>
+                <div className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
+                  {locale === "th" ? "ระบบอัจฉริยะ 3D" : "3D Animated Hub"}
+                </div>
+                <div className="text-[10px] text-muted-foreground font-medium">
+                  {locale === "th" ? "นวัตกรรมเพื่อการศึกษา" : "Smart Campus"}
+                </div>
+              </div>
+            </div>
+
+            {/* Floating Satellite 3D Badge 2 (Bottom-Left): Reverse Float Bob */}
+            <div className="absolute -bottom-5 -left-2 sm:-left-5 px-4 py-2.5 rounded-2xl bg-white/95 dark:bg-card/95 border border-slate-200/80 dark:border-border/60 shadow-xl shadow-slate-900/10 backdrop-blur-xl animate-float-reverse z-30 flex items-center gap-3">
+              <div className="flex -space-x-2">
+                <div className="w-7 h-7 rounded-full border-2 border-white bg-primary/20 flex items-center justify-center text-[10px] font-bold text-primary">A</div>
+                <div className="w-7 h-7 rounded-full border-2 border-white bg-primary/40 flex items-center justify-center text-[10px] font-bold text-primary">B</div>
+                <div className="w-7 h-7 rounded-full border-2 border-white bg-primary text-primary-foreground flex items-center justify-center text-[10px] font-bold">+5k</div>
+              </div>
+              <div>
+                <div className="flex items-center gap-1 text-amber-500 text-xs">
+                  <Star className="h-3 w-3 fill-amber-500" />
+                  <span className="font-bold text-slate-900 dark:text-white text-xs">4.9</span>
+                  <span className="text-[10px] text-muted-foreground">/5.0</span>
+                </div>
+                <div className="text-[10px] text-muted-foreground font-medium">
+                  {locale === "th" ? "ความพึงพอใจการบริการ" : "Student Satisfaction"}
+                </div>
+              </div>
             </div>
           </div>
         </div>
