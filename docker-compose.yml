@@ -44,7 +44,7 @@ services:
       PORT: 3010
       HOSTNAME: "0.0.0.0"
     ports:
-      - "3010:3010"
+      - "${APP_HOST_PORT:-3011}:3010"
     volumes:
       # Persistent storage for uploaded logos and documents
       - uploads_data:/app/public/uploads

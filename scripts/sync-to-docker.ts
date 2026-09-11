@@ -11,14 +11,14 @@ import { PrismaPg } from "@prisma/adapter-pg";
 async function sync() {
   console.log("🔄 กำลังตรวจสอบและ Sync ข้อมูลจาก Dev ไปยัง Docker Production...");
 
-  const devDbUrl = process.env.DEV_DATABASE_URL ?? "postgresql://postgres:Passw0rd!vibe@localhost:5432/ums_dev?schema=public";
+  const devDbUrl = process.env.DATABASE_URL ?? "postgresql://postgres:0644744508@localhost:5432/ums_dev?schema=public";
   const prodDbUrl = process.env.PROD_DATABASE_URL ?? "postgresql://postgres:Passw0rd!vibe@localhost:5433/ums_prod?schema=public";
 
   const devDb = new PrismaClient({ adapter: new PrismaPg({ connectionString: devDbUrl }) });
   const prodDb = new PrismaClient({ adapter: new PrismaPg({ connectionString: prodDbUrl }) });
 
   try {
-    const devTenant = await devDb.tenant.findFirst({ orderBy: { createdAt: "asc" } });
+    const devTenant = await devDb.tenant.findFirst({ where: { isActive: true }, orderBy: { updatedAt: "desc" } });
     if (!devTenant) {
       console.warn("⚠️ ไม่พบข้อมูล Tenant ใน Dev Database");
       return;
@@ -37,7 +37,24 @@ async function sync() {
           settings: devTenant.settings ?? {},
         },
       });
-      console.log("✅ อัปเดตข้อมูลการตั้งค่าเข้าสู่ Docker Production (ums_prod) สำเร็จ!");
+      console.log("✅ อัปเดตข้อมูลการตั้งค่าและธีมเข้าสู่ Docker Production (ums_prod) สำเร็จ!");
+    }
+
+    // Sync superadmin user
+    const devAdmin = await devDb.user.findFirst({ where: { email: "ragnaroknaja888@gmail.com" } });
+    if (devAdmin) {
+      const prodAdmin = await prodDb.user.findFirst({ where: { email: { in: ["admin@app.local", "ragnaroknaja888@gmail.com"] } } });
+      if (prodAdmin) {
+        await prodDb.user.update({
+          where: { id: prodAdmin.id },
+          data: {
+            email: devAdmin.email,
+            passwordHash: devAdmin.passwordHash,
+            name: devAdmin.name,
+          },
+        });
+        console.log("✅ ซิงค์บัญชี Super Admin (ragnaroknaja888@gmail.com) เข้าสู่ Docker Production สำเร็จ!");
+      }
     }
 
     // คัดลอกไฟล์รูปภาพใน public/uploads ไปยัง Docker Container
