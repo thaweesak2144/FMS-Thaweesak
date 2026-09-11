@@ -127,35 +127,99 @@ export default async function PortalHomePage() {
             </div>
           </div>
 
-          {/* Right Column: 3D Animated Scene with Floating Elements (Etail Style) */}
-          <div className="lg:col-span-6 relative [perspective:1200px] flex items-center justify-center">
+          {/* Right Column: 3D Isometric Scene (Etail Style with Students & Campus) */}
+          <div className="lg:col-span-6 relative [perspective:1200px] flex items-center justify-center pt-4 lg:pt-0">
             {/* Main 3D Card Display */}
-            <div className="relative w-full rounded-3xl overflow-hidden border border-slate-200/90 dark:border-white/10 shadow-2xl shadow-slate-900/15 bg-white dark:bg-card/90 transition-all duration-700 hover:scale-[1.02] group">
-              {/* Shimmer Light Reflection Animation Sweep */}
-              <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
-                <div className="w-[150%] h-[150%] bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-shimmer" />
-              </div>
-
-              {/* 3D Render Image */}
-              <div className="relative w-full aspect-[16/10] overflow-hidden">
-                <img
-                  src="/images/portal-hero-3d.jpg"
-                  alt="3D Campus Scene"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+            <div className="relative w-full rounded-3xl overflow-hidden border border-slate-200/90 dark:border-white/10 shadow-2xl shadow-slate-900/15 bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-card/90 dark:to-card/60 transition-all duration-700 hover:scale-[1.02] group animate-shimmer">
+              {/* Studio Backdrop with Soft Lighting & Grid Lines */}
+              <div className="relative w-full aspect-[16/11] overflow-hidden flex items-end justify-center bg-gradient-to-b from-slate-100/70 via-slate-50 to-slate-200/50 dark:from-slate-900/60 dark:to-slate-950/80 p-6">
+                {/* 3D Isometric Floor Grid (Clay Style) */}
+                <div 
+                  className="absolute inset-x-0 bottom-0 h-48 opacity-30 pointer-events-none"
+                  style={{
+                    backgroundImage: "linear-gradient(to right, var(--brand) 1px, transparent 1px), linear-gradient(to bottom, var(--brand) 1px, transparent 1px)",
+                    backgroundSize: "32px 32px",
+                    transform: "perspective(500px) rotateX(60deg)",
+                    transformOrigin: "bottom center",
+                  }}
                 />
+
+                {/* 3D Isometric Clay Building (Center-Right) */}
+                <div className="absolute right-6 sm:right-10 bottom-8 z-10 flex flex-col items-center">
+                  {/* Roof & Main Hall */}
+                  <div className="relative w-36 sm:w-44 h-44 sm:h-52 rounded-2xl bg-white dark:bg-card border-2 border-slate-200 dark:border-border/80 shadow-2xl flex flex-col justify-between overflow-hidden">
+                    {/* Architectural Accent Canopy */}
+                    <div className="h-4 w-full bg-primary flex items-center justify-center">
+                      <span className="text-[9px] font-bold text-primary-foreground tracking-wider uppercase">{orgName}</span>
+                    </div>
+
+                    {/* Window Arc Glass */}
+                    <div className="mx-auto my-auto w-16 h-24 rounded-t-full border-2 border-primary/30 bg-gradient-to-b from-primary/15 to-transparent flex items-center justify-center">
+                      <GraduationCap className="h-6 w-6 text-primary opacity-80" />
+                    </div>
+
+                    {/* Entrance Door & Steps */}
+                    <div className="w-full flex flex-col items-center">
+                      <div className="w-12 h-10 rounded-t-md bg-slate-800 dark:bg-slate-900 border border-slate-700" />
+                      <div className="w-20 h-2 bg-slate-300 dark:bg-slate-700 rounded-t-sm" />
+                    </div>
+                  </div>
+
+                  {/* 3D Campus Bench in front of building */}
+                  <div className="relative -mt-3 z-20 flex items-center justify-center">
+                    <div className="px-3 py-1 rounded-md bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 shadow-md text-[10px] text-muted-foreground flex items-center gap-1">
+                      <span>ม้านั่งพักผ่อนหน้าอาคาร</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3D Conveyor Belt (สายพานลำเลียงแห่งการเรียนรู้) */}
+                <div className="absolute left-4 sm:left-8 bottom-3 sm:bottom-4 z-10 w-44 sm:w-56 h-10 rounded-xl bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 shadow-inner overflow-hidden flex items-center">
+                  <div className="flex gap-4 animate-conveyor whitespace-nowrap text-[9px] font-mono font-bold text-muted-foreground">
+                    <span>• เส้นทางการเรียนรู้สู่ความสำเร็จ</span>
+                    <span>• นวัตกรรมแห่งอนาคต</span>
+                    <span>• เส้นทางการเรียนรู้สู่ความสำเร็จ</span>
+                    <span>• นวัตกรรมแห่งอนาคต</span>
+                  </div>
+                </div>
+
+                {/* 3D Student Boy in Uniform (Left side on the journey) */}
+                <div className="absolute left-6 sm:left-10 bottom-6 z-20 w-32 sm:w-40 transition-transform duration-500 hover:scale-105">
+                  <img
+                    src="/images/3d/student-boy.png"
+                    alt="นิสิตปัจจุบัน"
+                    className="w-full h-auto drop-shadow-[0_12px_20px_rgba(0,0,0,0.25)] filter"
+                  />
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-2 px-2.5 py-0.5 rounded-full bg-white/95 dark:bg-card border border-slate-200 dark:border-border text-[10px] font-bold text-slate-800 dark:text-slate-200 shadow-md whitespace-nowrap">
+                    นิสิตปัจจุบัน
+                  </div>
+                </div>
+
+                {/* 3D Graduate Student in Gown (Center/Right near building) */}
+                <div className="absolute left-32 sm:left-44 bottom-6 z-25 w-32 sm:w-40 transition-transform duration-500 hover:scale-105">
+                  <img
+                    src="/images/3d/graduate-boy.png"
+                    alt="บัณฑิตเกียรตินิยม"
+                    className="w-full h-auto drop-shadow-[0_12px_24px_rgba(0,0,0,0.3)] filter"
+                  />
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-2 px-2.5 py-0.5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold shadow-md whitespace-nowrap flex items-center gap-1">
+                    <Award className="h-3 w-3" />
+                    บัณฑิตสำเร็จการศึกษา
+                  </div>
+                </div>
               </div>
 
-              {/* Bottom Subtle Bar inside 3D Card */}
-              <div className="px-5 py-3 bg-white/90 dark:bg-card/90 border-t border-slate-100 dark:border-border/40 flex items-center justify-between backdrop-blur-md">
+              {/* Bottom Live Status Bar */}
+              <div className="px-6 py-3.5 bg-white/90 dark:bg-card/90 border-t border-slate-100 dark:border-border/40 flex items-center justify-between backdrop-blur-md">
                 <div className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
                   <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                    {locale === "th" ? "ระบบพร้อมให้บริการตลอด 24 ชม." : "Active 24/7 Digital Services"}
+                    {locale === "th" ? "จำลองบรรยากาศการศึกษาและบัณฑิตแห่งอนาคต" : "Future-Ready Campus & Graduates"}
                   </span>
                 </div>
-                <span className="text-[11px] font-mono text-muted-foreground flex items-center gap-1">
-                  <ShieldCheck className="h-3 w-3 text-primary" />
-                  Uptime 99.9%
+                <span className="text-[11px] font-mono text-muted-foreground flex items-center gap-1 font-semibold text-primary">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Smart Education
                 </span>
               </div>
             </div>
@@ -167,10 +231,10 @@ export default async function PortalHomePage() {
               </div>
               <div>
                 <div className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
-                  {locale === "th" ? "ระบบอัจฉริยะ 3D" : "3D Animated Hub"}
+                  {locale === "th" ? "นวัตกรรม 3D & AI" : "3D Animated Hub"}
                 </div>
                 <div className="text-[10px] text-muted-foreground font-medium">
-                  {locale === "th" ? "นวัตกรรมเพื่อการศึกษา" : "Smart Campus"}
+                  {locale === "th" ? "ขับเคลื่อนการศึกษา" : "Smart Campus"}
                 </div>
               </div>
             </div>
