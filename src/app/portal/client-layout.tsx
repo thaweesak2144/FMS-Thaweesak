@@ -473,7 +473,7 @@ export default function PortalClientLayout({
                 </div>
                 <div className="flex items-center gap-2.5">
                   <Phone className="h-4 w-4 text-primary shrink-0" />
-                  <span>055-512-345, 055-512-346</span>
+                  <a href="tel:055896083" className="hover:text-primary transition-colors">055-896083</a>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <Mail className="h-4 w-4 text-primary shrink-0" />
