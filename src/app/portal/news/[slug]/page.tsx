@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
@@ -108,9 +108,16 @@ export default async function NewsDetailPage({ params }: Props) {
         )}
 
         {/* Article Body */}
-        <div className="text-sm sm:text-base leading-relaxed text-foreground whitespace-pre-line space-y-4">
-          {body}
-        </div>
+        {/<[a-z][\s\S]*>/i.test(body) ? (
+          <div
+            className="text-sm sm:text-base leading-relaxed text-foreground space-y-4 [&>p]:mb-4 [&>h1]:text-2xl [&>h1]:font-bold [&>h1]:mt-6 [&>h1]:mb-3 [&>h2]:text-xl [&>h2]:font-bold [&>h2]:mt-6 [&>h2]:mb-3 [&>h3]:text-lg [&>h3]:font-semibold [&>h3]:mt-4 [&>h3]:mb-2 [&>ul]:list-disc [&>ul]:pl-6 [&>ul]:mb-4 [&>ol]:list-decimal [&>ol]:pl-6 [&>ol]:mb-4 [&>table]:w-full [&>table]:border-collapse [&>table]:my-4 [&_th]:border [&_th]:p-2.5 [&_th]:bg-muted/60 [&_td]:border [&_td]:p-2.5 [&>blockquote]:border-l-4 [&>blockquote]:border-primary [&>blockquote]:pl-4 [&>blockquote]:italic [&_a]:text-primary [&_a]:underline font-normal"
+            dangerouslySetInnerHTML={{ __html: body }}
+          />
+        ) : (
+          <div className="text-sm sm:text-base leading-relaxed text-foreground whitespace-pre-line space-y-4">
+            {body}
+          </div>
+        )}
 
         {/* Attachments (if any) */}
         {post.attachments && post.attachments.length > 0 && (

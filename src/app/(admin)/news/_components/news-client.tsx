@@ -27,6 +27,7 @@ import {
   LiyonDialogFooter,
   LiyonField,
   RowMenuItem,
+  RichTextEditor,
   type DataTableColumn,
 } from "@/shared/components/liyon";
 import { Button } from "@/components/ui/button";
@@ -612,32 +613,23 @@ export function NewsClient({
             </div>
           </div>
 
-          {/* Full Body Contents */}
-          <div className="space-y-3">
-            <div>
-              <label className="text-xs font-semibold text-muted-foreground block mb-1">
-                {t("news.post.bodyTh")} *
-              </label>
-              <textarea
-                value={formBodyTh}
-                onChange={(e) => setFormBodyTh(e.target.value)}
-                rows={5}
-                placeholder="เนื้อหาข่าวแบบละเอียด (รองรับข้อความหลายย่อหน้า)..."
-                className="w-full p-2.5 rounded-md border text-xs bg-background"
-              />
-            </div>
-            <div>
-              <label className="text-xs font-semibold text-muted-foreground block mb-1">
-                {t("news.post.bodyEn")}
-              </label>
-              <textarea
-                value={formBodyEn}
-                onChange={(e) => setFormBodyEn(e.target.value)}
-                rows={4}
-                placeholder="Full content in English..."
-                className="w-full p-2.5 rounded-md border text-xs bg-background"
-              />
-            </div>
+          {/* Full Body Contents with TinyMCE Rich Text Editor */}
+          <div className="space-y-4">
+            <RichTextEditor
+              label={`${t("news.post.bodyTh")} *`}
+              value={formBodyTh}
+              onChange={(val) => setFormBodyTh(val)}
+              placeholder="เนื้อหาข่าวภาษาไทย (จัดรูปแบบตัวหนา เอียง หัวข้อ ลิสต์ ลิงก์ ตาราง ได้ตามต้องการ)..."
+              height={320}
+            />
+
+            <RichTextEditor
+              label={t("news.post.bodyEn")}
+              value={formBodyEn}
+              onChange={(val) => setFormBodyEn(val)}
+              placeholder="Full content in English (สามารถกดปุ่มสร้างด้วย AI ด้านบนได้)..."
+              height={280}
+            />
           </div>
 
           {/* Attachments */}

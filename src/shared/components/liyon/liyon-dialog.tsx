@@ -38,6 +38,18 @@ export function LiyonDialog({ open, onOpenChange, danger, wide, children }: Liyo
             danger && "danger",
             wide && "wide",
           )}
+          onInteractOutside={(e) => {
+            const target = e.target as HTMLElement | null;
+            if (target?.closest(".tox, .tox-tinymce-aux")) {
+              e.preventDefault();
+            }
+          }}
+          onFocusOutside={(e) => {
+            const target = e.target as HTMLElement | null;
+            if (target?.closest(".tox, .tox-tinymce-aux")) {
+              e.preventDefault();
+            }
+          }}
         >
           <div className="box">{children}</div>
         </DialogPrimitive.Content>

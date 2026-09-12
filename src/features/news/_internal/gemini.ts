@@ -32,7 +32,7 @@ Thai News Data:
 Requirements:
 1. "titleEn": A natural, professional, and engaging English headline suitable for a higher education institution.
 2. "excerptEn": A concise, clear summary (1-2 sentences) capturing the core essence of the news.
-3. "bodyEn": A complete, accurate English translation and article elaboration of the full body. Preserve paragraphs, dates, names, key details, and professional tone.
+3. "bodyEn": A complete, accurate English translation and article elaboration of the full body. Preserve paragraphs, dates, names, key details, and professional tone. If the Thai body contains HTML tags (e.g. <p>, <strong>, <em>, <ul>, <li>, <table>, <a>, <h2>, etc.), preserve and output clean, well-formatted semantic HTML tags in "bodyEn" so that typography, formatting, and layout structure remain intact.
 4. "slugEn": An SEO-friendly URL slug in English (lowercase letters, numbers, and hyphens only, e.g. "faculty-launches-new-curriculum-2026").
 
 Respond strictly in valid JSON matching this exact structure:

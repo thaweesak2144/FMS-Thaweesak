@@ -34,5 +34,7 @@ export type {
 } from "./data-table";
 export { LiyonCard } from "./card";
 export type { LiyonCardProps } from "./card";
+export { RichTextEditor } from "./rich-text-editor";
+export type { RichTextEditorProps } from "./rich-text-editor";
 export { useBreadcrumbTail, useBreadcrumbTailItems, useBreadcrumbTailStore } from "./breadcrumb-tail";
 export type { Crumb } from "./breadcrumb-tail";

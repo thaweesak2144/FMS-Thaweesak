@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -10,6 +10,10 @@ import type { NewsPostDto, NewsCategoryDto } from "@/features/news";
 interface Props {
   newsList: NewsPostDto[];
   categories: NewsCategoryDto[];
+}
+
+function stripHtml(html: string): string {
+  return html ? html.replace(/<[^>]*>?/gm, "").trim() : "";
 }
 
 export function PortalNewsClient({ newsList, categories }: Props) {
@@ -32,7 +36,7 @@ export function PortalNewsClient({ newsList, categories }: Props) {
       const q = searchQuery.toLowerCase().trim();
       const title = `${item.titleTh} ${item.titleEn}`.toLowerCase();
       const excerpt = `${item.excerptTh || ""} ${item.excerptEn || ""}`.toLowerCase();
-      const body = `${item.bodyTh} ${item.bodyEn}`.toLowerCase();
+      const body = `${stripHtml(item.bodyTh)} ${stripHtml(item.bodyEn)}`.toLowerCase();
       return title.includes(q) || excerpt.includes(q) || body.includes(q);
     }
 
@@ -62,7 +66,7 @@ export function PortalNewsClient({ newsList, categories }: Props) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {pinnedPosts.slice(0, 2).map((post) => {
               const title = locale === "th" ? post.titleTh : post.titleEn;
-              const excerpt = locale === "th" ? (post.excerptTh || post.bodyTh.slice(0, 150)) : (post.excerptEn || post.bodyEn.slice(0, 150));
+              const excerpt = locale === "th" ? (post.excerptTh || stripHtml(post.bodyTh).slice(0, 150)) : (post.excerptEn || stripHtml(post.bodyEn).slice(0, 150));
               const catName = locale === "th" ? post.categoryNameTh : post.categoryNameEn;
 
               return (
@@ -181,7 +185,7 @@ export function PortalNewsClient({ newsList, categories }: Props) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((item) => {
             const title = locale === "th" ? item.titleTh : item.titleEn;
-            const excerpt = locale === "th" ? (item.excerptTh || item.bodyTh.slice(0, 120)) : (item.excerptEn || item.bodyEn.slice(0, 120));
+            const excerpt = locale === "th" ? (item.excerptTh || stripHtml(item.bodyTh).slice(0, 120)) : (item.excerptEn || stripHtml(item.bodyEn).slice(0, 120));
             const catName = locale === "th" ? item.categoryNameTh : item.categoryNameEn;
 
             return (
