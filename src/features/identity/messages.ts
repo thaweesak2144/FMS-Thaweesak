@@ -46,6 +46,18 @@ export const MESSAGES: Dictionary = {
   "vemail.confirmDesc": { th: "กดยืนยันเพื่อเปลี่ยนอีเมลเข้าระบบเป็นอีเมลนี้ ลิงก์นี้ใช้ได้ครั้งเดียว", en: "Press confirm to switch your sign-in email to this address. This link works once." },
   "vemail.ok": { th: "ยืนยันอีเมลใหม่เรียบร้อย ใช้อีเมลนี้เข้าสู่ระบบได้แล้ว", en: "Email verified. Use this address to sign in from now on." },
   "vemail.bad": { th: "ลิงก์ยืนยันใช้ไม่ได้ หมดอายุ หรือถูกใช้ไปแล้ว", en: "This link is invalid, expired, or already used" },
+  // setup wizard
+  "setup.title": { th: "ตั้งค่าระบบเริ่มต้น", en: "System Initial Setup" },
+  "setup.subtitle": { th: "ยินดีต้อนรับ! กรุณากำหนดข้อมูลหน่วยงานและสร้างบัญชีผู้ดูแลระบบสูงสุด (Super Admin) เพื่อเริ่มต้นใช้งาน", en: "Welcome! Configure your organization and create the Super Admin account." },
+  "setup.orgTh": { th: "ชื่อองค์กร/หน่วยงาน (ภาษาไทย)", en: "Organization Name (Thai)" },
+  "setup.orgEn": { th: "ชื่อองค์กร/หน่วยงาน (ภาษาอังกฤษ)", en: "Organization Name (English)" },
+  "setup.adminName": { th: "ชื่อ-นามสกุล ผู้ดูแลระบบ", en: "Administrator Name" },
+  "setup.adminEmail": { th: "อีเมลผู้ดูแลระบบ", en: "Administrator Email" },
+  "setup.password": { th: "รหัสผ่าน (อย่างน้อย 8 ตัวอักษร)", en: "Password (min 8 chars)" },
+  "setup.confirmPassword": { th: "ยืนยันรหัสผ่าน", en: "Confirm Password" },
+  "setup.submit": { th: "บันทึกและเริ่มต้นใช้งานระบบ", en: "Initialize & Start System" },
+  "setup.success": { th: "ตั้งค่าระบบเริ่มต้นสำเร็จ ยินดีต้อนรับสู่ระบบ!", en: "System initialized successfully. Welcome!" },
+  "setup.alreadyDone": { th: "ระบบได้รับการตั้งค่าแล้ว ไม่สามารถตั้งค่าซ้ำได้", en: "System has already been initialized." },
   // users
   "users.title": { th: "ผู้ใช้งาน", en: "Users" },
   "users.listTitle": { th: "รายชื่อผู้ใช้", en: "User list" },

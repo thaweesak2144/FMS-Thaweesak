@@ -1,0 +1,43 @@
+{
+  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+  "appId": "com.fms.system",
+  "productName": "FMS Management System",
+  "directories": {
+    "output": "dist-installer",
+    "buildResources": "resources"
+  },
+  "files": [
+    "dist-electron/**/*",
+    "electron/splash.html",
+    "package.json"
+  ],
+  "extraResources": [
+    {
+      "from": ".next/standalone",
+      "to": "standalone",
+      "filter": ["**/*"]
+    },
+    {
+      "from": "resources/postgres",
+      "to": "postgres",
+      "filter": ["**/*"]
+    }
+  ],
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      }
+    ],
+    "artifactName": "${productName}-Setup-${version}.${ext}"
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "FMS Management System",
+    "runAfterFinish": true
+  }
+}

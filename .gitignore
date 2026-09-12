@@ -15,3 +15,10 @@ public/uploads/*
 !public/uploads/.gitkeep
 !public/uploads/logo-*
 
+# Electron & Desktop packaging
+dist-electron/
+dist-installer/
+resources/postgres/
+resources/*.zip
+
+
