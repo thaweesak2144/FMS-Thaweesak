@@ -32,6 +32,66 @@ interface Props {
   canDelete: boolean;
 }
 
+// Helpers for robust JSON extraction supporting various casings, wrappers, Thai keys, and array formats
+function extractJsonField(obj: Record<string, unknown>, aliases: string[]): unknown {
+  const norm = (s: string) => s.toLowerCase().replace(/[-_\s]/g, "");
+  const normalizedEntries = new Map<string, unknown>();
+
+  for (const [key, val] of Object.entries(obj)) {
+    if (val !== undefined && val !== null) {
+      normalizedEntries.set(norm(key), val);
+      normalizedEntries.set(key.toLowerCase(), val);
+    }
+  }
+
+  for (const alias of aliases) {
+    if (obj[alias] !== undefined && obj[alias] !== null) return obj[alias];
+    const nKey = norm(alias);
+    if (normalizedEntries.has(nKey)) {
+      return normalizedEntries.get(nKey);
+    }
+  }
+  return undefined;
+}
+
+function formatJsonValue(val: unknown): string {
+  if (val === undefined || val === null) return "";
+  if (typeof val === "string") return val.trim();
+  if (typeof val === "number" || typeof val === "boolean") return String(val);
+  if (Array.isArray(val)) {
+    return val
+      .map((item) => {
+        if (typeof item === "string") return item.trim();
+        if (typeof item === "object" && item !== null) {
+          const o = item as Record<string, unknown>;
+          const code = o.code || o.id || o.no || o.ploNo || o.ploCode || "";
+          const desc = o.desc || o.description || o.name || o.title || o.text || o.detail || "";
+          if (code && desc) return `${code}: ${desc}`;
+          if (desc) return String(desc);
+          if (code) return String(code);
+          return JSON.stringify(item);
+        }
+        return String(item);
+      })
+      .filter(Boolean)
+      .join("\n");
+  }
+  if (typeof val === "object") {
+    return JSON.stringify(val, null, 2);
+  }
+  return String(val);
+}
+
+function normalizeDegreeLevelVal(val: unknown): DegreeLevel | null {
+  if (!val) return null;
+  const s = String(val).toUpperCase().trim();
+  if (s === "BACHELOR" || s.includes("ตรี") || s.includes("UNDERGRAD")) return DegreeLevel.BACHELOR;
+  if (s === "MASTER" || s.includes("โท") || s.includes("POSTGRAD") || s.includes("GRADUATE")) return DegreeLevel.MASTER;
+  if (s === "DOCTORAL" || s === "DOCTORATE" || s.includes("เอก") || s.includes("PHD")) return DegreeLevel.DOCTORAL;
+  if (s === "CERTIFICATE" || s.includes("ประกาศนียบัตร") || s.includes("CERT")) return DegreeLevel.CERTIFICATE;
+  return null;
+}
+
 export function CurriculumClient({
   initialCurriculums,
   departments,
@@ -228,53 +288,231 @@ export function CurriculumClient({
     const reader = new FileReader();
     reader.onload = (event) => {
       try {
-        const content = event.target?.result as string;
-        const parsed = JSON.parse(content);
+        let rawContent = (event.target?.result as string) || "";
+        rawContent = rawContent.trim();
+        // Strip BOM if present
+        if (rawContent.charCodeAt(0) === 0xfeff) {
+          rawContent = rawContent.slice(1);
+        }
+        // Strip markdown code fences e.g. ```json ... ```
+        if (rawContent.startsWith("```")) {
+          rawContent = rawContent.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim();
+        }
 
-        if (typeof parsed !== "object" || parsed === null) {
+        let parsed: unknown;
+        try {
+          parsed = JSON.parse(rawContent);
+        } catch {
           toast.error(t("curriculum.json.invalidFile"));
           return;
         }
 
-        if (parsed.code !== undefined) setFormCode(String(parsed.code ?? ""));
-        if (parsed.nameTh !== undefined) setFormNameTh(String(parsed.nameTh ?? ""));
-        if (parsed.nameEn !== undefined) setFormNameEn(String(parsed.nameEn ?? ""));
-        if (parsed.degreeLevel && Object.values(DegreeLevel).includes(parsed.degreeLevel)) {
-          setFormDegreeLevel(parsed.degreeLevel);
+        // If array, unwrap the first element
+        if (Array.isArray(parsed)) {
+          parsed = parsed[0];
         }
-        if (parsed.departmentId && departments.some((d) => d.id === parsed.departmentId)) {
-          setFormDepartmentId(parsed.departmentId);
-        } else if (parsed.departmentNameTh || parsed.departmentNameEn) {
+
+        if (!parsed || typeof parsed !== "object") {
+          toast.error(t("curriculum.json.invalidFile"));
+          return;
+        }
+
+        let obj = parsed as Record<string, unknown>;
+
+        // Unwrap if nested in a root property
+        const wrapperKeys = ["curriculum", "data", "program", "course", "curriculumInfo", "curriculum_info", "item", "result"];
+        for (const wk of wrapperKeys) {
+          if (obj[wk] && typeof obj[wk] === "object" && !Array.isArray(obj[wk])) {
+            obj = obj[wk] as Record<string, unknown>;
+            break;
+          }
+        }
+
+        let updatedCount = 0;
+
+        // 1. Code
+        const codeVal = extractJsonField(obj, ["code", "curriculumCode", "curriculum_code", "programCode", "program_code", "courseCode", "id", "รหัส", "รหัสหลักสูตร", "รหัสวิชา"]);
+        if (codeVal !== undefined && codeVal !== null) {
+          setFormCode(formatJsonValue(codeVal));
+          updatedCount++;
+        }
+
+        // 2. Name TH
+        const nameThVal = extractJsonField(obj, ["nameTh", "name_th", "curriculumNameTh", "curriculum_name_th", "programNameTh", "program_name_th", "titleTh", "title_th", "name", "title", "ชื่อไทย", "ชื่อหลักสูตร", "ชื่อหลักสูตรไทย", "ชื่อหลักสูตรภาษาไทย"]);
+        if (nameThVal !== undefined && nameThVal !== null) {
+          setFormNameTh(formatJsonValue(nameThVal));
+          updatedCount++;
+        }
+
+        // 3. Name EN
+        const nameEnVal = extractJsonField(obj, ["nameEn", "name_en", "curriculumNameEn", "curriculum_name_en", "programNameEn", "program_name_en", "titleEn", "title_en", "nameEnglish", "englishName", "ชื่ออังกฤษ", "ชื่อหลักสูตรอังกฤษ", "ชื่อหลักสูตรภาษาอังกฤษ", "ชื่อภาษาอังกฤษ"]);
+        if (nameEnVal !== undefined && nameEnVal !== null) {
+          setFormNameEn(formatJsonValue(nameEnVal));
+          updatedCount++;
+        }
+
+        // 4. Degree Name TH
+        const degreeNameThVal = extractJsonField(obj, ["degreeNameTh", "degree_name_th", "degreeTitleTh", "degree_title_th", "degreeName", "degree_name", "ชื่อปริญญา", "ชื่อปริญญาไทย", "ชื่อปริญญาภาษาไทย", "ชื่อเต็มภาษาไทย"]);
+        if (degreeNameThVal !== undefined && degreeNameThVal !== null) {
+          setFormDegreeNameTh(formatJsonValue(degreeNameThVal));
+          updatedCount++;
+        }
+
+        // 5. Degree Name EN
+        const degreeNameEnVal = extractJsonField(obj, ["degreeNameEn", "degree_name_en", "degreeTitleEn", "degree_title_en", "degreeNameEnglish", "ชื่อปริญญาอังกฤษ", "ชื่อปริญญาภาษาอังกฤษ", "ชื่อเต็มภาษาอังกฤษ"]);
+        if (degreeNameEnVal !== undefined && degreeNameEnVal !== null) {
+          setFormDegreeNameEn(formatJsonValue(degreeNameEnVal));
+          updatedCount++;
+        }
+
+        // 6. Degree Abbr TH
+        const degreeAbbrThVal = extractJsonField(obj, ["degreeAbbrTh", "degree_abbr_th", "abbrTh", "abbr_th", "abbreviationTh", "abbreviation_th", "degreeAbbr", "degree_abbr", "ชื่อย่อ", "อักษรย่อ", "ชื่อย่อภาษาไทย", "อักษรย่อภาษาไทย", "ชื่อย่อปริญญาไทย"]);
+        if (degreeAbbrThVal !== undefined && degreeAbbrThVal !== null) {
+          setFormDegreeAbbrTh(formatJsonValue(degreeAbbrThVal));
+          updatedCount++;
+        }
+
+        // 7. Degree Abbr EN
+        const degreeAbbrEnVal = extractJsonField(obj, ["degreeAbbrEn", "degree_abbr_en", "abbrEn", "abbr_en", "abbreviationEn", "abbreviation_en", "degreeAbbrEnglish", "ชื่อย่อภาษาอังกฤษ", "อักษรย่อภาษาอังกฤษ", "ชื่อย่อปริญญาอังกฤษ"]);
+        if (degreeAbbrEnVal !== undefined && degreeAbbrEnVal !== null) {
+          setFormDegreeAbbrEn(formatJsonValue(degreeAbbrEnVal));
+          updatedCount++;
+        }
+
+        // 8. Degree Level
+        const levelVal = extractJsonField(obj, ["degreeLevel", "degree_level", "level", "degree", "degreeType", "degree_type", "ระดับ", "ระดับการศึกษา", "ระดับปริญญา"]);
+        if (levelVal !== undefined && levelVal !== null) {
+          const matchedLevel = normalizeDegreeLevelVal(levelVal);
+          if (matchedLevel) {
+            setFormDegreeLevel(matchedLevel);
+            updatedCount++;
+          }
+        }
+
+        // 9. Department
+        const deptVal = extractJsonField(obj, ["departmentId", "department_id", "deptId", "dept_id", "departmentCode", "department_code", "department", "departmentName", "department_name", "departmentNameTh", "department_name_th", "departmentNameEn", "ภาควิชา", "สาขาวิชา", "สาขา"]);
+        if (deptVal !== undefined && deptVal !== null) {
+          const rawDeptStr = String(deptVal).trim();
           const matched = departments.find(
             (d) =>
-              (parsed.departmentNameTh && d.nameTh === parsed.departmentNameTh) ||
-              (parsed.departmentNameEn && d.nameEn === parsed.departmentNameEn)
+              d.id === rawDeptStr ||
+              d.nameTh === rawDeptStr ||
+              d.nameEn === rawDeptStr ||
+              rawDeptStr.includes(d.nameTh) ||
+              d.nameTh.includes(rawDeptStr)
           );
-          if (matched) setFormDepartmentId(matched.id);
+          if (matched) {
+            setFormDepartmentId(matched.id);
+            updatedCount++;
+          }
         }
-        if (parsed.totalCredits !== undefined) setFormTotalCredits(String(parsed.totalCredits ?? ""));
-        if (parsed.curriculumYear !== undefined) setFormCurriculumYear(String(parsed.curriculumYear ?? ""));
-        if (parsed.studyPeriodYears !== undefined) setFormStudyPeriodYears(String(parsed.studyPeriodYears ?? ""));
-        if (parsed.tuitionFee !== undefined) setFormTuitionFee(parsed.tuitionFee ? String(parsed.tuitionFee) : "");
-        if (parsed.degreeNameTh !== undefined) setFormDegreeNameTh(String(parsed.degreeNameTh ?? ""));
-        if (parsed.degreeNameEn !== undefined) setFormDegreeNameEn(String(parsed.degreeNameEn ?? ""));
-        if (parsed.degreeAbbrTh !== undefined) setFormDegreeAbbrTh(String(parsed.degreeAbbrTh ?? ""));
-        if (parsed.degreeAbbrEn !== undefined) setFormDegreeAbbrEn(String(parsed.degreeAbbrEn ?? ""));
-        if (parsed.philosophyTh !== undefined) setFormPhilosophyTh(String(parsed.philosophyTh ?? ""));
-        if (parsed.philosophyEn !== undefined) setFormPhilosophyEn(String(parsed.philosophyEn ?? ""));
-        if (parsed.objectivesTh !== undefined) setFormObjectivesTh(String(parsed.objectivesTh ?? ""));
-        if (parsed.objectivesEn !== undefined) setFormObjectivesEn(String(parsed.objectivesEn ?? ""));
-        if (parsed.ploTh !== undefined) setFormPloTh(String(parsed.ploTh ?? ""));
-        if (parsed.ploEn !== undefined) setFormPloEn(String(parsed.ploEn ?? ""));
-        if (parsed.careerProspectsTh !== undefined) setFormCareerProspectsTh(String(parsed.careerProspectsTh ?? ""));
-        if (parsed.careerProspectsEn !== undefined) setFormCareerProspectsEn(String(parsed.careerProspectsEn ?? ""));
 
-        toast.success(t("curriculum.json.importSuccess"));
-      } catch {
+        // 10. Curriculum Year
+        const yearVal = extractJsonField(obj, ["curriculumYear", "curriculum_year", "year", "academicYear", "academic_year", "ปีหลักสูตร", "ปีพศ", "ปีการศึกษา", "พศ", "ปีที่ปรับปรุง", "ปีที่พัฒนา"]);
+        if (yearVal !== undefined && yearVal !== null) {
+          const rawYearNum = parseInt(String(yearVal).replace(/\D/g, ""), 10);
+          if (!isNaN(rawYearNum)) {
+            const finalYear = rawYearNum > 1900 && rawYearNum < 2200 ? rawYearNum + 543 : rawYearNum;
+            setFormCurriculumYear(String(finalYear));
+            updatedCount++;
+          }
+        }
+
+        // 11. Total Credits
+        const creditsVal = extractJsonField(obj, ["totalCredits", "total_credits", "credits", "credit", "totalCredit", "total_credit", "หน่วยกิต", "จำนวนหน่วยกิต", "หน่วยกิตรวม"]);
+        if (creditsVal !== undefined && creditsVal !== null) {
+          const cNum = parseInt(String(creditsVal).replace(/\D/g, ""), 10);
+          if (!isNaN(cNum)) {
+            setFormTotalCredits(String(cNum));
+            updatedCount++;
+          }
+        }
+
+        // 12. Study Period Years
+        const periodVal = extractJsonField(obj, ["studyPeriodYears", "study_period_years", "studyPeriod", "study_period", "studyYears", "study_years", "periodYears", "period", "duration", "years", "ระยะเวลา", "ระยะเวลาศึกษา", "ระยะเวลาการศึกษา", "จำนวนปี"]);
+        if (periodVal !== undefined && periodVal !== null) {
+          const pNum = parseInt(String(periodVal).replace(/\D/g, ""), 10);
+          if (!isNaN(pNum)) {
+            setFormStudyPeriodYears(String(pNum));
+            updatedCount++;
+          }
+        }
+
+        // 13. Tuition Fee
+        const feeVal = extractJsonField(obj, ["tuitionFee", "tuition_fee", "fee", "tuition", "feePerSemester", "fee_per_semester", "ค่าธรรมเนียม", "ค่าเทอม", "ค่าเล่าเรียน", "ค่าธรรมเนียมการศึกษา"]);
+        if (feeVal !== undefined && feeVal !== null) {
+          const fNum = parseInt(String(feeVal).replace(/\D/g, ""), 10);
+          setFormTuitionFee(!isNaN(fNum) ? String(fNum) : "");
+          updatedCount++;
+        }
+
+        // 14. Philosophy TH
+        const philThVal = extractJsonField(obj, ["philosophyTh", "philosophy_th", "philosophy", "philosophyThai", "ปรัชญา", "ปรัชญาของหลักสูตร"]);
+        if (philThVal !== undefined && philThVal !== null) {
+          setFormPhilosophyTh(formatJsonValue(philThVal));
+          updatedCount++;
+        }
+
+        // 15. Philosophy EN
+        const philEnVal = extractJsonField(obj, ["philosophyEn", "philosophy_en", "philosophyEnglish", "englishPhilosophy"]);
+        if (philEnVal !== undefined && philEnVal !== null) {
+          setFormPhilosophyEn(formatJsonValue(philEnVal));
+          updatedCount++;
+        }
+
+        // 16. Career Prospects TH
+        const careerThVal = extractJsonField(obj, ["careerProspectsTh", "career_prospects_th", "careerProspects", "career_prospects", "careers", "career", "careerTh", "career_th", "careerPaths", "occupations", "อาชีพ", "อาชีพที่ประกอบได้", "อาชีพที่สามารถประกอบได้", "อาชีพหลังสำเร็จการศึกษา", "แนวทางการประกอบอาชีพ"]);
+        if (careerThVal !== undefined && careerThVal !== null) {
+          setFormCareerProspectsTh(formatJsonValue(careerThVal));
+          updatedCount++;
+        }
+
+        // 17. Career Prospects EN
+        const careerEnVal = extractJsonField(obj, ["careerProspectsEn", "career_prospects_en", "careerEn", "career_en", "careersEn", "careers_en", "careersEnglish"]);
+        if (careerEnVal !== undefined && careerEnVal !== null) {
+          setFormCareerProspectsEn(formatJsonValue(careerEnVal));
+          updatedCount++;
+        }
+
+        // 18. Objectives TH
+        const objThVal = extractJsonField(obj, ["objectivesTh", "objectives_th", "objectives", "objective", "objectivesThai", "วัตถุประสงค์", "วัตถุประสงค์ของหลักสูตร"]);
+        if (objThVal !== undefined && objThVal !== null) {
+          setFormObjectivesTh(formatJsonValue(objThVal));
+          updatedCount++;
+        }
+
+        // 19. Objectives EN
+        const objEnVal = extractJsonField(obj, ["objectivesEn", "objectives_en", "objectivesEnglish", "englishObjectives"]);
+        if (objEnVal !== undefined && objEnVal !== null) {
+          setFormObjectivesEn(formatJsonValue(objEnVal));
+          updatedCount++;
+        }
+
+        // 20. PLO TH
+        const ploThVal = extractJsonField(obj, ["ploTh", "plo_th", "plo", "plos", "ploList", "learningOutcomes", "learning_outcomes", "expectedLearningOutcomes", "ผลลัพธ์การเรียนรู้", "ผลการเรียนรู้", "ผลการเรียนรู้ที่คาดหวัง", "มาตรฐานผลการเรียนรู้", "พลีโอ"]);
+        if (ploThVal !== undefined && ploThVal !== null) {
+          setFormPloTh(formatJsonValue(ploThVal));
+          updatedCount++;
+        }
+
+        // 21. PLO EN
+        const ploEnVal = extractJsonField(obj, ["ploEn", "plo_en", "ploEnglish", "plosEnglish", "learningOutcomesEn", "expectedLearningOutcomesEn"]);
+        if (ploEnVal !== undefined && ploEnVal !== null) {
+          setFormPloEn(formatJsonValue(ploEnVal));
+          updatedCount++;
+        }
+
+        if (updatedCount === 0) {
+          toast.error("ไม่พบข้อมูลฟิลด์หลักสูตรที่ตรงกันในไฟล์ JSON (กรุณาตรวจสอบโครงสร้างไฟล์)");
+        } else {
+          toast.success(`${t("curriculum.json.importSuccess")} (${updatedCount} รายการ)`);
+        }
+      } catch (err) {
+        console.error("Failed to parse JSON file", err);
         toast.error(t("curriculum.json.invalidFile"));
       } finally {
-        if (e.target) {
-          e.target.value = "";
+        if (jsonFileInputRef.current) {
+          jsonFileInputRef.current.value = "";
         }
       }
     };
@@ -561,8 +799,11 @@ export function CurriculumClient({
               <input
                 ref={jsonFileInputRef}
                 type="file"
-                accept=".json,application/json"
+                accept=".json,application/json,text/plain"
                 className="hidden"
+                onClick={(e) => {
+                  (e.currentTarget as HTMLInputElement).value = "";
+                }}
                 onChange={handleImportJson}
               />
               <Button
