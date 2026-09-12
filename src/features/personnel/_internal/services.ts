@@ -16,8 +16,21 @@ export interface DepartmentDto {
   parentId: string | null;
   sortOrder: number;
   personnelCount?: number;
+  curriculumCount?: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface DepartmentCurriculumSummaryDto {
+  id: string;
+  code: string;
+  nameTh: string;
+  nameEn: string;
+  degreeLevel: string;
+  totalCredits: number;
+  studyPeriodYears: number;
+  curriculumYear: number;
+  isActive: boolean;
 }
 
 export interface EducationDto {
@@ -67,7 +80,7 @@ export async function listDepartments(tenantId: string): Promise<DepartmentDto[]
     where: { tenantId },
     include: {
       _count: {
-        select: { personnel: true },
+        select: { personnel: true, curriculums: true },
       },
     },
     orderBy: [{ sortOrder: "asc" }, { code: "asc" }],
@@ -82,8 +95,42 @@ export async function listDepartments(tenantId: string): Promise<DepartmentDto[]
     parentId: d.parentId,
     sortOrder: d.sortOrder,
     personnelCount: d._count.personnel,
+    curriculumCount: d._count.curriculums,
     createdAt: d.createdAt.toISOString(),
     updatedAt: d.updatedAt.toISOString(),
+  }));
+}
+
+export async function listDepartmentCurriculums(
+  tenantId: string,
+  departmentId: string
+): Promise<DepartmentCurriculumSummaryDto[]> {
+  const items = await prisma.curriculum.findMany({
+    where: { tenantId, departmentId },
+    orderBy: [{ curriculumYear: "desc" }, { code: "asc" }],
+    select: {
+      id: true,
+      code: true,
+      nameTh: true,
+      nameEn: true,
+      degreeLevel: true,
+      totalCredits: true,
+      studyPeriodYears: true,
+      curriculumYear: true,
+      isActive: true,
+    },
+  });
+
+  return items.map((c) => ({
+    id: c.id,
+    code: c.code,
+    nameTh: c.nameTh,
+    nameEn: c.nameEn,
+    degreeLevel: c.degreeLevel,
+    totalCredits: c.totalCredits,
+    studyPeriodYears: c.studyPeriodYears,
+    curriculumYear: c.curriculumYear,
+    isActive: c.isActive,
   }));
 }
 

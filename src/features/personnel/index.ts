@@ -1,6 +1,7 @@
-﻿export { PERSONNEL_P } from "./permissions";
+export { PERSONNEL_P } from "./permissions";
 export type {
   DepartmentDto,
+  DepartmentCurriculumSummaryDto,
   PersonnelDto,
   EducationDto,
   PersonnelFilter,

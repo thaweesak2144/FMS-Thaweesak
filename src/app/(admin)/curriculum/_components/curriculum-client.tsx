@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { Plus, Pencil, Trash2, GraduationCap, BookOpen, AlertCircle, CheckCircle2, XCircle } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useT, useLocale } from "@/shared/lib/i18n/client";
 import { DataTable, StatusPill, LiyonDialog, LiyonDialogHeader, LiyonDialogBody, LiyonDialogFooter, LiyonField, RowMenuItem, type DataTableColumn } from "@/shared/components/liyon";
 import { Button } from "@/components/ui/button";
@@ -40,12 +41,16 @@ export function CurriculumClient({
 }: Props) {
   const t = useT();
   const locale = useLocale();
+  const searchParams = useSearchParams();
+  const departmentIdParam = searchParams.get("departmentId");
+  const createParam = searchParams.get("create");
+
   const [items, setItems] = useState<CurriculumDto[]>(initialCurriculums);
   const [isPending, startTransition] = useTransition();
 
   // Filter states
   const [filterLevel, setFilterLevel] = useState<DegreeLevel | "">("");
-  const [filterDepartment, setFilterDepartment] = useState("");
+  const [filterDepartment, setFilterDepartment] = useState(departmentIdParam ?? "");
 
   // Dialog state
   const [modalOpen, setModalOpen] = useState(false);
@@ -67,13 +72,13 @@ export function CurriculumClient({
   const [formCareerProspectsTh, setFormCareerProspectsTh] = useState("");
   const [formCareerProspectsEn, setFormCareerProspectsEn] = useState("");
 
-  const openCreateDialog = () => {
+  const openCreateDialog = (defaultDeptId?: string) => {
     setEditingItem(null);
     setFormCode("");
     setFormNameTh("");
     setFormNameEn("");
     setFormDegreeLevel(DegreeLevel.BACHELOR);
-    setFormDepartmentId(departments[0]?.id ?? "");
+    setFormDepartmentId(defaultDeptId || filterDepartment || (departments[0]?.id ?? ""));
     setFormTotalCredits("120");
     setFormCurriculumYear(new Date().getFullYear() + 543 + "");
     setFormStudyPeriodYears("4");
@@ -84,6 +89,15 @@ export function CurriculumClient({
     setFormCareerProspectsEn("");
     setModalOpen(true);
   };
+
+  useEffect(() => {
+    if (departmentIdParam) {
+      setFilterDepartment(departmentIdParam);
+    }
+    if (createParam === "true") {
+      openCreateDialog(departmentIdParam || undefined);
+    }
+  }, [departmentIdParam, createParam]);
 
   const openEditDialog = (item: CurriculumDto) => {
     setEditingItem(item);
@@ -263,7 +277,7 @@ export function CurriculumClient({
         </div>
         {canWrite && (
           <div className="acts ml-auto">
-            <Button onClick={openCreateDialog} className="inline-flex items-center gap-2">
+            <Button onClick={() => openCreateDialog()} className="inline-flex items-center gap-2">
               <Plus className="h-4 w-4" />
               {t("curriculum.create")}
             </Button>

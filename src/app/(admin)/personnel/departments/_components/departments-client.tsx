@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Plus, Pencil, Trash2, Building2, AlertCircle, Users } from "lucide-react";
+import { Plus, Pencil, Trash2, Building2, AlertCircle, Users, GraduationCap, ExternalLink, BookOpen, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
+import Link from "next/link";
 import { useT, useLocale } from "@/shared/lib/i18n/client";
 import {
   DataTable,
+  StatusPill,
   LiyonDialog,
   LiyonDialogHeader,
   LiyonDialogBody,
@@ -15,12 +17,13 @@ import {
   type DataTableColumn,
 } from "@/shared/components/liyon";
 import { Button } from "@/components/ui/button";
-import type { DepartmentDto } from "@/features/personnel";
+import type { DepartmentDto, DepartmentCurriculumSummaryDto } from "@/features/personnel";
 import {
   createDepartmentAction,
   updateDepartmentAction,
   deleteDepartmentAction,
   getDepartmentsAction,
+  getDepartmentCurriculumsAction,
 } from "@/features/personnel/actions";
 
 interface Props {
@@ -37,10 +40,29 @@ export function DepartmentsClient({ initialItems }: Props) {
   const [deleteItem, setDeleteItem] = useState<DepartmentDto | null>(null);
   const [editingItem, setEditingItem] = useState<DepartmentDto | null>(null);
 
+  // Curriculum modal state
+  const [curriculumsModalOpen, setCurriculumsModalOpen] = useState(false);
+  const [selectedDeptForCurriculums, setSelectedDeptForCurriculums] = useState<DepartmentDto | null>(null);
+  const [deptCurriculums, setDeptCurriculums] = useState<DepartmentCurriculumSummaryDto[]>([]);
+  const [loadingCurriculums, setLoadingCurriculums] = useState(false);
+
   const [formCode, setFormCode] = useState("");
   const [formNameTh, setFormNameTh] = useState("");
   const [formNameEn, setFormNameEn] = useState("");
   const [formSortOrder, setFormSortOrder] = useState(0);
+
+  const openCurriculumsModal = async (dept: DepartmentDto) => {
+    setSelectedDeptForCurriculums(dept);
+    setCurriculumsModalOpen(true);
+    setLoadingCurriculums(true);
+    const res = await getDepartmentCurriculumsAction(dept.id);
+    if (res.ok) {
+      setDeptCurriculums(res.data);
+    } else {
+      toast.error(res.error.message || t("common.error"));
+    }
+    setLoadingCurriculums(false);
+  };
 
   const openCreateDialog = () => {
     setEditingItem(null);
@@ -148,6 +170,22 @@ export function DepartmentsClient({ initialItems }: Props) {
       sortable: true,
     },
     {
+      key: "curriculums",
+      header: t("department.curriculumCount"),
+      render: (row) => (
+        <button
+          type="button"
+          onClick={() => openCurriculumsModal(row)}
+          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-all cursor-pointer shadow-xs"
+          title={t("department.viewCurriculums")}
+        >
+          <GraduationCap className="h-3.5 w-3.5" />
+          <span>{row.curriculumCount ?? 0} หลักสูตร</span>
+        </button>
+      ),
+      sortable: true,
+    },
+    {
       key: "sortOrder",
       header: "Sort",
       render: (row) => <span className="text-xs text-muted-foreground">{row.sortOrder}</span>,
@@ -186,6 +224,12 @@ export function DepartmentsClient({ initialItems }: Props) {
         }}
         renderRowMenu={(row) => (
           <>
+            <RowMenuItem
+              icon={<GraduationCap className="h-4 w-4" />}
+              onSelect={() => openCurriculumsModal(row)}
+            >
+              {t("department.viewCurriculums")}
+            </RowMenuItem>
             <RowMenuItem
               icon={<Pencil className="h-4 w-4" />}
               onSelect={() => openEditDialog(row)}
@@ -272,6 +316,97 @@ export function DepartmentsClient({ initialItems }: Props) {
           </Button>
           <Button variant="destructive" onClick={handleDelete} disabled={isPending}>
             {t("common.delete")}
+          </Button>
+        </LiyonDialogFooter>
+      </LiyonDialog>
+
+      {/* Department Curriculums Modal */}
+      <LiyonDialog open={curriculumsModalOpen} onOpenChange={setCurriculumsModalOpen}>
+        <LiyonDialogHeader
+          title={selectedDeptForCurriculums ? `${t("department.curriculumsTitle")}: ${locale === "th" ? selectedDeptForCurriculums.nameTh : selectedDeptForCurriculums.nameEn}` : t("department.curriculumsTitle")}
+          description={`${t("department.code")}: ${selectedDeptForCurriculums?.code ?? ""}`}
+        />
+        <LiyonDialogBody className="space-y-4 max-h-[65vh] overflow-y-auto pr-1">
+          {loadingCurriculums ? (
+            <div className="py-8 text-center text-muted-foreground text-sm flex items-center justify-center gap-2">
+              <div className="h-4 w-4 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+              <span>{t("common.loading")}</span>
+            </div>
+          ) : deptCurriculums.length === 0 ? (
+            <div className="py-10 text-center space-y-3">
+              <div className="mx-auto w-12 h-12 rounded-full bg-muted flex items-center justify-center text-muted-foreground">
+                <GraduationCap className="h-6 w-6" />
+              </div>
+              <p className="text-sm font-medium text-foreground">{t("department.noCurriculums")}</p>
+              <p className="text-xs text-muted-foreground">
+                สามารถเริ่มต้นสร้างหลักสูตรใหม่ที่สังกัดภาควิชาหรือส่วนงานนี้ได้ทันที
+              </p>
+            </div>
+          ) : (
+            <div className="divide-y divide-border border rounded-lg overflow-hidden">
+              {deptCurriculums.map((c) => (
+                <div key={c.id} className="p-3.5 hover:bg-muted/40 transition-colors flex items-start justify-between gap-3">
+                  <div className="space-y-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <code className="text-xs font-semibold px-2 py-0.5 rounded bg-muted text-foreground">
+                        {c.code}
+                      </code>
+                      <span className="text-xs font-medium text-muted-foreground">
+                        (พ.ศ. {c.curriculumYear})
+                      </span>
+                      <StatusPill tone={c.isActive ? "ok" : "off"}>
+                        {c.isActive ? t("curriculum.status.active") : t("curriculum.status.inactive")}
+                      </StatusPill>
+                    </div>
+                    <div className="font-medium text-sm text-foreground truncate">
+                      {locale === "th" ? c.nameTh : c.nameEn}
+                    </div>
+                    <div className="text-xs text-muted-foreground flex items-center gap-3">
+                      <span>{t(`curriculum.level.${c.degreeLevel}`)}</span>
+                      <span>•</span>
+                      <span>{c.totalCredits} {t("portal.curriculum.creditsUnit")}</span>
+                      <span>•</span>
+                      <span>{c.studyPeriodYears} {t("portal.curriculum.yearsUnit")}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5 shrink-0 pt-1">
+                    <Link
+                      href={`/curriculum/${c.id}/plan`}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-md border hover:bg-muted transition-colors text-muted-foreground hover:text-foreground shadow-2xs"
+                      title={t("curriculum.plan.manageBtn")}
+                    >
+                      <BookOpen className="h-3.5 w-3.5" />
+                      <span>{t("curriculum.plan.manageBtn")}</span>
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </LiyonDialogBody>
+        <LiyonDialogFooter className="flex flex-col sm:flex-row items-center justify-between gap-2 border-t pt-4">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            {selectedDeptForCurriculums && (
+              <Link
+                href={`/curriculum?departmentId=${selectedDeptForCurriculums.id}&create=true`}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors w-full sm:w-auto justify-center shadow-xs"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                <span>{t("department.addCurriculum")}</span>
+              </Link>
+            )}
+            {selectedDeptForCurriculums && (
+              <Link
+                href={`/curriculum?departmentId=${selectedDeptForCurriculums.id}`}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border hover:bg-muted transition-colors text-foreground w-full sm:w-auto justify-center"
+              >
+                <span>{t("department.manageAllCurriculums")}</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            )}
+          </div>
+          <Button variant="outline" size="sm" onClick={() => setCurriculumsModalOpen(false)}>
+            {t("common.close")}
           </Button>
         </LiyonDialogFooter>
       </LiyonDialog>

@@ -14,6 +14,7 @@ import {
 } from "./validations";
 import {
   listDepartments,
+  listDepartmentCurriculums,
   createDepartment,
   updateDepartment,
   deleteDepartment,
@@ -24,6 +25,7 @@ import {
   togglePersonnelActive,
   deletePersonnel,
   type DepartmentDto,
+  type DepartmentCurriculumSummaryDto,
   type PersonnelDto,
   type PersonnelFilter,
 } from "./services";
@@ -61,12 +63,20 @@ export async function updateDepartmentAction(input: unknown): Promise<ActionResu
   });
 }
 
+export async function getDepartmentCurriculumsAction(departmentId: string): Promise<ActionResult<DepartmentCurriculumSummaryDto[]>> {
+  return runAction(async () => {
+    const ctx = await requirePermission(PERSONNEL_P.personnelRead);
+    return listDepartmentCurriculums(ctx.tenantId, departmentId);
+  });
+}
+
 export async function deleteDepartmentAction(id: string): Promise<ActionResult<void>> {
   return runAction(async () => {
     const ctx = await requirePermission(PERSONNEL_P.departmentManage);
     await deleteDepartment(ctx.tenantId, id);
     revalidatePath("/personnel");
     revalidatePath("/personnel/departments");
+    revalidatePath("/curriculum");
     revalidatePath("/portal/personnel");
   });
 }

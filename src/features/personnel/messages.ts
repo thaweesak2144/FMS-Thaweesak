@@ -61,6 +61,12 @@ export const MESSAGES = {
   "department.delete": { th: "ลบภาควิชา", en: "Delete Department" },
   "department.deleteConfirm": { th: "ยืนยันการลบภาควิชานี้หรือไม่? (บุคลากรในสังกัดจะไม่ถูกลบ)", en: "Are you sure you want to delete this department?" },
   "department.memberCount": { th: "จำนวนบุคลากร", en: "Members" },
+  "department.curriculumCount": { th: "จำนวนหลักสูตร", en: "Curriculums" },
+  "department.viewCurriculums": { th: "ดูหลักสูตรในสังกัด", en: "View Curriculums" },
+  "department.curriculumsTitle": { th: "หลักสูตรที่สังกัดในภาควิชา", en: "Curriculums in Department" },
+  "department.noCurriculums": { th: "ยังไม่มีหลักสูตรสังกัดในภาควิชา/หน่วยงานนี้", en: "No curriculums in this department yet" },
+  "department.addCurriculum": { th: "เพิ่มหลักสูตรใหม่ในภาควิชานี้", en: "Add Curriculum to Department" },
+  "department.manageAllCurriculums": { th: "ไปที่หน้ารวมหลักสูตรของภาควิชานี้", en: "Manage All Curriculums" },
 
   // Public Portal
   "portal.nav.personnel": { th: "คณาจารย์และบุคลากร", en: "Faculty & Staff" },

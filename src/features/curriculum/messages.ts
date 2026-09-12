@@ -1,7 +1,8 @@
-﻿export const MESSAGES = {
+export const MESSAGES = {
   // Navigation & General
   "curriculum.nav": { th: "หลักสูตรการศึกษา", en: "Curriculums" },
   "curriculum.nav.list": { th: "รายการหลักสูตร", en: "All Curriculums" },
+  "curriculum.nav.departments": { th: "ภาควิชา / ส่วนงาน", en: "Departments & Units" },
   "curriculum.title": { th: "ระบบจัดการหลักสูตรการศึกษา", en: "Curriculum Management" },
   "curriculum.subtitle": { th: "บริหารจัดการหลักสูตร โครงสร้างหน่วยกิต และแผนการศึกษาตลอดหลักสูตร", en: "Manage programs, credit structures, and semester study plans" },
 

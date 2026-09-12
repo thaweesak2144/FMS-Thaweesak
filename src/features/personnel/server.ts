@@ -2,6 +2,7 @@ import "server-only";
 
 export {
   listDepartments,
+  listDepartmentCurriculums,
   createDepartment,
   updateDepartment,
   deleteDepartment,
@@ -13,6 +14,7 @@ export {
   deletePersonnel,
   getDefaultTenantId,
   type DepartmentDto,
+  type DepartmentCurriculumSummaryDto,
   type PersonnelDto,
   type EducationDto,
   type PersonnelFilter,

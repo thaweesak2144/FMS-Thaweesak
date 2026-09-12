@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { requirePermission, hasPermission } from "@/features/identity/server";
 import { CURRICULUM_P, listCurriculums } from "@/features/curriculum/server";
 import { CurriculumClient } from "./_components/curriculum-client";
@@ -17,12 +18,14 @@ export default async function CurriculumPage() {
   });
 
   return (
-    <CurriculumClient
-      initialCurriculums={curriculums}
-      departments={departments}
-      canWrite={hasPermission(ctx, CURRICULUM_P.curriculumWrite)}
-      canManage={hasPermission(ctx, CURRICULUM_P.curriculumManage)}
-      canDelete={hasPermission(ctx, CURRICULUM_P.curriculumDelete)}
-    />
+    <Suspense fallback={null}>
+      <CurriculumClient
+        initialCurriculums={curriculums}
+        departments={departments}
+        canWrite={hasPermission(ctx, CURRICULUM_P.curriculumWrite)}
+        canManage={hasPermission(ctx, CURRICULUM_P.curriculumManage)}
+        canDelete={hasPermission(ctx, CURRICULUM_P.curriculumDelete)}
+      />
+    </Suspense>
   );
 }

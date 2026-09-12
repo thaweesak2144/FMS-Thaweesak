@@ -1,5 +1,6 @@
-﻿export {
+export {
   getDepartmentsAction,
+  getDepartmentCurriculumsAction,
   createDepartmentAction,
   updateDepartmentAction,
   deleteDepartmentAction,

@@ -30,6 +30,7 @@ export const sidebarGroups: NavGroup[] = [
         icon: GraduationCap,
         permission: CURRICULUM_P.curriculumRead,
         children: [
+          { title: "curriculum.nav.departments", href: "/personnel/departments", permission: CURRICULUM_P.curriculumRead },
           { title: "curriculum.nav.list", href: "/curriculum", permission: CURRICULUM_P.curriculumRead },
         ],
       },
