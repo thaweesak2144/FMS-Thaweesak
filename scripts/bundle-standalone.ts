@@ -51,6 +51,13 @@ async function main() {
     console.log("[bundle-standalone] Copied splash.html to dist-electron/");
   }
 
+  // Ensure resources/postgres exists so electron-builder doesn't fail if not downloaded yet
+  const resourcesPg = path.join(rootDir, "resources", "postgres");
+  if (!fs.existsSync(resourcesPg)) {
+    fs.mkdirSync(resourcesPg, { recursive: true });
+    fs.writeFileSync(path.join(resourcesPg, ".gitkeep"), "");
+  }
+
   console.log("[bundle-standalone] Standalone bundle is ready!");
 }
 
