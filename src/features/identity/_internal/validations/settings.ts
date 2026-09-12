@@ -22,16 +22,29 @@ export const testSmtpSchema = z.object({
   testTo: z.string().trim().email(),
 });
 
+export const contactSettingsSchema = z.object({
+  address: z.string().trim().max(1000).default(""),
+  phone: z.string().trim().max(100).default(""),
+  email: z.string().trim().max(255).default(""),
+  officeHours: z.string().trim().max(255).default(""),
+  facebookUrl: z.string().trim().max(500).default(""),
+  lineUrl: z.string().trim().max(500).default(""),
+  youtubeUrl: z.string().trim().max(500).default(""),
+  mapUrl: z.string().trim().max(1000).default(""),
+});
+
 export const updateSettingsSchema = z.object({
   nameTh: z.string().trim().min(1).max(255),
   nameEn: z.string().trim().min(1).max(255),
   logoUrl: z.string().trim().max(500).or(z.literal("")).default(""),
   palette: z.enum(PALETTE_IDS),
   smtp: smtpSettingsSchema.optional(),
+  contact: contactSettingsSchema.optional(),
 });
 export const updateProfileSchema = z.object({ name: z.string().trim().min(1).max(255), locale: z.enum(["th", "en"]) });
 export type SmtpSettingsInput = z.infer<typeof smtpSettingsSchema>;
 export type TestSmtpInput = z.infer<typeof testSmtpSchema>;
+export type ContactSettingsInput = z.infer<typeof contactSettingsSchema>;
 export type UpdateSettingsInput = z.infer<typeof updateSettingsSchema>;
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
 

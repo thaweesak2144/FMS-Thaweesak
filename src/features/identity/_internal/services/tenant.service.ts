@@ -16,6 +16,17 @@ export interface SmtpSettings {
   from: string;
 }
 
+export interface ContactSettings {
+  address: string;
+  phone: string;
+  email: string;
+  officeHours: string;
+  facebookUrl: string;
+  lineUrl: string;
+  youtubeUrl: string;
+  mapUrl: string;
+}
+
 export interface TenantSettings {
   code: string;
   nameTh: string;
@@ -23,6 +34,7 @@ export interface TenantSettings {
   logoUrl: string | null;
   palette: PaletteId;
   smtp: SmtpSettings;
+  contact: ContactSettings;
 }
 
 export const defaultSmtp: SmtpSettings = {
@@ -36,13 +48,24 @@ export const defaultSmtp: SmtpSettings = {
   from: "",
 };
 
+export const defaultContact: ContactSettings = {
+  address: "",
+  phone: "",
+  email: "",
+  officeHours: "",
+  facebookUrl: "",
+  lineUrl: "",
+  youtubeUrl: "",
+  mapUrl: "",
+};
+
 async function readTenantSettings(tenantId: string, db: Db): Promise<TenantSettings> {
   let t = await db.tenant.findUnique({ where: { id: tenantId } });
   if (!t) {
     t = await db.tenant.findFirst({ orderBy: { createdAt: "asc" } });
   }
   if (!t) throw errors.not_found();
-  const s = (t.settings as { palette?: unknown; smtp?: Partial<SmtpSettings> } | null) || {};
+  const s = (t.settings as { palette?: unknown; smtp?: Partial<SmtpSettings>; contact?: Partial<ContactSettings> } | null) || {};
   const p = s.palette;
   return {
     code: t.code,
@@ -51,6 +74,7 @@ async function readTenantSettings(tenantId: string, db: Db): Promise<TenantSetti
     logoUrl: t.logoUrl,
     palette: isPalette(p) ? p : DEFAULT_PALETTE,
     smtp: { ...defaultSmtp, ...(s.smtp || {}) },
+    contact: { ...defaultContact, ...(s.contact || {}) },
   };
 }
 
@@ -58,7 +82,7 @@ export async function getTenantSettings(tenantId: string): Promise<TenantSetting
   return readTenantSettings(tenantId, prisma);
 }
 
-/** เก็บคีย์อื่น ๆ ใน settings JSON ไว้ทั้งหมด — merge เฉพาะ palette และ smtp ที่เปลี่ยน ไม่ทับทั้งก้อน */
+/** เก็บคีย์อื่น ๆ ใน settings JSON ไว้ทั้งหมด — merge เฉพาะ palette, smtp และ contact ที่เปลี่ยน ไม่ทับทั้งก้อน */
 export async function updateTenantSettings(input: { tenantId: string; actorId: string } & UpdateSettingsInput): Promise<void> {
   await prisma.$transaction(async (tx) => {
     let targetTenantId = input.tenantId;
@@ -79,6 +103,9 @@ export async function updateTenantSettings(input: { tenantId: string; actorId: s
     };
     if (input.smtp !== undefined) {
       newSettings.smtp = input.smtp;
+    }
+    if (input.contact !== undefined) {
+      newSettings.contact = input.contact;
     }
     await tx.tenant.update({
       where: { id: targetTenantId },

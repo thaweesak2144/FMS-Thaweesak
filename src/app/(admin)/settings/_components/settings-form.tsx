@@ -27,6 +27,16 @@ export function SettingsForm({ initial }: { initial: TenantSettings }) {
       pass: initial.smtp?.pass || "",
       from: initial.smtp?.from || "",
     },
+    contact: {
+      address: initial.contact?.address || "",
+      phone: initial.contact?.phone || "",
+      email: initial.contact?.email || "",
+      officeHours: initial.contact?.officeHours || "",
+      facebookUrl: initial.contact?.facebookUrl || "",
+      lineUrl: initial.contact?.lineUrl || "",
+      youtubeUrl: initial.contact?.youtubeUrl || "",
+      mapUrl: initial.contact?.mapUrl || "",
+    },
   });
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [pending, start] = useTransition();
@@ -271,6 +281,135 @@ export function SettingsForm({ initial }: { initial: TenantSettings }) {
               </div>
             </div>
           )}
+        </LiyonCard>
+
+        {/* ข้อมูลการติดต่อ (Contact Information for Portal) */}
+        <LiyonCard>
+          <h2>{t("settings.contactTitle")}</h2>
+          <p>{t("settings.contactDesc")}</p>
+          <div style={{ marginTop: "1.25rem", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px" }}>
+            <div style={{ gridColumn: "1 / -1" }}>
+              <LiyonField
+                label={t("settings.contactAddress")}
+                htmlFor="s-contact-address"
+                hint="ที่อยู่หน่วยงานที่ต้องการให้แสดงผลด้านล่างเว็บไซต์ (Footer)"
+                error={errors["contact.address"]?.[0]}
+              >
+                <textarea
+                  id="s-contact-address"
+                  rows={2}
+                  value={form.contact.address}
+                  onChange={(e) => setForm({ ...form, contact: { ...form.contact, address: e.target.value } })}
+                  placeholder={t("settings.contactAddressPh")}
+                  style={{
+                    width: "100%",
+                    resize: "vertical",
+                    padding: "8px 12px",
+                    borderRadius: "var(--r-sm)",
+                    border: "1px solid var(--border)",
+                    background: "var(--field-bg)",
+                    color: "var(--text-1)",
+                    fontSize: "0.875rem",
+                    lineHeight: "1.4",
+                  }}
+                />
+              </LiyonField>
+            </div>
+
+            <LiyonField
+              label={t("settings.contactPhone")}
+              htmlFor="s-contact-phone"
+              error={errors["contact.phone"]?.[0]}
+            >
+              <input
+                id="s-contact-phone"
+                value={form.contact.phone}
+                onChange={(e) => setForm({ ...form, contact: { ...form.contact, phone: e.target.value } })}
+                placeholder={t("settings.contactPhonePh")}
+              />
+            </LiyonField>
+
+            <LiyonField
+              label={t("settings.contactEmail")}
+              htmlFor="s-contact-email"
+              error={errors["contact.email"]?.[0]}
+            >
+              <input
+                id="s-contact-email"
+                type="email"
+                value={form.contact.email}
+                onChange={(e) => setForm({ ...form, contact: { ...form.contact, email: e.target.value } })}
+                placeholder={t("settings.contactEmailPh")}
+              />
+            </LiyonField>
+
+            <div style={{ gridColumn: "1 / -1" }}>
+              <LiyonField
+                label={t("settings.contactHours")}
+                htmlFor="s-contact-hours"
+                error={errors["contact.officeHours"]?.[0]}
+              >
+                <input
+                  id="s-contact-hours"
+                  value={form.contact.officeHours}
+                  onChange={(e) => setForm({ ...form, contact: { ...form.contact, officeHours: e.target.value } })}
+                  placeholder={t("settings.contactHoursPh")}
+                />
+              </LiyonField>
+            </div>
+
+            <LiyonField
+              label={t("settings.contactFacebook")}
+              htmlFor="s-contact-facebook"
+              error={errors["contact.facebookUrl"]?.[0]}
+            >
+              <input
+                id="s-contact-facebook"
+                value={form.contact.facebookUrl}
+                onChange={(e) => setForm({ ...form, contact: { ...form.contact, facebookUrl: e.target.value } })}
+                placeholder={t("settings.contactFacebookPh")}
+              />
+            </LiyonField>
+
+            <LiyonField
+              label={t("settings.contactLine")}
+              htmlFor="s-contact-line"
+              error={errors["contact.lineUrl"]?.[0]}
+            >
+              <input
+                id="s-contact-line"
+                value={form.contact.lineUrl}
+                onChange={(e) => setForm({ ...form, contact: { ...form.contact, lineUrl: e.target.value } })}
+                placeholder={t("settings.contactLinePh")}
+              />
+            </LiyonField>
+
+            <LiyonField
+              label={t("settings.contactYoutube")}
+              htmlFor="s-contact-youtube"
+              error={errors["contact.youtubeUrl"]?.[0]}
+            >
+              <input
+                id="s-contact-youtube"
+                value={form.contact.youtubeUrl}
+                onChange={(e) => setForm({ ...form, contact: { ...form.contact, youtubeUrl: e.target.value } })}
+                placeholder={t("settings.contactYoutubePh")}
+              />
+            </LiyonField>
+
+            <LiyonField
+              label={t("settings.contactMap")}
+              htmlFor="s-contact-map"
+              error={errors["contact.mapUrl"]?.[0]}
+            >
+              <input
+                id="s-contact-map"
+                value={form.contact.mapUrl}
+                onChange={(e) => setForm({ ...form, contact: { ...form.contact, mapUrl: e.target.value } })}
+                placeholder={t("settings.contactMapPh")}
+              />
+            </LiyonField>
+          </div>
         </LiyonCard>
 
         <div className="savebar"><Button type="button" onClick={save} disabled={pending}>{t("common.save")}</Button></div>

@@ -10,17 +10,20 @@ import { useAppSession } from "@/hooks/use-session";
 import { useT, useLocale } from "@/shared/lib/i18n/client";
 import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui";
 import { signOut } from "next-auth/react";
+import type { ContactSettings } from "@/features/identity";
 
 export default function PortalClientLayout({
   children,
   logoUrl,
   orgNameTh,
   orgNameEn,
+  contact,
 }: {
   children: React.ReactNode;
   logoUrl?: string | null;
   orgNameTh?: string | null;
   orgNameEn?: string | null;
+  contact?: ContactSettings | null;
 }) {
   const pathname = usePathname();
   const t = useT();
@@ -31,6 +34,15 @@ export default function PortalClientLayout({
 
   const initials = (user?.name ?? "?").trim().charAt(0).toUpperCase() || "?";
   const orgName = (locale === "th" ? orgNameTh : orgNameEn) || orgNameTh || orgNameEn || t("app.name");
+
+  const address = contact?.address || `${orgName} อ.เมือง จ.ตาก 63000`;
+  const phone = contact?.phone || "055-896083";
+  const email = contact?.email || "ragnaroknaja888@gmail.com";
+  const officeHours = contact?.officeHours || (locale === "th" ? "จันทร์ - ศุกร์: 08:30 - 16:30 น." : "Mon - Fri: 08:30 - 16:30");
+  const facebookUrl = contact?.facebookUrl || "https://facebook.com";
+  const youtubeUrl = contact?.youtubeUrl || "https://youtube.com";
+  const lineUrl = contact?.lineUrl || "https://line.me";
+  const mapUrl = contact?.mapUrl || "";
 
   const navLinks = [
     { href: "/portal", label: locale === "th" ? "หน้าหลัก" : "Home" },
@@ -350,39 +362,45 @@ export default function PortalClientLayout({
 
               {/* Social Channels */}
               <div className="pt-1 flex items-center gap-2.5">
-                <a
-                  href="https://facebook.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="h-8 w-8 rounded-full bg-background border border-border/80 hover:border-primary hover:bg-primary hover:text-white flex items-center justify-center text-muted-foreground transition-all shadow-2xs"
-                  aria-label="Facebook"
-                >
-                  <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                  </svg>
-                </a>
-                <a
-                  href="https://youtube.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="h-8 w-8 rounded-full bg-background border border-border/80 hover:border-red-600 hover:bg-red-600 hover:text-white flex items-center justify-center text-muted-foreground transition-all shadow-2xs"
-                  aria-label="YouTube"
-                >
-                  <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
-                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                  </svg>
-                </a>
-                <a
-                  href="https://line.me"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="h-8 w-8 rounded-full bg-background border border-border/80 hover:border-emerald-500 hover:bg-emerald-500 hover:text-white flex items-center justify-center text-muted-foreground transition-all shadow-2xs"
-                  aria-label="LINE Official"
-                >
-                  <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
-                    <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.499.254l2.457 3.328V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314" />
-                  </svg>
-                </a>
+                {facebookUrl && (
+                  <a
+                    href={facebookUrl.startsWith("http") ? facebookUrl : `https://${facebookUrl}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="h-8 w-8 rounded-full bg-background border border-border/80 hover:border-primary hover:bg-primary hover:text-white flex items-center justify-center text-muted-foreground transition-all shadow-2xs"
+                    aria-label="Facebook"
+                  >
+                    <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                    </svg>
+                  </a>
+                )}
+                {youtubeUrl && (
+                  <a
+                    href={youtubeUrl.startsWith("http") ? youtubeUrl : `https://${youtubeUrl}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="h-8 w-8 rounded-full bg-background border border-border/80 hover:border-red-600 hover:bg-red-600 hover:text-white flex items-center justify-center text-muted-foreground transition-all shadow-2xs"
+                    aria-label="YouTube"
+                  >
+                    <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
+                      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                    </svg>
+                  </a>
+                )}
+                {lineUrl && (
+                  <a
+                    href={lineUrl.startsWith("http") ? lineUrl : lineUrl.startsWith("@") ? `https://line.me/R/ti/p/${lineUrl}` : `https://line.me/R/ti/p/@${lineUrl}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="h-8 w-8 rounded-full bg-background border border-border/80 hover:border-emerald-500 hover:bg-emerald-500 hover:text-white flex items-center justify-center text-muted-foreground transition-all shadow-2xs"
+                    aria-label="LINE Official"
+                  >
+                    <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
+                      <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.499.254l2.457 3.328V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314" />
+                    </svg>
+                  </a>
+                )}
               </div>
             </div>
 
@@ -467,24 +485,39 @@ export default function PortalClientLayout({
               <div className="space-y-3 text-sm text-muted-foreground">
                 <div className="flex items-start gap-2.5">
                   <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                  <span className="leading-snug">
-                    {orgName} อ.เมือง จ.ตาก 63000
-                  </span>
+                  {mapUrl ? (
+                    <a
+                      href={mapUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="leading-snug hover:text-primary transition-colors hover:underline"
+                    >
+                      {address}
+                    </a>
+                  ) : (
+                    <span className="leading-snug">{address}</span>
+                  )}
                 </div>
-                <div className="flex items-center gap-2.5">
-                  <Phone className="h-4 w-4 text-primary shrink-0" />
-                  <a href="tel:055896083" className="hover:text-primary transition-colors">055-896083</a>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <Mail className="h-4 w-4 text-primary shrink-0" />
-                  <a href="mailto:ragnaroknaja888@gmail.com" className="hover:text-primary transition-colors truncate">
-                    ragnaroknaja888@gmail.com
-                  </a>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <Clock className="h-4 w-4 text-primary shrink-0" />
-                  <span>{locale === "th" ? "จันทร์ - ศุกร์: 08:30 - 16:30 น." : "Mon - Fri: 08:30 - 16:30"}</span>
-                </div>
+                {phone && (
+                  <div className="flex items-center gap-2.5">
+                    <Phone className="h-4 w-4 text-primary shrink-0" />
+                    <a href={`tel:${phone.replace(/[^0-9+]/g, "")}`} className="hover:text-primary transition-colors">{phone}</a>
+                  </div>
+                )}
+                {email && (
+                  <div className="flex items-center gap-2.5">
+                    <Mail className="h-4 w-4 text-primary shrink-0" />
+                    <a href={`mailto:${email}`} className="hover:text-primary transition-colors truncate">
+                      {email}
+                    </a>
+                  </div>
+                )}
+                {officeHours && (
+                  <div className="flex items-center gap-2.5">
+                    <Clock className="h-4 w-4 text-primary shrink-0" />
+                    <span>{officeHours}</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
