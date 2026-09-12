@@ -130,10 +130,6 @@ export const sidebarGroups: NavGroup[] = [
         href: "/personnel",
         icon: UserCheck,
         permission: PERSONNEL_P.personnelRead,
-        children: [
-          { title: "personnel.nav.list", href: "/personnel", permission: PERSONNEL_P.personnelRead },
-          { title: "personnel.nav.departments", href: "/personnel/departments", permission: PERSONNEL_P.departmentManage },
-        ],
       },
     ],
   },
