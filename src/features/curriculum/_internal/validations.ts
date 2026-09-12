@@ -1,13 +1,21 @@
-﻿import { z } from "zod";
+import { z } from "zod";
 
 export const curriculumSchema = z.object({
   code: z.string().min(1).max(50),
   nameTh: z.string().min(1).max(255),
   nameEn: z.string().min(1).max(255),
+  degreeNameTh: z.string().max(255).nullable().optional(),
+  degreeNameEn: z.string().max(255).nullable().optional(),
+  degreeAbbrTh: z.string().max(100).nullable().optional(),
+  degreeAbbrEn: z.string().max(100).nullable().optional(),
   degreeLevel: z.enum(["BACHELOR", "MASTER", "DOCTORAL", "CERTIFICATE"]).default("BACHELOR"),
   departmentId: z.string().uuid(),
   totalCredits: z.number().int().min(1),
   curriculumYear: z.number().int().min(2500).max(2600),
+  objectivesTh: z.string().nullable().optional(),
+  objectivesEn: z.string().nullable().optional(),
+  ploTh: z.string().nullable().optional(),
+  ploEn: z.string().nullable().optional(),
   philosophyTh: z.string().nullable().optional(),
   philosophyEn: z.string().nullable().optional(),
   careerProspectsTh: z.string().nullable().optional(),

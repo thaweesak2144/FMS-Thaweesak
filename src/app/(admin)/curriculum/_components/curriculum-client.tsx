@@ -71,6 +71,14 @@ export function CurriculumClient({
   const [formPhilosophyEn, setFormPhilosophyEn] = useState("");
   const [formCareerProspectsTh, setFormCareerProspectsTh] = useState("");
   const [formCareerProspectsEn, setFormCareerProspectsEn] = useState("");
+  const [formDegreeNameTh, setFormDegreeNameTh] = useState("");
+  const [formDegreeNameEn, setFormDegreeNameEn] = useState("");
+  const [formDegreeAbbrTh, setFormDegreeAbbrTh] = useState("");
+  const [formDegreeAbbrEn, setFormDegreeAbbrEn] = useState("");
+  const [formObjectivesTh, setFormObjectivesTh] = useState("");
+  const [formObjectivesEn, setFormObjectivesEn] = useState("");
+  const [formPloTh, setFormPloTh] = useState("");
+  const [formPloEn, setFormPloEn] = useState("");
 
   const openCreateDialog = (defaultDeptId?: string) => {
     setEditingItem(null);
@@ -87,6 +95,14 @@ export function CurriculumClient({
     setFormPhilosophyEn("");
     setFormCareerProspectsTh("");
     setFormCareerProspectsEn("");
+    setFormDegreeNameTh("");
+    setFormDegreeNameEn("");
+    setFormDegreeAbbrTh("");
+    setFormDegreeAbbrEn("");
+    setFormObjectivesTh("");
+    setFormObjectivesEn("");
+    setFormPloTh("");
+    setFormPloEn("");
     setModalOpen(true);
   };
 
@@ -114,6 +130,14 @@ export function CurriculumClient({
     setFormPhilosophyEn(item.philosophyEn ?? "");
     setFormCareerProspectsTh(item.careerProspectsTh ?? "");
     setFormCareerProspectsEn(item.careerProspectsEn ?? "");
+    setFormDegreeNameTh(item.degreeNameTh ?? "");
+    setFormDegreeNameEn(item.degreeNameEn ?? "");
+    setFormDegreeAbbrTh(item.degreeAbbrTh ?? "");
+    setFormDegreeAbbrEn(item.degreeAbbrEn ?? "");
+    setFormObjectivesTh(item.objectivesTh ?? "");
+    setFormObjectivesEn(item.objectivesEn ?? "");
+    setFormPloTh(item.ploTh ?? "");
+    setFormPloEn(item.ploEn ?? "");
     setModalOpen(true);
   };
 
@@ -138,6 +162,14 @@ export function CurriculumClient({
         philosophyEn: formPhilosophyEn.trim() || null,
         careerProspectsTh: formCareerProspectsTh.trim() || null,
         careerProspectsEn: formCareerProspectsEn.trim() || null,
+        degreeNameTh: formDegreeNameTh.trim() || null,
+        degreeNameEn: formDegreeNameEn.trim() || null,
+        degreeAbbrTh: formDegreeAbbrTh.trim() || null,
+        degreeAbbrEn: formDegreeAbbrEn.trim() || null,
+        objectivesTh: formObjectivesTh.trim() || null,
+        objectivesEn: formObjectivesEn.trim() || null,
+        ploTh: formPloTh.trim() || null,
+        ploEn: formPloEn.trim() || null,
         isActive: true,
         sortOrder: 0,
       };
@@ -417,6 +449,44 @@ export function CurriculumClient({
             </LiyonField>
           </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <LiyonField label={t("curriculum.degreeNameTh")}>
+              <input
+                value={formDegreeNameTh}
+                onChange={(e) => setFormDegreeNameTh(e.target.value)}
+                placeholder="ex. รัฐประศาสนศาสตรบัณฑิต (รัฐประศาสนศาสตร์)"
+                className="w-full h-9 px-3 rounded-md border text-sm bg-background"
+              />
+            </LiyonField>
+            <LiyonField label={t("curriculum.degreeNameEn")}>
+              <input
+                value={formDegreeNameEn}
+                onChange={(e) => setFormDegreeNameEn(e.target.value)}
+                placeholder="ex. Bachelor of Public Administration (Public Administration)"
+                className="w-full h-9 px-3 rounded-md border text-sm bg-background"
+              />
+            </LiyonField>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <LiyonField label={t("curriculum.degreeAbbrTh")}>
+              <input
+                value={formDegreeAbbrTh}
+                onChange={(e) => setFormDegreeAbbrTh(e.target.value)}
+                placeholder="ex. รป.บ. (รัฐประศาสนศาสตร์)"
+                className="w-full h-9 px-3 rounded-md border text-sm bg-background"
+              />
+            </LiyonField>
+            <LiyonField label={t("curriculum.degreeAbbrEn")}>
+              <input
+                value={formDegreeAbbrEn}
+                onChange={(e) => setFormDegreeAbbrEn(e.target.value)}
+                placeholder="ex. B.P.A. (Public Administration)"
+                className="w-full h-9 px-3 rounded-md border text-sm bg-background"
+              />
+            </LiyonField>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div>
               <label className="text-xs font-semibold text-muted-foreground block mb-1">
@@ -491,6 +561,30 @@ export function CurriculumClient({
                 value={formCareerProspectsTh}
                 onChange={(e) => setFormCareerProspectsTh(e.target.value)}
                 rows={2}
+                className="w-full p-2.5 rounded-md border text-xs bg-background"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-muted-foreground block mb-1">
+                {t("curriculum.objectivesTh")}
+              </label>
+              <textarea
+                value={formObjectivesTh}
+                onChange={(e) => setFormObjectivesTh(e.target.value)}
+                rows={3}
+                placeholder="วัตถุประสงค์ของหลักสูตร..."
+                className="w-full p-2.5 rounded-md border text-xs bg-background"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-muted-foreground block mb-1">
+                {t("curriculum.ploTh")}
+              </label>
+              <textarea
+                value={formPloTh}
+                onChange={(e) => setFormPloTh(e.target.value)}
+                rows={3}
+                placeholder="ผลลัพธ์การเรียนรู้ที่คาดหวัง (PLOs)..."
                 className="w-full p-2.5 rounded-md border text-xs bg-background"
               />
             </div>

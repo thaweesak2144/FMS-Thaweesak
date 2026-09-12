@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, GraduationCap, Building2, Clock, BookOpen, Banknote, CheckCircle2, LayoutList } from "lucide-react";
+import { ArrowLeft, GraduationCap, Building2, Clock, BookOpen, Banknote, CheckCircle2, LayoutList, Target, Award } from "lucide-react";
 import { useT, useLocale } from "@/shared/lib/i18n/client";
 import type { CurriculumDto, CurriculumPlanDto } from "@/features/curriculum";
 
@@ -17,8 +17,10 @@ export function PortalCurriculumDetailClient({ curriculum, plans }: Props) {
 
   const name = locale === "th" ? curriculum.nameTh : curriculum.nameEn;
   const deptName = locale === "th" ? curriculum.departmentNameTh : curriculum.departmentNameEn;
-  const philosophy = locale === "th" ? curriculum.philosophyTh : curriculum.philosophyEn;
-  const careers = locale === "th" ? curriculum.careerProspectsTh : curriculum.careerProspectsEn;
+  const philosophy = locale === "th" ? (curriculum.philosophyTh || curriculum.philosophyEn) : (curriculum.philosophyEn || curriculum.philosophyTh);
+  const careers = locale === "th" ? (curriculum.careerProspectsTh || curriculum.careerProspectsEn) : (curriculum.careerProspectsEn || curriculum.careerProspectsTh);
+  const objectives = locale === "th" ? (curriculum.objectivesTh || curriculum.objectivesEn) : (curriculum.objectivesEn || curriculum.objectivesTh);
+  const plos = locale === "th" ? (curriculum.ploTh || curriculum.ploEn) : (curriculum.ploEn || curriculum.ploTh);
 
   // Group plans by year, then by semester
   const plansByYear = plans.reduce((acc, plan) => {
@@ -63,6 +65,34 @@ export function PortalCurriculumDetailClient({ curriculum, plans }: Props) {
           </p>
         </div>
 
+        {(curriculum.degreeNameTh || curriculum.degreeNameEn) && (
+          <div className="bg-muted/40 rounded-xl p-4 border text-sm space-y-2">
+            <div className="font-semibold text-xs text-primary uppercase tracking-wider">
+              {t("portal.curriculum.degreeInfo")}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {curriculum.degreeNameTh && (
+                <div>
+                  <span className="text-muted-foreground text-xs block">{t("curriculum.degreeNameTh")}:</span>
+                  <span className="font-medium text-foreground">{curriculum.degreeNameTh}</span>
+                  {curriculum.degreeAbbrTh && (
+                    <span className="text-muted-foreground ml-2 text-xs font-mono">({curriculum.degreeAbbrTh})</span>
+                  )}
+                </div>
+              )}
+              {curriculum.degreeNameEn && (
+                <div>
+                  <span className="text-muted-foreground text-xs block">{t("curriculum.degreeNameEn")}:</span>
+                  <span className="font-medium text-foreground">{curriculum.degreeNameEn}</span>
+                  {curriculum.degreeAbbrEn && (
+                    <span className="text-muted-foreground ml-2 text-xs font-mono">({curriculum.degreeAbbrEn})</span>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t">
            <div className="bg-card p-4 rounded-xl border shadow-sm flex flex-col items-center justify-center text-center">
              <Clock className="h-6 w-6 text-primary mb-2" />
@@ -97,6 +127,28 @@ export function PortalCurriculumDetailClient({ curriculum, plans }: Props) {
                </h3>
                <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
                  {philosophy}
+               </p>
+             </div>
+          )}
+          {objectives && (
+             <div className="bg-card rounded-2xl p-6 border shadow-sm">
+               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+                 <Target className="h-5 w-5 text-primary" />
+                 {t("curriculum.objectivesTh")}
+               </h3>
+               <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
+                 {objectives}
+               </p>
+             </div>
+          )}
+          {plos && (
+             <div className="bg-card rounded-2xl p-6 border shadow-sm">
+               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+                 <Award className="h-5 w-5 text-primary" />
+                 {t("curriculum.ploTh")}
+               </h3>
+               <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
+                 {plos}
                </p>
              </div>
           )}

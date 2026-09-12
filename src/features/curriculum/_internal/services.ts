@@ -38,6 +38,14 @@ export interface CurriculumDto {
   philosophyEn: string | null;
   careerProspectsTh: string | null;
   careerProspectsEn: string | null;
+  degreeNameTh?: string | null;
+  degreeNameEn?: string | null;
+  degreeAbbrTh?: string | null;
+  degreeAbbrEn?: string | null;
+  objectivesTh?: string | null;
+  objectivesEn?: string | null;
+  ploTh?: string | null;
+  ploEn?: string | null;
   tuitionFee: number | null;
   studyPeriodYears: number;
   isActive: boolean;
@@ -118,6 +126,14 @@ export async function listCurriculums(tenantId: string, filter?: CurriculumFilte
     philosophyEn: c.philosophyEn,
     careerProspectsTh: c.careerProspectsTh,
     careerProspectsEn: c.careerProspectsEn,
+    degreeNameTh: c.degreeNameTh,
+    degreeNameEn: c.degreeNameEn,
+    degreeAbbrTh: c.degreeAbbrTh,
+    degreeAbbrEn: c.degreeAbbrEn,
+    objectivesTh: c.objectivesTh,
+    objectivesEn: c.objectivesEn,
+    ploTh: c.ploTh,
+    ploEn: c.ploEn,
     tuitionFee: c.tuitionFee,
     studyPeriodYears: c.studyPeriodYears,
     isActive: c.isActive,
@@ -163,6 +179,14 @@ export async function getCurriculumById(tenantId: string, id: string): Promise<C
     philosophyEn: c.philosophyEn,
     careerProspectsTh: c.careerProspectsTh,
     careerProspectsEn: c.careerProspectsEn,
+    degreeNameTh: c.degreeNameTh,
+    degreeNameEn: c.degreeNameEn,
+    degreeAbbrTh: c.degreeAbbrTh,
+    degreeAbbrEn: c.degreeAbbrEn,
+    objectivesTh: c.objectivesTh,
+    objectivesEn: c.objectivesEn,
+    ploTh: c.ploTh,
+    ploEn: c.ploEn,
     tuitionFee: c.tuitionFee,
     studyPeriodYears: c.studyPeriodYears,
     isActive: c.isActive,
@@ -196,6 +220,14 @@ export async function createCurriculum(tenantId: string, input: CreateCurriculum
       degreeLevel: input.degreeLevel,
       totalCredits: input.totalCredits,
       curriculumYear: input.curriculumYear,
+      degreeNameTh: input.degreeNameTh || null,
+      degreeNameEn: input.degreeNameEn || null,
+      degreeAbbrTh: input.degreeAbbrTh || null,
+      degreeAbbrEn: input.degreeAbbrEn || null,
+      objectivesTh: input.objectivesTh || null,
+      objectivesEn: input.objectivesEn || null,
+      ploTh: input.ploTh || null,
+      ploEn: input.ploEn || null,
       philosophyTh: input.philosophyTh || null,
       philosophyEn: input.philosophyEn || null,
       careerProspectsTh: input.careerProspectsTh || null,
@@ -223,6 +255,14 @@ export async function createCurriculum(tenantId: string, input: CreateCurriculum
     degreeLevel: created.degreeLevel,
     totalCredits: created.totalCredits,
     curriculumYear: created.curriculumYear,
+    degreeNameTh: created.degreeNameTh,
+    degreeNameEn: created.degreeNameEn,
+    degreeAbbrTh: created.degreeAbbrTh,
+    degreeAbbrEn: created.degreeAbbrEn,
+    objectivesTh: created.objectivesTh,
+    objectivesEn: created.objectivesEn,
+    ploTh: created.ploTh,
+    ploEn: created.ploEn,
     philosophyTh: created.philosophyTh,
     philosophyEn: created.philosophyEn,
     careerProspectsTh: created.careerProspectsTh,
@@ -247,6 +287,14 @@ export async function updateCurriculum(tenantId: string, input: UpdateCurriculum
       degreeLevel: input.degreeLevel,
       totalCredits: input.totalCredits,
       curriculumYear: input.curriculumYear,
+      degreeNameTh: input.degreeNameTh || null,
+      degreeNameEn: input.degreeNameEn || null,
+      degreeAbbrTh: input.degreeAbbrTh || null,
+      degreeAbbrEn: input.degreeAbbrEn || null,
+      objectivesTh: input.objectivesTh || null,
+      objectivesEn: input.objectivesEn || null,
+      ploTh: input.ploTh || null,
+      ploEn: input.ploEn || null,
       philosophyTh: input.philosophyTh || null,
       philosophyEn: input.philosophyEn || null,
       careerProspectsTh: input.careerProspectsTh || null,
@@ -274,6 +322,14 @@ export async function updateCurriculum(tenantId: string, input: UpdateCurriculum
     degreeLevel: updated.degreeLevel,
     totalCredits: updated.totalCredits,
     curriculumYear: updated.curriculumYear,
+    degreeNameTh: updated.degreeNameTh,
+    degreeNameEn: updated.degreeNameEn,
+    degreeAbbrTh: updated.degreeAbbrTh,
+    degreeAbbrEn: updated.degreeAbbrEn,
+    objectivesTh: updated.objectivesTh,
+    objectivesEn: updated.objectivesEn,
+    ploTh: updated.ploTh,
+    ploEn: updated.ploEn,
     philosophyTh: updated.philosophyTh,
     philosophyEn: updated.philosophyEn,
     careerProspectsTh: updated.careerProspectsTh,

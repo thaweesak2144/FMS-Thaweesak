@@ -416,6 +416,14 @@ model Curriculum {
   degreeLevel       DegreeLevel @default(BACHELOR) @map("degree_level")
   totalCredits      Int         @map("total_credits")
   curriculumYear    Int         @map("curriculum_year")
+  degreeNameTh      String?     @map("degree_name_th") @db.VarChar(255)
+  degreeNameEn      String?     @map("degree_name_en") @db.VarChar(255)
+  degreeAbbrTh      String?     @map("degree_abbr_th") @db.VarChar(100)
+  degreeAbbrEn      String?     @map("degree_abbr_en") @db.VarChar(100)
+  objectivesTh      String?     @map("objectives_th") @db.Text
+  objectivesEn      String?     @map("objectives_en") @db.Text
+  ploTh             String?     @map("plo_th") @db.Text
+  ploEn             String?     @map("plo_en") @db.Text
   philosophyTh      String?     @map("philosophy_th") @db.Text
   philosophyEn      String?     @map("philosophy_en") @db.Text
   careerProspectsTh String?     @map("career_prospects_th") @db.Text
