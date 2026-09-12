@@ -62,6 +62,13 @@ export const MESSAGES = {
   "curriculum.deleteConfirm": { th: "ยืนยันการลบหลักสูตรนี้หรือไม่? (แผนการเรียนที่เกี่ยวข้องจะถูกลบทั้งหมด)", en: "Are you sure you want to delete this curriculum?" },
   "curriculum.searchPlaceholder": { th: "ค้นหาชื่อหลักสูตร, รหัส, สาขา...", en: "Search curriculum name, code..." },
   "curriculum.allLevels": { th: "ทุกระดับการศึกษา", en: "All Degree Levels" },
+  // JSON Import/Export
+  "curriculum.json.title": { th: "จัดการข้อมูลโครงสร้าง (JSON Data)", en: "Structured JSON Data" },
+  "curriculum.json.import": { th: "นำเข้า JSON", en: "Import JSON" },
+  "curriculum.json.export": { th: "ส่งออก JSON", en: "Export JSON" },
+  "curriculum.json.importSuccess": { th: "นำเข้าข้อมูลหลักสูตรจากไฟล์ JSON สำเร็จแล้ว", en: "Curriculum imported from JSON successfully" },
+  "curriculum.json.exportSuccess": { th: "ส่งออกข้อมูลหลักสูตรเป็นไฟล์ JSON สำเร็จแล้ว", en: "Curriculum exported to JSON successfully" },
+  "curriculum.json.invalidFile": { th: "ไฟล์ JSON ไม่ถูกต้องหรือไม่ตรงตามรูปแบบโครงสร้างหลักสูตร", en: "Invalid JSON format for curriculum data" },
 
   // Public Portal
   "portal.nav.curriculum": { th: "หลักสูตรการศึกษา", en: "Academic Programs" },

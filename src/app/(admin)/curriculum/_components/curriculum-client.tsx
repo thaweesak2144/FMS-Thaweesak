@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useTransition, useEffect } from "react";
-import { Plus, Pencil, Trash2, GraduationCap, BookOpen, AlertCircle, CheckCircle2, XCircle } from "lucide-react";
+import { useState, useTransition, useEffect, useRef } from "react";
+import { Plus, Pencil, Trash2, GraduationCap, BookOpen, AlertCircle, CheckCircle2, XCircle, FileCode, Upload, Download, FileDown } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -139,6 +139,146 @@ export function CurriculumClient({
     setFormPloTh(item.ploTh ?? "");
     setFormPloEn(item.ploEn ?? "");
     setModalOpen(true);
+  };
+
+  const jsonFileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleExportJson = () => {
+    const data = {
+      code: formCode,
+      nameTh: formNameTh,
+      nameEn: formNameEn,
+      degreeLevel: formDegreeLevel,
+      departmentId: formDepartmentId,
+      curriculumYear: parseInt(formCurriculumYear) || 2567,
+      totalCredits: parseInt(formTotalCredits) || 120,
+      studyPeriodYears: parseInt(formStudyPeriodYears) || 4,
+      tuitionFee: formTuitionFee ? parseInt(formTuitionFee) : null,
+      degreeNameTh: formDegreeNameTh || null,
+      degreeNameEn: formDegreeNameEn || null,
+      degreeAbbrTh: formDegreeAbbrTh || null,
+      degreeAbbrEn: formDegreeAbbrEn || null,
+      philosophyTh: formPhilosophyTh || null,
+      philosophyEn: formPhilosophyEn || null,
+      objectivesTh: formObjectivesTh || null,
+      objectivesEn: formObjectivesEn || null,
+      ploTh: formPloTh || null,
+      ploEn: formPloEn || null,
+      careerProspectsTh: formCareerProspectsTh || null,
+      careerProspectsEn: formCareerProspectsEn || null,
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    const safeCode = (formCode.trim() || "draft").replace(/[^a-zA-Z0-9_\u0E00-\u0E7F-]/g, "_");
+    link.href = url;
+    link.download = `curriculum-${safeCode}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast.success(t("curriculum.json.exportSuccess"));
+  };
+
+  const handleExportRowJson = (row: CurriculumDto) => {
+    const data = {
+      code: row.code,
+      nameTh: row.nameTh,
+      nameEn: row.nameEn,
+      degreeLevel: row.degreeLevel,
+      departmentId: row.departmentId,
+      departmentNameTh: row.departmentNameTh,
+      departmentNameEn: row.departmentNameEn,
+      curriculumYear: row.curriculumYear,
+      totalCredits: row.totalCredits,
+      studyPeriodYears: row.studyPeriodYears,
+      tuitionFee: row.tuitionFee,
+      degreeNameTh: row.degreeNameTh,
+      degreeNameEn: row.degreeNameEn,
+      degreeAbbrTh: row.degreeAbbrTh,
+      degreeAbbrEn: row.degreeAbbrEn,
+      philosophyTh: row.philosophyTh,
+      philosophyEn: row.philosophyEn,
+      objectivesTh: row.objectivesTh,
+      objectivesEn: row.objectivesEn,
+      ploTh: row.ploTh,
+      ploEn: row.ploEn,
+      careerProspectsTh: row.careerProspectsTh,
+      careerProspectsEn: row.careerProspectsEn,
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    const safeCode = row.code.replace(/[^a-zA-Z0-9_\u0E00-\u0E7F-]/g, "_");
+    link.href = url;
+    link.download = `curriculum-${safeCode}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast.success(t("curriculum.json.exportSuccess"));
+  };
+
+  const handleImportJson = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const content = event.target?.result as string;
+        const parsed = JSON.parse(content);
+
+        if (typeof parsed !== "object" || parsed === null) {
+          toast.error(t("curriculum.json.invalidFile"));
+          return;
+        }
+
+        if (parsed.code !== undefined) setFormCode(String(parsed.code ?? ""));
+        if (parsed.nameTh !== undefined) setFormNameTh(String(parsed.nameTh ?? ""));
+        if (parsed.nameEn !== undefined) setFormNameEn(String(parsed.nameEn ?? ""));
+        if (parsed.degreeLevel && Object.values(DegreeLevel).includes(parsed.degreeLevel)) {
+          setFormDegreeLevel(parsed.degreeLevel);
+        }
+        if (parsed.departmentId && departments.some((d) => d.id === parsed.departmentId)) {
+          setFormDepartmentId(parsed.departmentId);
+        } else if (parsed.departmentNameTh || parsed.departmentNameEn) {
+          const matched = departments.find(
+            (d) =>
+              (parsed.departmentNameTh && d.nameTh === parsed.departmentNameTh) ||
+              (parsed.departmentNameEn && d.nameEn === parsed.departmentNameEn)
+          );
+          if (matched) setFormDepartmentId(matched.id);
+        }
+        if (parsed.totalCredits !== undefined) setFormTotalCredits(String(parsed.totalCredits ?? ""));
+        if (parsed.curriculumYear !== undefined) setFormCurriculumYear(String(parsed.curriculumYear ?? ""));
+        if (parsed.studyPeriodYears !== undefined) setFormStudyPeriodYears(String(parsed.studyPeriodYears ?? ""));
+        if (parsed.tuitionFee !== undefined) setFormTuitionFee(parsed.tuitionFee ? String(parsed.tuitionFee) : "");
+        if (parsed.degreeNameTh !== undefined) setFormDegreeNameTh(String(parsed.degreeNameTh ?? ""));
+        if (parsed.degreeNameEn !== undefined) setFormDegreeNameEn(String(parsed.degreeNameEn ?? ""));
+        if (parsed.degreeAbbrTh !== undefined) setFormDegreeAbbrTh(String(parsed.degreeAbbrTh ?? ""));
+        if (parsed.degreeAbbrEn !== undefined) setFormDegreeAbbrEn(String(parsed.degreeAbbrEn ?? ""));
+        if (parsed.philosophyTh !== undefined) setFormPhilosophyTh(String(parsed.philosophyTh ?? ""));
+        if (parsed.philosophyEn !== undefined) setFormPhilosophyEn(String(parsed.philosophyEn ?? ""));
+        if (parsed.objectivesTh !== undefined) setFormObjectivesTh(String(parsed.objectivesTh ?? ""));
+        if (parsed.objectivesEn !== undefined) setFormObjectivesEn(String(parsed.objectivesEn ?? ""));
+        if (parsed.ploTh !== undefined) setFormPloTh(String(parsed.ploTh ?? ""));
+        if (parsed.ploEn !== undefined) setFormPloEn(String(parsed.ploEn ?? ""));
+        if (parsed.careerProspectsTh !== undefined) setFormCareerProspectsTh(String(parsed.careerProspectsTh ?? ""));
+        if (parsed.careerProspectsEn !== undefined) setFormCareerProspectsEn(String(parsed.careerProspectsEn ?? ""));
+
+        toast.success(t("curriculum.json.importSuccess"));
+      } catch {
+        toast.error(t("curriculum.json.invalidFile"));
+      } finally {
+        if (e.target) {
+          e.target.value = "";
+        }
+      }
+    };
+    reader.readAsText(file);
   };
 
   const handleSave = () => {
@@ -377,6 +517,12 @@ export function CurriculumClient({
                 {t("curriculum.edit")}
               </RowMenuItem>
             )}
+            <RowMenuItem
+              icon={<FileDown className="h-4 w-4 text-indigo-500" />}
+              onSelect={() => handleExportRowJson(row)}
+            >
+              {t("curriculum.json.export")}
+            </RowMenuItem>
             {canWrite && (
               <RowMenuItem
                 icon={row.isActive ? <XCircle className="h-4 w-4 text-amber-500" /> : <CheckCircle2 className="h-4 w-4 text-emerald-500" />}
@@ -405,6 +551,42 @@ export function CurriculumClient({
           description={t("curriculum.subtitle")}
         />
         <LiyonDialogBody className="space-y-4 max-h-[70vh] overflow-y-auto pr-1">
+          {/* JSON Import/Export Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 bg-muted/40 rounded-lg border border-border/60 text-xs">
+            <div className="flex items-center gap-2 text-muted-foreground font-medium">
+              <FileCode className="h-4 w-4 text-primary" />
+              <span>{t("curriculum.json.title")}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                ref={jsonFileInputRef}
+                type="file"
+                accept=".json,application/json"
+                className="hidden"
+                onChange={handleImportJson}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-7 text-xs gap-1.5"
+                onClick={() => jsonFileInputRef.current?.click()}
+              >
+                <Upload className="h-3.5 w-3.5 text-blue-500" />
+                {t("curriculum.json.import")}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-7 text-xs gap-1.5"
+                onClick={handleExportJson}
+              >
+                <Download className="h-3.5 w-3.5 text-emerald-500" />
+                {t("curriculum.json.export")}
+              </Button>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <LiyonField label={t("curriculum.code")}>
               <input
