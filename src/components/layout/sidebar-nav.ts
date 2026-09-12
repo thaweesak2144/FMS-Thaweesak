@@ -143,6 +143,7 @@ export const sidebarGroups: NavGroup[] = [
       title: "nav.users", href: "/users", icon: Users, permission: P.usersRead,
       children: [
         { title: "nav.users", href: "/users", permission: P.usersRead },
+        { title: "users.importExport.nav", href: "/users/import-export", permission: P.usersManage },
         { title: "nav.roles", href: "/users/roles", permission: P.rolesManage },
       ],
     }],
