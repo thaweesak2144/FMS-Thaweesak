@@ -430,7 +430,7 @@ export function NewsClient({
                 icon={<Pencil className="h-4 w-4" />}
                 onSelect={() => openEditDialog(row)}
               >
-                {t("common.edit")}
+                {t("news.edit")}
               </RowMenuItem>
             )}
             {canPublish && row.status !== "PUBLISHED" && (
@@ -463,7 +463,7 @@ export function NewsClient({
                 icon={<Trash2 className="h-4 w-4" />}
                 onSelect={() => setDeleteItem(row)}
               >
-                {t("common.delete")}
+                {t("news.delete")}
               </RowMenuItem>
             )}
           </>

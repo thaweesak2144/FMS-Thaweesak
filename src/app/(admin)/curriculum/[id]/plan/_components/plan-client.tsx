@@ -228,7 +228,7 @@ export function PlanClient({
                 icon={<Pencil className="h-4 w-4" />}
                 onSelect={() => openEditDialog(row)}
               >
-                {t("common.edit")}
+                {t("curriculum.plan.editCourse")}
               </RowMenuItem>
             )}
             {canManage && (
@@ -237,7 +237,7 @@ export function PlanClient({
                 icon={<Trash2 className="h-4 w-4" />}
                 onSelect={() => setDeleteItem(row)}
               >
-                {t("common.delete")}
+                {t("curriculum.plan.deleteCourse")}
               </RowMenuItem>
             )}
           </>
@@ -247,7 +247,7 @@ export function PlanClient({
       {/* Add / Edit Dialog */}
       <LiyonDialog open={modalOpen} onOpenChange={setModalOpen} wide>
         <LiyonDialogHeader
-          title={editingItem ? t("common.edit") : t("curriculum.plan.addCourse")}
+          title={editingItem ? t("curriculum.plan.editCourse") : t("curriculum.plan.addCourse")}
           description={curriculumName}
         />
         <LiyonDialogBody className="space-y-4">

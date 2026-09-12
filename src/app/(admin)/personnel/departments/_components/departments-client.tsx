@@ -234,14 +234,14 @@ export function DepartmentsClient({ initialItems }: Props) {
               icon={<Pencil className="h-4 w-4" />}
               onSelect={() => openEditDialog(row)}
             >
-              {t("common.edit")}
+              {t("department.edit")}
             </RowMenuItem>
             <RowMenuItem
               danger
               icon={<Trash2 className="h-4 w-4" />}
               onSelect={() => setDeleteItem(row)}
             >
-              {t("common.delete")}
+              {t("department.delete")}
             </RowMenuItem>
           </>
         )}

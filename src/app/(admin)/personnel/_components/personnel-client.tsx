@@ -412,7 +412,7 @@ export function PersonnelClient({
                 icon={<Pencil className="h-4 w-4" />}
                 onSelect={() => openEditDialog(row)}
               >
-                {t("common.edit")}
+                {t("personnel.edit")}
               </RowMenuItem>
             )}
             {canWrite && (
@@ -429,7 +429,7 @@ export function PersonnelClient({
                 icon={<Trash2 className="h-4 w-4" />}
                 onSelect={() => setDeleteItem(row)}
               >
-                {t("common.delete")}
+                {t("personnel.delete")}
               </RowMenuItem>
             )}
           </>

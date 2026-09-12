@@ -50,6 +50,8 @@ export const MESSAGES = {
   "curriculum.plan.credits": { th: "หน่วยกิต", en: "Credits" },
   "curriculum.plan.courseType": { th: "กลุ่มวิชา", en: "Course Category" },
   "curriculum.plan.addCourse": { th: "เพิ่มรายวิชาในแผน", en: "Add Course" },
+  "curriculum.plan.editCourse": { th: "แก้ไขรายวิชา", en: "Edit Course" },
+  "curriculum.plan.deleteCourse": { th: "ลบรายวิชา", en: "Delete Course" },
   "curriculum.plan.totalSemesterCredits": { th: "หน่วยกิตประจำภาค", en: "Semester Credits" },
   "curriculum.plan.noCourses": { th: "ยังไม่มีรายวิชาในภาคการศึกษานี้", en: "No courses listed for this semester" },
 
