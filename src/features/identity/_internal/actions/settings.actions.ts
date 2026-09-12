@@ -7,11 +7,48 @@ import { zodErrorMap } from "@/shared/lib/i18n/zod-locale";
 import { P } from "../../permissions";
 import { requirePermission } from "../rbac";
 import nodemailer from "nodemailer";
-import { updateSettingsSchema, testSmtpSchema } from "../validations/settings";
+import { updateSettingsSchema, testSmtpSchema, testGeminiSchema } from "../validations/settings";
 import { getTenantSettings, updateTenantSettings, type TenantSettings } from "../services/tenant.service";
 
 export async function getSettingsAction(): Promise<ActionResult<TenantSettings>> {
   return runAction(async () => getTenantSettings((await requirePermission(P.settingsManage)).tenantId));
+}
+
+export async function testGeminiAction(input: unknown): Promise<ActionResult<{ success: boolean; message: string }>> {
+  return runAction(async () => {
+    await requirePermission(P.settingsManage);
+    const data = testGeminiSchema.parse(input, { error: zodErrorMap(await getLocale()) });
+    const apiKey = data.apiKey.trim();
+    const model = data.model.trim() || "gemini-2.5-flash";
+
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [{ text: "Hello! Please reply with the single word 'OK' if you receive this." }]
+            }
+          ]
+        }),
+      });
+
+      if (!response.ok) {
+        const errJson = await response.json().catch(() => null);
+        const errMsg = errJson?.error?.message || `HTTP ${response.status} ${response.statusText}`;
+        throw new Error(errMsg);
+      }
+
+      const resData = await response.json();
+      const reply = resData?.candidates?.[0]?.content?.parts?.[0]?.text;
+      return { success: true, message: `เชื่อมต่อสำเร็จ (${model}): ${reply?.trim() || "OK"}` };
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      throw errors.internal(`เชื่อมต่อกับ Gemini API ไม่สำเร็จ: ${errMsg}`);
+    }
+  });
 }
 
 export async function testSmtpAction(input: unknown): Promise<ActionResult<{ success: boolean; message: string }>> {

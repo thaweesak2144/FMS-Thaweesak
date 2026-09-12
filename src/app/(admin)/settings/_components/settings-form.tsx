@@ -7,7 +7,8 @@ import { LiyonCard, LiyonField, LiyonSelect, LiyonSwitchRow, PalettePicker } fro
 import { useT } from "@/shared/lib/i18n/client";
 import type { PaletteId } from "@/shared/lib/palette";
 import type { TenantSettings } from "@/features/identity";
-import { updateSettingsAction, uploadLogoAction, testSmtpAction } from "@/features/identity/actions";
+import { Eye, EyeOff } from "lucide-react";
+import { updateSettingsAction, uploadLogoAction, testSmtpAction, testGeminiAction } from "@/features/identity/actions";
 
 export function SettingsForm({ initial }: { initial: TenantSettings }) {
   const t = useT();
@@ -37,10 +38,16 @@ export function SettingsForm({ initial }: { initial: TenantSettings }) {
       youtubeUrl: initial.contact?.youtubeUrl || "",
       mapUrl: initial.contact?.mapUrl || "",
     },
+    ai: {
+      geminiApiKey: initial.ai?.geminiApiKey || "",
+      model: initial.ai?.model || "gemini-2.5-flash",
+    },
   });
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [pending, start] = useTransition();
   const [testPending, startTest] = useTransition();
+  const [testAiPending, startTestAi] = useTransition();
+  const [showApiKey, setShowApiKey] = useState(false);
   const [testEmail, setTestEmail] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -113,6 +120,24 @@ export function SettingsForm({ initial }: { initial: TenantSettings }) {
         toast.success(t("settings.testOk"));
       } else {
         toast.error(res.error.message || t("settings.testFail"));
+      }
+    });
+  }
+
+  function testAi() {
+    if (!form.ai.geminiApiKey.trim()) {
+      toast.error("กรุณาระบุ Gemini API Key ก่อนทดสอบ");
+      return;
+    }
+    startTestAi(async () => {
+      const res = await testGeminiAction({
+        apiKey: form.ai.geminiApiKey.trim(),
+        model: form.ai.model || "gemini-2.5-flash",
+      });
+      if (res.ok) {
+        toast.success(res.data.message || t("settings.testAiOk"));
+      } else {
+        toast.error(res.error.message || t("settings.testAiFail"));
       }
     });
   }
@@ -409,6 +434,106 @@ export function SettingsForm({ initial }: { initial: TenantSettings }) {
                 placeholder={t("settings.contactMapPh")}
               />
             </LiyonField>
+          </div>
+        </LiyonCard>
+
+        {/* Gemini AI Integration */}
+        <LiyonCard>
+          <h2>{t("settings.aiTitle")}</h2>
+          <p>{t("settings.aiDesc")}</p>
+          <div style={{ marginTop: "1.25rem", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px" }}>
+            <div>
+              <LiyonField
+                label={t("settings.aiApiKey")}
+                htmlFor="s-ai-key"
+                hint={t("settings.aiApiKeyHint")}
+              >
+                <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+                  <input
+                    id="s-ai-key"
+                    type={showApiKey ? "text" : "password"}
+                    value={form.ai.geminiApiKey}
+                    onChange={(e) => setForm({ ...form, ai: { ...form.ai, geminiApiKey: e.target.value } })}
+                    placeholder={t("settings.aiApiKeyPh")}
+                    style={{ width: "100%", paddingRight: "40px" }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowApiKey(!showApiKey)}
+                    style={{
+                      position: "absolute",
+                      right: "10px",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      color: "var(--text-2)",
+                    }}
+                  >
+                    {showApiKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </LiyonField>
+            </div>
+
+            <div>
+              <LiyonField
+                label={t("settings.aiModel")}
+                htmlFor="s-ai-model"
+                hint="เลือกรุ่นโมเดล Gemini ที่ต้องการใช้งาน"
+              >
+                <select
+                  id="s-ai-model"
+                  value={form.ai.model}
+                  onChange={(e) => setForm({ ...form, ai: { ...form.ai, model: e.target.value } })}
+                  style={{
+                    width: "100%",
+                    height: "38px",
+                    padding: "0 12px",
+                    borderRadius: "var(--r-sm)",
+                    border: "1px solid var(--border)",
+                    background: "var(--field-bg)",
+                    color: "var(--text-1)",
+                  }}
+                >
+                  <option value="gemini-2.5-flash">Gemini 2.5 Flash (แนะนำ - เร็วและฉลาดล่าสุด)</option>
+                  <option value="gemini-2.0-flash">Gemini 2.0 Flash (เสถียรและเร็วสูง)</option>
+                  <option value="gemini-1.5-flash">Gemini 1.5 Flash (รุ่นมาตรฐาน)</option>
+                  <option value="gemini-1.5-pro">Gemini 1.5 Pro (งานแปลและวิเคราะห์ซับซ้อน)</option>
+                </select>
+              </LiyonField>
+            </div>
+
+            <div style={{
+              gridColumn: "1 / -1",
+              marginTop: "0.5rem",
+              padding: "16px",
+              borderRadius: "var(--r-md)",
+              border: "1px solid var(--glass-border)",
+              background: "var(--panel)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: "12px",
+            }}>
+              <div>
+                <h3 style={{ fontSize: "0.9rem", fontWeight: 600, margin: 0 }}>{t("settings.testAiBtn")}</h3>
+                <p style={{ fontSize: "0.8rem", color: "var(--text-2)", margin: "4px 0 0" }}>
+                  ทดสอบการเรียกใช้งาน Google Generative Language API
+                </p>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={testAi}
+                disabled={testAiPending || !form.ai.geminiApiKey.trim()}
+              >
+                {testAiPending ? "กำลังทดสอบ..." : t("settings.testAiBtn")}
+              </Button>
+            </div>
           </div>
         </LiyonCard>
 

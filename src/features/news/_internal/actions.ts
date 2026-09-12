@@ -1,4 +1,4 @@
-﻿"use server";
+"use server";
 
 import { revalidatePath } from "next/cache";
 import { runAction, type ActionResult } from "@/shared/lib/result";
@@ -147,5 +147,27 @@ export async function deleteNewsPostAction(id: string): Promise<ActionResult<voi
     await deleteNewsPost(ctx.tenantId, id);
     revalidatePath("/news");
     revalidatePath("/portal/news");
+  });
+}
+
+import { getTenantSettings } from "@/features/identity/_internal/services/tenant.service";
+import { generateNewsAiSchema } from "./validations";
+import { generateNewsEnglishWithGemini, type GenerateNewsAiOutput } from "./gemini";
+import { errors } from "@/shared/lib/errors";
+
+export async function generateNewsEnglishAction(input: unknown): Promise<ActionResult<GenerateNewsAiOutput>> {
+  return runAction(async () => {
+    await requirePermission(NEWS_P.newsWrite);
+    const parsed = generateNewsAiSchema.parse(input, { error: zodErrorMap(await getLocale()) });
+    const settings = await getTenantSettings((await requirePermission(NEWS_P.newsWrite)).tenantId);
+
+    const apiKey = settings.ai?.geminiApiKey?.trim() || process.env.GEMINI_API_KEY?.trim() || "";
+    const model = settings.ai?.model?.trim() || "gemini-2.5-flash";
+
+    if (!apiKey) {
+      throw errors.validation("ยังไม่ได้ระบุ Gemini API Key กรุณาตั้งค่าที่หน้าการตั้งค่า (/settings) ก่อนใช้งาน");
+    }
+
+    return generateNewsEnglishWithGemini(apiKey, model, parsed);
   });
 }

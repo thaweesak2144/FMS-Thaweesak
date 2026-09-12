@@ -12,6 +12,8 @@ import {
   Send,
   Archive,
   AlertCircle,
+  Sparkles,
+  Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useT, useLocale } from "@/shared/lib/i18n/client";
@@ -39,6 +41,7 @@ import {
   toggleNewsPostPinAction,
   deleteNewsPostAction,
   getNewsPostsAction,
+  generateNewsEnglishAction,
 } from "@/features/news/actions";
 
 interface Props {
@@ -60,6 +63,7 @@ export function NewsClient({
   const locale = useLocale();
   const [items, setItems] = useState<NewsPostDto[]>(initialPosts);
   const [isPending, startTransition] = useTransition();
+  const [isAiTranslating, startAiTranslation] = useTransition();
 
   // Filter states
   const [filterCategory, setFilterCategory] = useState("");
@@ -239,6 +243,33 @@ export function NewsClient({
     if (res.ok) {
       setItems(res.data);
     }
+  };
+
+  const handleGenerateEnglishWithAi = () => {
+    if (!formTitleTh.trim() || !formBodyTh.trim()) {
+      toast.error(t("news.ai.requireThai"));
+      return;
+    }
+
+    startAiTranslation(async () => {
+      const res = await generateNewsEnglishAction({
+        titleTh: formTitleTh.trim(),
+        excerptTh: formExcerptTh.trim() || undefined,
+        bodyTh: formBodyTh.trim(),
+      });
+
+      if (res.ok) {
+        setFormTitleEn(res.data.titleEn);
+        setFormExcerptEn(res.data.excerptEn);
+        setFormBodyEn(res.data.bodyEn);
+        if (res.data.slugEn && (!formSlug.trim() || /[^\u0000-\u007F]/.test(formSlug))) {
+          setFormSlug(res.data.slugEn);
+        }
+        toast.success(t("news.ai.success"));
+      } else {
+        toast.error(res.error.message || t("common.error"));
+      }
+    });
   };
 
   const filteredItems = items.filter((item) => {
@@ -446,6 +477,36 @@ export function NewsClient({
           description={t("news.subtitle")}
         />
         <LiyonDialogBody className="space-y-4 max-h-[70vh] overflow-y-auto pr-1">
+          {/* AI Translation Action Bar */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3 rounded-lg bg-primary/5 border border-primary/20 text-xs">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary shrink-0 animate-pulse" />
+              <span className="text-muted-foreground">
+                {t("news.ai.hint")}
+              </span>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleGenerateEnglishWithAi}
+              disabled={isAiTranslating || !formTitleTh.trim()}
+              className="h-8 text-xs font-semibold gap-1.5 shadow-sm text-primary hover:text-primary hover:bg-primary/10 border-primary/30 shrink-0 self-end sm:self-auto"
+            >
+              {isAiTranslating ? (
+                <>
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  {t("news.ai.generating")}
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-3.5 w-3.5" />
+                  {t("news.ai.generateEn")}
+                </>
+              )}
+            </Button>
+          </div>
+
           {/* Headlines TH / EN */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <LiyonField label={t("news.post.titleTh")}>

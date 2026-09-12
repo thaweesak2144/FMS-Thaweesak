@@ -196,6 +196,16 @@ export const MESSAGES: Dictionary = {
   "settings.contactYoutubePh": { th: "เช่น https://www.youtube.com/@yourchannel", en: "e.g. https://www.youtube.com/@yourchannel" },
   "settings.contactMap": { th: "ลิงก์แผนที่ Google Maps", en: "Google Maps URL" },
   "settings.contactMapPh": { th: "เช่น https://maps.google.com/?q=...", en: "e.g. https://maps.google.com/?q=..." },
+  // AI Settings (Google Gemini)
+  "settings.aiTitle": { th: "การเชื่อมต่อ AI (Google Gemini API)", en: "AI Integration (Google Gemini API)" },
+  "settings.aiDesc": { th: "กำหนด Google Gemini API Key เพื่อเปิดใช้งานฟังก์ชัน AI อัจฉริยะ เช่น การสร้าง/แปลเนื้อหาข่าวสารเป็นภาษาอังกฤษอัตโนมัติ", en: "Configure Google Gemini API Key to enable AI features such as automatic news translation into English" },
+  "settings.aiApiKey": { th: "Gemini API Key", en: "Gemini API Key" },
+  "settings.aiApiKeyPh": { th: "กรอก API Key เช่น AIzaSy...", en: "e.g. AIzaSy..." },
+  "settings.aiApiKeyHint": { th: "สามารถรับ API Key ได้ฟรีจาก Google AI Studio (aistudio.google.com)", en: "Get a free API key from Google AI Studio (aistudio.google.com)" },
+  "settings.aiModel": { th: "รุ่นโมเดล AI (Gemini Model)", en: "Gemini Model" },
+  "settings.testAiBtn": { th: "ทดสอบการเชื่อมต่อ API", en: "Test API Connection" },
+  "settings.testAiOk": { th: "เชื่อมต่อกับ Google Gemini API สำเร็จ!", en: "Successfully connected to Google Gemini API!" },
+  "settings.testAiFail": { th: "เชื่อมต่อกับ Google Gemini API ไม่สำเร็จ", en: "Failed to connect to Google Gemini API" },
   // me
   "me.title": { th: "โปรไฟล์ของฉัน", en: "My profile" },
   "me.name": { th: "ชื่อที่แสดง", en: "Display name" },

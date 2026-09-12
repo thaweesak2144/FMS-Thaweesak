@@ -27,6 +27,11 @@ export interface ContactSettings {
   mapUrl: string;
 }
 
+export interface AiSettings {
+  geminiApiKey: string;
+  model: string;
+}
+
 export interface TenantSettings {
   code: string;
   nameTh: string;
@@ -35,6 +40,7 @@ export interface TenantSettings {
   palette: PaletteId;
   smtp: SmtpSettings;
   contact: ContactSettings;
+  ai: AiSettings;
 }
 
 export const defaultSmtp: SmtpSettings = {
@@ -59,13 +65,18 @@ export const defaultContact: ContactSettings = {
   mapUrl: "",
 };
 
+export const defaultAi: AiSettings = {
+  geminiApiKey: "",
+  model: "gemini-2.5-flash",
+};
+
 async function readTenantSettings(tenantId: string, db: Db): Promise<TenantSettings> {
   let t = await db.tenant.findUnique({ where: { id: tenantId } });
   if (!t) {
     t = await db.tenant.findFirst({ orderBy: { createdAt: "asc" } });
   }
   if (!t) throw errors.not_found();
-  const s = (t.settings as { palette?: unknown; smtp?: Partial<SmtpSettings>; contact?: Partial<ContactSettings> } | null) || {};
+  const s = (t.settings as { palette?: unknown; smtp?: Partial<SmtpSettings>; contact?: Partial<ContactSettings>; ai?: Partial<AiSettings> } | null) || {};
   const p = s.palette;
   return {
     code: t.code,
@@ -75,6 +86,7 @@ async function readTenantSettings(tenantId: string, db: Db): Promise<TenantSetti
     palette: isPalette(p) ? p : DEFAULT_PALETTE,
     smtp: { ...defaultSmtp, ...(s.smtp || {}) },
     contact: { ...defaultContact, ...(s.contact || {}) },
+    ai: { ...defaultAi, ...(s.ai || {}) },
   };
 }
 
@@ -82,7 +94,7 @@ export async function getTenantSettings(tenantId: string): Promise<TenantSetting
   return readTenantSettings(tenantId, prisma);
 }
 
-/** เก็บคีย์อื่น ๆ ใน settings JSON ไว้ทั้งหมด — merge เฉพาะ palette, smtp และ contact ที่เปลี่ยน ไม่ทับทั้งก้อน */
+/** เก็บคีย์อื่น ๆ ใน settings JSON ไว้ทั้งหมด — merge เฉพาะ palette, smtp, contact และ ai ที่เปลี่ยน ไม่ทับทั้งก้อน */
 export async function updateTenantSettings(input: { tenantId: string; actorId: string } & UpdateSettingsInput): Promise<void> {
   await prisma.$transaction(async (tx) => {
     let targetTenantId = input.tenantId;
@@ -106,6 +118,9 @@ export async function updateTenantSettings(input: { tenantId: string; actorId: s
     }
     if (input.contact !== undefined) {
       newSettings.contact = input.contact;
+    }
+    if (input.ai !== undefined) {
+      newSettings.ai = input.ai;
     }
     await tx.tenant.update({
       where: { id: targetTenantId },

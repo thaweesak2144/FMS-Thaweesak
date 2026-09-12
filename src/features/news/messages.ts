@@ -1,4 +1,4 @@
-﻿export const MESSAGES = {
+export const MESSAGES = {
   // Navigation & General
   "news.nav": { th: "ข่าวสารประชาสัมพันธ์", en: "News & PR" },
   "news.nav.list": { th: "รายการข่าว", en: "All News" },
@@ -69,4 +69,11 @@
   "perm.news:publish": { th: "เผยแพร่และจัดเก็บข่าว", en: "Publish & archive news" },
   "perm.news:delete": { th: "ลบข่าวสาร", en: "Delete news" },
   "perm.news:category:manage": { th: "จัดการหมวดหมู่ข่าว", en: "Manage news categories" },
+
+  // AI Translation (Gemini)
+  "news.ai.generateEn": { th: "✨ สร้างภาษาอังกฤษด้วย AI (Gemini)", en: "✨ Generate English with Gemini AI" },
+  "news.ai.generating": { th: "กำลังสร้างภาษาอังกฤษด้วย AI...", en: "Generating English with AI..." },
+  "news.ai.success": { th: "สร้างเนื้อหาภาษาอังกฤษสำเร็จเรียบร้อยแล้ว", en: "English content generated successfully!" },
+  "news.ai.requireThai": { th: "กรุณากรอกหัวข้อข่าวและเนื้อหาภาษาไทยก่อนใช้งาน AI", en: "Please fill in Thai title and body before generating with AI" },
+  "news.ai.hint": { th: "AI จะแปลและเรียบเรียงหัวข้อ บทคัดย่อ เนื้อหา และ URL slug เป็นภาษาอังกฤษให้อัตโนมัติ", en: "AI will automatically translate and write English title, excerpt, full body, and URL slug" },
 } as const;

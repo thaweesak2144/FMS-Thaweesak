@@ -1,4 +1,4 @@
-﻿export {
+export {
   getNewsCategoriesAction,
   createNewsCategoryAction,
   updateNewsCategoryAction,
@@ -11,4 +11,5 @@
   archiveNewsPostAction,
   toggleNewsPostPinAction,
   deleteNewsPostAction,
+  generateNewsEnglishAction,
 } from "./_internal/actions";
