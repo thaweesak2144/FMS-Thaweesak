@@ -2,6 +2,8 @@
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
   "appId": "com.fms.system",
   "productName": "FMS Management System",
+  "npmRebuild": false,
+  "nodeGypRebuild": false,
   "directories": {
     "output": "dist-installer",
     "buildResources": "resources"
@@ -13,16 +15,12 @@
   ],
   "extraResources": [
     {
-      "from": ".next/standalone",
-      "to": "standalone",
-      "filter": ["**/*"]
-    },
-    {
       "from": "resources/postgres",
       "to": "postgres",
       "filter": ["**/*"]
     }
   ],
+  "afterPack": "scripts/after-pack.js",
   "win": {
     "target": [
       {
