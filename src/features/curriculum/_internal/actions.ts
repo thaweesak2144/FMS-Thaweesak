@@ -1,4 +1,4 @@
-﻿"use server";
+"use server";
 
 import { revalidatePath } from "next/cache";
 import { runAction, type ActionResult } from "@/shared/lib/result";
@@ -50,6 +50,7 @@ export async function createCurriculumAction(input: unknown): Promise<ActionResu
     const parsed = curriculumSchema.parse(input, { error: zodErrorMap(await getLocale()) });
     const res = await createCurriculum(ctx.tenantId, parsed);
     revalidatePath("/curriculum");
+    revalidatePath("/personnel/departments");
     revalidatePath("/portal/curriculum");
     return res;
   });
@@ -61,6 +62,7 @@ export async function updateCurriculumAction(input: unknown): Promise<ActionResu
     const parsed = updateCurriculumSchema.parse(input, { error: zodErrorMap(await getLocale()) });
     const res = await updateCurriculum(ctx.tenantId, parsed);
     revalidatePath("/curriculum");
+    revalidatePath("/personnel/departments");
     revalidatePath(`/curriculum/${res.id}/plan`);
     revalidatePath("/portal/curriculum");
     revalidatePath(`/portal/curriculum/${res.id}`);
@@ -73,6 +75,7 @@ export async function toggleCurriculumActiveAction(id: string): Promise<ActionRe
     const ctx = await requirePermission(CURRICULUM_P.curriculumWrite);
     const res = await toggleCurriculumActive(ctx.tenantId, id);
     revalidatePath("/curriculum");
+    revalidatePath("/personnel/departments");
     revalidatePath("/portal/curriculum");
     return res;
   });
@@ -83,6 +86,7 @@ export async function deleteCurriculumAction(id: string): Promise<ActionResult<v
     const ctx = await requirePermission(CURRICULUM_P.curriculumDelete);
     await deleteCurriculum(ctx.tenantId, id);
     revalidatePath("/curriculum");
+    revalidatePath("/personnel/departments");
     revalidatePath("/portal/curriculum");
   });
 }

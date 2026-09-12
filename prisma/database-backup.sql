@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict NO41clUbaZR12eGXhHBeZZheOprCMtAiRj7Jb002mtyni38t5ui5xc8JJmIoBjz
+\restrict 6ob2LjdmISECBJcwqAjKUNnd33PXFiRe7vWk3CAe4UMd0Hf3mZTrf0Hd8DbMtku
 
 -- Dumped from database version 17.11
 -- Dumped by pg_dump version 17.11
@@ -1236,11 +1236,11 @@ ALTER TABLE public.users OWNER TO postgres;
 --
 
 COPY public._prisma_migrations (id, checksum, finished_at, migration_name, logs, rolled_back_at, started_at, applied_steps_count) FROM stdin;
-efe3c084-8ef9-421f-a247-1da61b0a49bd	0b37bf67c23295e217b0d7a1d3428a29cfc6c5fc57175fbf0c53aa6a6e347b9b	2026-09-10 07:12:14.936836+00	20260907020200_init	\N	\N	2026-09-10 07:12:14.844472+00	1
-ec3eb1dc-f707-469c-9961-5e48471a49e0	16c8e283afed40a57060e2e41a3d629231d319a7067df0543aed23fb42afe2d8	2026-09-10 07:17:00.102095+00	20260910071700_add_sample_items	\N	\N	2026-09-10 07:17:00.019913+00	1
-f6d2625a-2541-4965-bb1f-52578f438b10	91a1c00570a38cea0f9159e7b5e36991a39aedb5b1b59c8e89b1102feca9e32f	2026-09-10 08:10:26.061066+00	20260910081025_add_personnel_and_departments	\N	\N	2026-09-10 08:10:25.957524+00	1
-545af41e-3f81-4af4-8201-9aab58e72dc7	597b5273f32faa5b652082fffeaf5710a80167d4cd399699ccfdc5160328609b	2026-09-10 08:23:04.889567+00	20260910082304_add_news_models	\N	\N	2026-09-10 08:23:04.791337+00	1
-9b167272-e624-4046-adc9-ad10abb21ca7	291add3b3445d4ba7fa5845e82bd853a8a9fdacb00ddbf4bbcd1a9709ee49e88	2026-09-10 08:30:07.374622+00	20260910083007_add_curriculum_models	\N	\N	2026-09-10 08:30:07.322889+00	1
+efe3c084-8ef9-421f-a247-1da61b0a49bd	0b37bf67c23295e217b0d7a1d3428a29cfc6c5fc57175fbf0c53aa6a6e347b9b	2026-09-10 14:12:14.936836+07	20260907020200_init	\N	\N	2026-09-10 14:12:14.844472+07	1
+ec3eb1dc-f707-469c-9961-5e48471a49e0	16c8e283afed40a57060e2e41a3d629231d319a7067df0543aed23fb42afe2d8	2026-09-10 14:17:00.102095+07	20260910071700_add_sample_items	\N	\N	2026-09-10 14:17:00.019913+07	1
+f6d2625a-2541-4965-bb1f-52578f438b10	91a1c00570a38cea0f9159e7b5e36991a39aedb5b1b59c8e89b1102feca9e32f	2026-09-10 15:10:26.061066+07	20260910081025_add_personnel_and_departments	\N	\N	2026-09-10 15:10:25.957524+07	1
+545af41e-3f81-4af4-8201-9aab58e72dc7	597b5273f32faa5b652082fffeaf5710a80167d4cd399699ccfdc5160328609b	2026-09-10 15:23:04.889567+07	20260910082304_add_news_models	\N	\N	2026-09-10 15:23:04.791337+07	1
+9b167272-e624-4046-adc9-ad10abb21ca7	291add3b3445d4ba7fa5845e82bd853a8a9fdacb00ddbf4bbcd1a9709ee49e88	2026-09-10 15:30:07.374622+07	20260910083007_add_curriculum_models	\N	\N	2026-09-10 15:30:07.322889+07	1
 \.
 
 
@@ -1321,14 +1321,14 @@ COPY public.auth_tokens (id, user_id, purpose, token_hash, payload, expires_at, 
 --
 
 COPY public.curriculum_plans (id, curriculum_id, academic_year, semester, course_code, course_name_th, course_name_en, credits, course_type, sort_order, created_at) FROM stdin;
-b193126c-b01d-4e2a-a2cc-020d603ad62d	acaa3f2a-bcdb-474b-a9e0-9f07c8ebd338	1	1	CS101	การเขียนโปรแกรมคอมพิวเตอร์ 1	Computer Programming I	3	วิชาแกน	0	2026-09-11 06:55:39.343+00
-b30ab846-0deb-4bed-b902-f65af03ffbde	acaa3f2a-bcdb-474b-a9e0-9f07c8ebd338	1	1	MA101	แคลคูลัส 1	Calculus I	3	วิชาพื้นฐาน	0	2026-09-11 06:55:39.343+00
-9a4be571-5f5b-423d-8cf1-4f345dbd2e7f	acaa3f2a-bcdb-474b-a9e0-9f07c8ebd338	1	2	CS102	โครงสร้างข้อมูลและอัลกอริทึม	Data Structures and Algorithms	3	วิชาแกน	0	2026-09-11 06:55:39.343+00
-86b5c6c1-6c97-449e-bf23-f10d2faf1987	acaa3f2a-bcdb-474b-a9e0-9f07c8ebd338	2	1	CS201	สถาปัตยกรรมคอมพิวเตอร์	Computer Architecture	3	วิชาเฉพาะบังคับ	0	2026-09-11 06:55:39.343+00
-72ae5fda-3e30-4d0d-bedc-256e0332a971	acaa3f2a-bcdb-474b-a9e0-9f07c8ebd338	2	2	CS202	ระบบฐานข้อมูล	Database Systems	3	วิชาเฉพาะบังคับ	0	2026-09-11 06:55:39.343+00
-5dae3163-92e9-4260-8f53-2db0a2627940	c2195325-61d1-499c-89f9-472f623d7897	1	1	IT101	ความรู้เบื้องต้นเกี่ยวกับเทคโนโลยีสารสนเทศ	Introduction to IT	3	วิชาแกน	0	2026-09-11 06:55:39.354+00
-e876f45a-215b-400d-bef3-77066ec072e4	c2195325-61d1-499c-89f9-472f623d7897	1	2	IT102	พื้นฐานเครือข่ายคอมพิวเตอร์	Computer Network Fundamentals	3	วิชาแกน	0	2026-09-11 06:55:39.354+00
-db7df070-addd-4763-babf-27e925a029c0	c2195325-61d1-499c-89f9-472f623d7897	2	1	IT201	ความปลอดภัยของระบบสารสนเทศ	Information System Security	3	วิชาเฉพาะบังคับ	0	2026-09-11 06:55:39.354+00
+b193126c-b01d-4e2a-a2cc-020d603ad62d	acaa3f2a-bcdb-474b-a9e0-9f07c8ebd338	1	1	CS101	การเขียนโปรแกรมคอมพิวเตอร์ 1	Computer Programming I	3	วิชาแกน	0	2026-09-11 13:55:39.343+07
+b30ab846-0deb-4bed-b902-f65af03ffbde	acaa3f2a-bcdb-474b-a9e0-9f07c8ebd338	1	1	MA101	แคลคูลัส 1	Calculus I	3	วิชาพื้นฐาน	0	2026-09-11 13:55:39.343+07
+9a4be571-5f5b-423d-8cf1-4f345dbd2e7f	acaa3f2a-bcdb-474b-a9e0-9f07c8ebd338	1	2	CS102	โครงสร้างข้อมูลและอัลกอริทึม	Data Structures and Algorithms	3	วิชาแกน	0	2026-09-11 13:55:39.343+07
+86b5c6c1-6c97-449e-bf23-f10d2faf1987	acaa3f2a-bcdb-474b-a9e0-9f07c8ebd338	2	1	CS201	สถาปัตยกรรมคอมพิวเตอร์	Computer Architecture	3	วิชาเฉพาะบังคับ	0	2026-09-11 13:55:39.343+07
+72ae5fda-3e30-4d0d-bedc-256e0332a971	acaa3f2a-bcdb-474b-a9e0-9f07c8ebd338	2	2	CS202	ระบบฐานข้อมูล	Database Systems	3	วิชาเฉพาะบังคับ	0	2026-09-11 13:55:39.343+07
+5dae3163-92e9-4260-8f53-2db0a2627940	c2195325-61d1-499c-89f9-472f623d7897	1	1	IT101	ความรู้เบื้องต้นเกี่ยวกับเทคโนโลยีสารสนเทศ	Introduction to IT	3	วิชาแกน	0	2026-09-11 13:55:39.354+07
+e876f45a-215b-400d-bef3-77066ec072e4	c2195325-61d1-499c-89f9-472f623d7897	1	2	IT102	พื้นฐานเครือข่ายคอมพิวเตอร์	Computer Network Fundamentals	3	วิชาแกน	0	2026-09-11 13:55:39.354+07
+db7df070-addd-4763-babf-27e925a029c0	c2195325-61d1-499c-89f9-472f623d7897	2	1	IT201	ความปลอดภัยของระบบสารสนเทศ	Information System Security	3	วิชาเฉพาะบังคับ	0	2026-09-11 13:55:39.354+07
 \.
 
 
@@ -1337,9 +1337,9 @@ db7df070-addd-4763-babf-27e925a029c0	c2195325-61d1-499c-89f9-472f623d7897	2	1	IT
 --
 
 COPY public.curriculums (id, tenant_id, department_id, code, name_th, name_en, degree_level, total_credits, curriculum_year, philosophy_th, philosophy_en, career_prospects_th, career_prospects_en, tuition_fee, study_period_years, is_active, sort_order, created_at, updated_at) FROM stdin;
-acaa3f2a-bcdb-474b-a9e0-9f07c8ebd338	6c59db5b-8a98-41e0-beb6-a21c9236920e	725d886d-5be6-4010-9c08-38347fd3f4c6	256601CS	วิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์	Bachelor of Science in Computer Science	BACHELOR	129	2566	มุ่งเน้นการผลิตบัณฑิตที่มีความรู้ความสามารถทางการพัฒนาซอฟต์แวร์ ปัญญาประดิษฐ์ และระบบคอมพิวเตอร์สมัยใหม่	\N	- นักพัฒนาซอฟต์แวร์ (Software Developer)\n- วิศวกรข้อมูล (Data Engineer)\n- นักวิทยาศาสตร์ข้อมูล (Data Scientist)	\N	25000	4	t	0	2026-09-11 06:55:39.339+00	2026-09-11 06:55:39.339+00
-c2195325-61d1-499c-89f9-472f623d7897	6c59db5b-8a98-41e0-beb6-a21c9236920e	72013d59-608e-4353-bed6-26b6dbec214b	256602IT	วิทยาศาสตรบัณฑิต สาขาวิชาเทคโนโลยีสารสนเทศ	Bachelor of Science in Information Technology	BACHELOR	125	2566	ผลิตบัณฑิตให้มีความเชี่ยวชาญด้านการประยุกต์ใช้เทคโนโลยีสารสนเทศ การบริหารจัดการเครือข่าย และความปลอดภัยไซเบอร์	\N	- นักวิเคราะห์ระบบสารสนเทศ (System Analyst)\n- ผู้ดูแลระบบเครือข่าย (Network Administrator)\n- ผู้เชี่ยวชาญความปลอดภัยไซเบอร์ (Cybersecurity Specialist)	\N	22000	4	t	0	2026-09-11 06:55:39.35+00	2026-09-11 06:55:39.35+00
-3eb446af-3041-4dbb-9192-7e0d4e07065b	6c59db5b-8a98-41e0-beb6-a21c9236920e	725d886d-5be6-4010-9c08-38347fd3f4c6	2567M1CS	วิทยาศาสตรมหาบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์	Master of Science in Computer Science	MASTER	36	2567	มุ่งเน้นการวิจัยและพัฒนาองค์ความรู้ระดับสูงทางวิทยาการคอมพิวเตอร์ โดยเน้นเทคโนโลยีเกิดใหม่ เช่น AI และ Quantum Computing	\N	\N	\N	45000	2	t	0	2026-09-11 06:55:39.359+00	2026-09-11 06:55:39.359+00
+3eb446af-3041-4dbb-9192-7e0d4e07065b	6c59db5b-8a98-41e0-beb6-a21c9236920e	725d886d-5be6-4010-9c08-38347fd3f4c6	2567M1CS	รัฐประศาสนศาสตรบัณฑิต	Bachelor of Public Administration	BACHELOR	36	2567	มุ่งเน้นการวิจัยและพัฒนาองค์ความรู้ระดับสูงทางวิทยาการคอมพิวเตอร์ โดยเน้นเทคโนโลยีเกิดใหม่ เช่น AI และ Quantum Computing	\N	\N	\N	45000	2	t	0	2026-09-11 13:55:39.359+07	2026-09-12 02:33:31.343+07
+acaa3f2a-bcdb-474b-a9e0-9f07c8ebd338	6c59db5b-8a98-41e0-beb6-a21c9236920e	725d886d-5be6-4010-9c08-38347fd3f4c6	256601CS	สาขาวิชาการจัดการเชิงพุทธ	Bachelor of Arts Program in Buddhist Management	BACHELOR	129	2566	มุ่งเน้นการผลิตบัณฑิตที่มีความรู้ความสามารถทางการพัฒนาซอฟต์แวร์ ปัญญาประดิษฐ์ และระบบคอมพิวเตอร์สมัยใหม่	\N	- นักพัฒนาซอฟต์แวร์ (Software Developer)\n- วิศวกรข้อมูล (Data Engineer)\n- นักวิทยาศาสตร์ข้อมูล (Data Scientist)	\N	25000	4	t	0	2026-09-11 13:55:39.339+07	2026-09-12 02:34:18+07
+c2195325-61d1-499c-89f9-472f623d7897	6c59db5b-8a98-41e0-beb6-a21c9236920e	725d886d-5be6-4010-9c08-38347fd3f4c6	256602IT	ประกาศนียบัตรการบริหารกิจการคณะสงฆ์	Certificate Program in Sangha Administration	CERTIFICATE	125	2566	ผลิตบัณฑิตให้มีความเชี่ยวชาญด้านการประยุกต์ใช้เทคโนโลยีสารสนเทศ การบริหารจัดการเครือข่าย และความปลอดภัยไซเบอร์	\N	- นักวิเคราะห์ระบบสารสนเทศ (System Analyst)\n- ผู้ดูแลระบบเครือข่าย (Network Administrator)\n- ผู้เชี่ยวชาญความปลอดภัยไซเบอร์ (Cybersecurity Specialist)	\N	22000	4	t	0	2026-09-11 13:55:39.35+07	2026-09-12 02:35:22.558+07
 \.
 
 
@@ -1348,9 +1348,7 @@ c2195325-61d1-499c-89f9-472f623d7897	6c59db5b-8a98-41e0-beb6-a21c9236920e	72013d
 --
 
 COPY public.departments (id, tenant_id, code, name_th, name_en, parent_id, sort_order, created_at, updated_at) FROM stdin;
-725d886d-5be6-4010-9c08-38347fd3f4c6	6c59db5b-8a98-41e0-beb6-a21c9236920e	CS	ภาควิชาวิทยาการคอมพิวเตอร์	Department of Computer Science	\N	1	2026-09-11 06:55:39.237+00	2026-09-11 06:55:39.237+00
-72013d59-608e-4353-bed6-26b6dbec214b	6c59db5b-8a98-41e0-beb6-a21c9236920e	IT	ภาควิชาเทคโนโลยีสารสนเทศ	Department of Information Technology	\N	2	2026-09-11 06:55:39.245+00	2026-09-11 06:55:39.245+00
-2d2ed075-7f5b-48bc-aa67-fc58448d4e89	6c59db5b-8a98-41e0-beb6-a21c9236920e	SE	สาขาวิชาวิศวกรรมซอฟต์แวร์	Software Engineering Program	\N	3	2026-09-11 06:55:39.249+00	2026-09-11 06:55:39.249+00
+725d886d-5be6-4010-9c08-38347fd3f4c6	6c59db5b-8a98-41e0-beb6-a21c9236920e	CS	คณะสังคมศาสตร์	Faculty of Social Sciences	\N	1	2026-09-11 13:55:39.237+07	2026-09-12 02:33:02.41+07
 \.
 
 
@@ -1399,9 +1397,9 @@ COPY public.news_attachments (id, post_id, file_name, file_url, file_size, creat
 --
 
 COPY public.news_categories (id, tenant_id, code, name_th, name_en, slug, sort_order, created_at, updated_at) FROM stdin;
-b4450ba8-aeb8-423a-8953-3b625363eb29	6c59db5b-8a98-41e0-beb6-a21c9236920e	ACADEMIC	ข่าววิชาการและงานวิจัย	Academic & Research News	academic	1	2026-09-11 06:55:39.293+00	2026-09-11 06:55:39.293+00
-00a63b11-81c8-4074-8021-ec36ac6a9ea9	6c59db5b-8a98-41e0-beb6-a21c9236920e	SCHOLARSHIP	ทุนการศึกษาและการแข่งขัน	Scholarships & Competitions	scholarships	2	2026-09-11 06:55:39.303+00	2026-09-11 06:55:39.303+00
-e7a11c88-87c5-4d79-9c7e-858d2b9a0148	6c59db5b-8a98-41e0-beb6-a21c9236920e	EVENT	ข่าวกิจกรรมและการอบรม	Events & Workshops	events	3	2026-09-11 06:55:39.307+00	2026-09-11 06:55:39.307+00
+b4450ba8-aeb8-423a-8953-3b625363eb29	6c59db5b-8a98-41e0-beb6-a21c9236920e	ACADEMIC	ข่าววิชาการและงานวิจัย	Academic & Research News	academic	1	2026-09-11 13:55:39.293+07	2026-09-11 13:55:39.293+07
+00a63b11-81c8-4074-8021-ec36ac6a9ea9	6c59db5b-8a98-41e0-beb6-a21c9236920e	SCHOLARSHIP	ทุนการศึกษาและการแข่งขัน	Scholarships & Competitions	scholarships	2	2026-09-11 13:55:39.303+07	2026-09-11 13:55:39.303+07
+e7a11c88-87c5-4d79-9c7e-858d2b9a0148	6c59db5b-8a98-41e0-beb6-a21c9236920e	EVENT	ข่าวกิจกรรมและการอบรม	Events & Workshops	events	3	2026-09-11 13:55:39.307+07	2026-09-11 13:55:39.307+07
 \.
 
 
@@ -1410,9 +1408,9 @@ e7a11c88-87c5-4d79-9c7e-858d2b9a0148	6c59db5b-8a98-41e0-beb6-a21c9236920e	EVENT	
 --
 
 COPY public.news_posts (id, tenant_id, title_th, title_en, slug, body_th, body_en, excerpt_th, excerpt_en, cover_image_url, category_id, status, is_pinned, published_at, author_id, view_count, created_at, updated_at) FROM stdin;
-9c9b28c1-eab0-4b22-a790-1376ac6bd241	6c59db5b-8a98-41e0-beb6-a21c9236920e	คณะเปิดตัวหลักสูตรใหม่ ปริญญาตรี AI & Data Engineering ตอบรับความต้องการอุตสาหกรรมดิจิทัลระดับสากล	Faculty Launches New Bachelor's Program in AI & Data Engineering to Meet Global Digital Industry Demands	new-curriculum-ai-data-engineering	คณะมีความยินดีประกาศเปิดหลักสูตรใหม่ วิศวกรรมปัญญาประดิษฐ์และวิทยาการข้อมูล (Bachelor of Engineering in Artificial Intelligence and Data Engineering)\n\nหลักสูตรนี้ได้รับการออกแบบร่วมกับผู้เชี่ยวชาญจากภาคอุตสาหกรรมเทคโนโลยีชั้นนำทั้งในและต่างประเทศ เพื่อสร้างบัณฑิตที่มีทักษะการปฏิบัติงานจริงในด้าน:\n1. สถาปัตยกรรม Machine Learning และโมเดลภาษาขนาดใหญ่ (LLMs)\n2. ระบบวิศวกรรมข้อมูลขนาดใหญ่ (Data Pipelines & Cloud Data Warehousing)\n3. ความมั่นคงปลอดภัยและจริยธรรมของปัญญาประดิษฐ์ (AI Ethics & Governance)\n\nผู้ที่สนใจสามารถศึกษาเกณฑ์การรับสมัครและคุณสมบัติได้ในระบบรับสมัครนิสิตใหม่	The Faculty is proud to announce the launch of our new program: Bachelor of Engineering in Artificial Intelligence and Data Engineering.\n\nDesigned in close collaboration with tech industry leaders, the program prepares graduates for real-world excellence in:\n1. Machine Learning Architectures & LLMs\n2. Big Data Pipelines & Cloud Infrastructure\n3. AI Ethics & Governance	เปิดรับนิสิตรุ่นแรกปีการศึกษา 2569 มุ่งเน้นการบูรณาการ Generative AI, Large Language Models และระบบประมวลผล Cloud ขั้นสูง	First cohort intake for Academic Year 2026 focusing on Generative AI, Large Language Models, and advanced Cloud computing.	https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&auto=format&fit=crop&q=80	b4450ba8-aeb8-423a-8953-3b625363eb29	PUBLISHED	t	2026-09-09 06:55:39.312+00	966ff26c-5e24-4d58-a162-717bde229822	142	2026-09-11 06:55:39.321+00	2026-09-11 06:55:39.321+00
-9e58980b-a928-4a3b-97e7-98b7fdb749ce	6c59db5b-8a98-41e0-beb6-a21c9236920e	เปิดรับสมัครทุนการศึกษาเรียนดีและทุนวิจัยระดับบัณฑิตศึกษา ประจำปีการศึกษา 2569	Call for Applications: Graduate Excellence & Research Scholarships for Academic Year 2026	scholarship-opportunity-2026	คณะเปิดรับสมัครผู้ขอรับทุนการศึกษาเพื่อส่งเสริมศักยภาพทางวิชาการและงานวิจัยขั้นสูง ประจำปีการศึกษา 2569\n\nประเภททุนการศึกษา:\n- ทุนยกเว้นค่าธรรมเนียมการศึกษา 100%\n- ทุนผู้ช่วยสอนและผู้ช่วยวิจัย (TA/RA) พร้อมเงินสนับสนุนรายเดือน\n- ทุนสนับสนุนการนำเสนอผลงานวิชาการในที่ประชุมวิชาการระดับนานาชาติ\n\nกำหนดการรับสมัคร: ตั้งแต่วันนี้ จนถึงวันที่ 30 พฤศจิกายน 2569 ผ่านระบบออนไลน์	Applications are now open for Academic Year 2026 Graduate Excellence & Research Scholarships.\n\nAvailable Scholarship Categories:\n- 100% Tuition Fee Waiver\n- Teaching and Research Assistantships (TA/RA) with monthly stipend\n- International Conference Travel Grants\n\nApplication Deadline: November 30, 2026 through the online portal.	สนับสนุนค่าเล่าเรียนเต็มจำนวนพร้อมค่าใช้จ่ายรายเดือน สำหรับนิสิตระดับปริญญาโทและเอกที่ทำวิจัยนวัตกรรม	Full tuition waiver plus monthly stipend for Master and Ph.D. students conducting innovative research.	https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80	00a63b11-81c8-4074-8021-ec36ac6a9ea9	PUBLISHED	t	2026-09-06 06:55:39.312+00	966ff26c-5e24-4d58-a162-717bde229822	89	2026-09-11 06:55:39.326+00	2026-09-11 06:55:39.326+00
-b90f00e8-0958-4f60-9018-f1158f0fd1d7	6c59db5b-8a98-41e0-beb6-a21c9236920e	ขอเชิญเข้าร่วมงานประชุมวิชาการระดับชาติ Digital Transformation in Higher Education 2026	Invitation: National Conference on Digital Transformation in Higher Education 2026	conference-digital-transformation-2026	ขอเชิญคณาจารย์ นิสิตนักศึกษา นักวิจัย และบุคคลทั่วไป เข้าร่วมงานประชุมวิชาการระดับชาติ Digital Transformation in Higher Education 2026\n\nหัวข้อการบรรยายพิเศษ:\n- บทบาทของ Generative AI ในการเรียนการสอนยุคใหม่\n- การพัฒนา Modular Monolith Platform สำหรับสถาบันการศึกษา\n- การรักษาความมั่นคงปลอดภัยไซเบอร์ในระบบสารสนเทศมหาวิทยาลัย\n\nงานจัดขึ้น ณ หอประชุมใหญ่ประจำคณะ และถ่ายทอดสดผ่านระบบออนไลน์	You are cordially invited to join the National Conference on Digital Transformation in Higher Education 2026.\n\nFeatured Sessions:\n- The role of Generative AI in modern pedagogical practices\n- Developing enterprise modular monolith platforms for higher education\n- University-wide cybersecurity risk management	พบกับการบรรยายพิเศษจากคณาจารย์และผู้ทรงคุณวุฒิ พร้อมการนำเสนองานวิจัยด้าน EdTech และ AI in Education	Keynote sessions from distinguished faculty and researchers showcasing EdTech innovations and AI in education.	https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80	e7a11c88-87c5-4d79-9c7e-858d2b9a0148	PUBLISHED	f	2026-09-04 06:55:39.312+00	966ff26c-5e24-4d58-a162-717bde229822	56	2026-09-11 06:55:39.33+00	2026-09-11 06:55:39.33+00
+9c9b28c1-eab0-4b22-a790-1376ac6bd241	6c59db5b-8a98-41e0-beb6-a21c9236920e	คณะเปิดตัวหลักสูตรใหม่ ปริญญาตรี AI & Data Engineering ตอบรับความต้องการอุตสาหกรรมดิจิทัลระดับสากล	Faculty Launches New Bachelor's Program in AI & Data Engineering to Meet Global Digital Industry Demands	new-curriculum-ai-data-engineering	คณะมีความยินดีประกาศเปิดหลักสูตรใหม่ วิศวกรรมปัญญาประดิษฐ์และวิทยาการข้อมูล (Bachelor of Engineering in Artificial Intelligence and Data Engineering)\n\nหลักสูตรนี้ได้รับการออกแบบร่วมกับผู้เชี่ยวชาญจากภาคอุตสาหกรรมเทคโนโลยีชั้นนำทั้งในและต่างประเทศ เพื่อสร้างบัณฑิตที่มีทักษะการปฏิบัติงานจริงในด้าน:\n1. สถาปัตยกรรม Machine Learning และโมเดลภาษาขนาดใหญ่ (LLMs)\n2. ระบบวิศวกรรมข้อมูลขนาดใหญ่ (Data Pipelines & Cloud Data Warehousing)\n3. ความมั่นคงปลอดภัยและจริยธรรมของปัญญาประดิษฐ์ (AI Ethics & Governance)\n\nผู้ที่สนใจสามารถศึกษาเกณฑ์การรับสมัครและคุณสมบัติได้ในระบบรับสมัครนิสิตใหม่	The Faculty is proud to announce the launch of our new program: Bachelor of Engineering in Artificial Intelligence and Data Engineering.\n\nDesigned in close collaboration with tech industry leaders, the program prepares graduates for real-world excellence in:\n1. Machine Learning Architectures & LLMs\n2. Big Data Pipelines & Cloud Infrastructure\n3. AI Ethics & Governance	เปิดรับนิสิตรุ่นแรกปีการศึกษา 2569 มุ่งเน้นการบูรณาการ Generative AI, Large Language Models และระบบประมวลผล Cloud ขั้นสูง	First cohort intake for Academic Year 2026 focusing on Generative AI, Large Language Models, and advanced Cloud computing.	https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&auto=format&fit=crop&q=80	b4450ba8-aeb8-423a-8953-3b625363eb29	PUBLISHED	t	2026-09-09 13:55:39.312+07	966ff26c-5e24-4d58-a162-717bde229822	142	2026-09-11 13:55:39.321+07	2026-09-11 13:55:39.321+07
+9e58980b-a928-4a3b-97e7-98b7fdb749ce	6c59db5b-8a98-41e0-beb6-a21c9236920e	เปิดรับสมัครทุนการศึกษาเรียนดีและทุนวิจัยระดับบัณฑิตศึกษา ประจำปีการศึกษา 2569	Call for Applications: Graduate Excellence & Research Scholarships for Academic Year 2026	scholarship-opportunity-2026	คณะเปิดรับสมัครผู้ขอรับทุนการศึกษาเพื่อส่งเสริมศักยภาพทางวิชาการและงานวิจัยขั้นสูง ประจำปีการศึกษา 2569\n\nประเภททุนการศึกษา:\n- ทุนยกเว้นค่าธรรมเนียมการศึกษา 100%\n- ทุนผู้ช่วยสอนและผู้ช่วยวิจัย (TA/RA) พร้อมเงินสนับสนุนรายเดือน\n- ทุนสนับสนุนการนำเสนอผลงานวิชาการในที่ประชุมวิชาการระดับนานาชาติ\n\nกำหนดการรับสมัคร: ตั้งแต่วันนี้ จนถึงวันที่ 30 พฤศจิกายน 2569 ผ่านระบบออนไลน์	Applications are now open for Academic Year 2026 Graduate Excellence & Research Scholarships.\n\nAvailable Scholarship Categories:\n- 100% Tuition Fee Waiver\n- Teaching and Research Assistantships (TA/RA) with monthly stipend\n- International Conference Travel Grants\n\nApplication Deadline: November 30, 2026 through the online portal.	สนับสนุนค่าเล่าเรียนเต็มจำนวนพร้อมค่าใช้จ่ายรายเดือน สำหรับนิสิตระดับปริญญาโทและเอกที่ทำวิจัยนวัตกรรม	Full tuition waiver plus monthly stipend for Master and Ph.D. students conducting innovative research.	https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80	00a63b11-81c8-4074-8021-ec36ac6a9ea9	PUBLISHED	t	2026-09-06 13:55:39.312+07	966ff26c-5e24-4d58-a162-717bde229822	89	2026-09-11 13:55:39.326+07	2026-09-11 13:55:39.326+07
+b90f00e8-0958-4f60-9018-f1158f0fd1d7	6c59db5b-8a98-41e0-beb6-a21c9236920e	ขอเชิญเข้าร่วมงานประชุมวิชาการระดับชาติ Digital Transformation in Higher Education 2026	Invitation: National Conference on Digital Transformation in Higher Education 2026	conference-digital-transformation-2026	ขอเชิญคณาจารย์ นิสิตนักศึกษา นักวิจัย และบุคคลทั่วไป เข้าร่วมงานประชุมวิชาการระดับชาติ Digital Transformation in Higher Education 2026\n\nหัวข้อการบรรยายพิเศษ:\n- บทบาทของ Generative AI ในการเรียนการสอนยุคใหม่\n- การพัฒนา Modular Monolith Platform สำหรับสถาบันการศึกษา\n- การรักษาความมั่นคงปลอดภัยไซเบอร์ในระบบสารสนเทศมหาวิทยาลัย\n\nงานจัดขึ้น ณ หอประชุมใหญ่ประจำคณะ และถ่ายทอดสดผ่านระบบออนไลน์	You are cordially invited to join the National Conference on Digital Transformation in Higher Education 2026.\n\nFeatured Sessions:\n- The role of Generative AI in modern pedagogical practices\n- Developing enterprise modular monolith platforms for higher education\n- University-wide cybersecurity risk management	พบกับการบรรยายพิเศษจากคณาจารย์และผู้ทรงคุณวุฒิ พร้อมการนำเสนองานวิจัยด้าน EdTech และ AI in Education	Keynote sessions from distinguished faculty and researchers showcasing EdTech innovations and AI in education.	https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80	e7a11c88-87c5-4d79-9c7e-858d2b9a0148	PUBLISHED	f	2026-09-04 13:55:39.312+07	966ff26c-5e24-4d58-a162-717bde229822	56	2026-09-11 13:55:39.33+07	2026-09-11 13:55:39.33+07
 \.
 
 
@@ -1471,15 +1469,15 @@ ef635224-b032-4f3e-b4a8-8e24b80b0d79	asset:write	asset	write	เพิ่ม/แ
 --
 
 COPY public.personnel_educations (id, personnel_id, degree, major, institution, graduation_year, sort_order, created_at) FROM stdin;
-f8cd18f7-5473-469b-95be-6349af1df575	981bb26b-b655-438f-b472-d6b6f56e6149	Ph.D. in Computer Science	AI & Neural Networks	Stanford University	2005	1	2026-09-11 06:55:39.26+00
-21ca3063-316a-4312-97a0-c4c34b9382fc	981bb26b-b655-438f-b472-d6b6f56e6149	M.S. in Computer Science	Computer Science	Chulalongkorn University	2000	2	2026-09-11 06:55:39.26+00
-ee202e4f-6b13-452f-acef-18668f9904b1	981bb26b-b655-438f-b472-d6b6f56e6149	B.S. in Computer Science	Computer Science	Chulalongkorn University	1998	3	2026-09-11 06:55:39.26+00
-6490a96c-eaea-4799-977d-054f4d148dfd	0cd4354b-c546-42d2-992c-bf3f2580a4eb	Ph.D. in Software Engineering	Software Architecture	Tokyo Institute of Technology	2012	1	2026-09-11 06:55:39.273+00
-2e5aa485-f435-4bc3-9a39-d0ed9c12430b	0cd4354b-c546-42d2-992c-bf3f2580a4eb	M.Eng. in Computer Engineering	Computer Engineering	Kasetsart University	2007	2	2026-09-11 06:55:39.273+00
-462b3dbe-d901-466b-9a22-c91f4d8b3b43	b707388e-c5f6-47e9-9840-05b1427e1a67	M.S. in Information Technology	Network & Security	King Mongkut's Institute of Technology Ladkrabang	2010	1	2026-09-11 06:55:39.28+00
-5a9734c2-3dff-4eab-a81a-de2414d4b130	b707388e-c5f6-47e9-9840-05b1427e1a67	B.S. in Information Technology	Information Technology	King Mongkut's University of Technology North Bangkok	2006	2	2026-09-11 06:55:39.28+00
-89058b1b-95e1-46a1-999d-3c8f76eed145	e77ba396-8854-4d5a-864b-3de67d682eb8	Ph.D. in Computer Science	Natural Language Processing	Edinburgh University	2021	1	2026-09-11 06:55:39.288+00
-43513501-add7-4ab0-a2fb-8e877a3c12ea	e77ba396-8854-4d5a-864b-3de67d682eb8	B.Sc. in Computer Science	Computer Science (1st Class Honors)	Mahidol University	2016	2	2026-09-11 06:55:39.288+00
+f8cd18f7-5473-469b-95be-6349af1df575	981bb26b-b655-438f-b472-d6b6f56e6149	Ph.D. in Computer Science	AI & Neural Networks	Stanford University	2005	1	2026-09-11 13:55:39.26+07
+21ca3063-316a-4312-97a0-c4c34b9382fc	981bb26b-b655-438f-b472-d6b6f56e6149	M.S. in Computer Science	Computer Science	Chulalongkorn University	2000	2	2026-09-11 13:55:39.26+07
+ee202e4f-6b13-452f-acef-18668f9904b1	981bb26b-b655-438f-b472-d6b6f56e6149	B.S. in Computer Science	Computer Science	Chulalongkorn University	1998	3	2026-09-11 13:55:39.26+07
+89058b1b-95e1-46a1-999d-3c8f76eed145	e77ba396-8854-4d5a-864b-3de67d682eb8	Ph.D. in Computer Science	Natural Language Processing	Edinburgh University	2021	1	2026-09-11 13:55:39.288+07
+43513501-add7-4ab0-a2fb-8e877a3c12ea	e77ba396-8854-4d5a-864b-3de67d682eb8	B.Sc. in Computer Science	Computer Science (1st Class Honors)	Mahidol University	2016	2	2026-09-11 13:55:39.288+07
+4c83ff7d-e46a-4db9-a730-70680dec6658	b707388e-c5f6-47e9-9840-05b1427e1a67	M.S. in Information Technology	Network & Security	King Mongkut's Institute of Technology Ladkrabang	2010	0	2026-09-12 02:40:53.147+07
+a8f26746-3968-4be3-8297-34775fd80ca8	b707388e-c5f6-47e9-9840-05b1427e1a67	B.S. in Information Technology	Information Technology	King Mongkut's University of Technology North Bangkok	2006	1	2026-09-12 02:40:53.147+07
+580aa473-8ffe-43ed-b243-6bfae8d312a6	0cd4354b-c546-42d2-992c-bf3f2580a4eb	Ph.D. in Software Engineering	Software Architecture	Tokyo Institute of Technology	2012	0	2026-09-12 02:40:57.726+07
+18f7f909-ee22-469a-8f62-5fff1ea292ac	0cd4354b-c546-42d2-992c-bf3f2580a4eb	M.Eng. in Computer Engineering	Computer Engineering	Kasetsart University	2007	1	2026-09-12 02:40:57.726+07
 \.
 
 
@@ -1488,10 +1486,10 @@ ee202e4f-6b13-452f-acef-18668f9904b1	981bb26b-b655-438f-b472-d6b6f56e6149	B.S. i
 --
 
 COPY public.personnel_profiles (id, tenant_id, user_id, employee_code, title_th, title_en, first_name_th, last_name_th, first_name_en, last_name_en, position_th, position_en, academic_rank, department_id, personnel_type, email, phone, photo_url, bio_th, bio_en, expertise_tags, is_active, sort_order, created_at, updated_at) FROM stdin;
-981bb26b-b655-438f-b472-d6b6f56e6149	6c59db5b-8a98-41e0-beb6-a21c9236920e	\N	FMS-001	ศ.ดร.	Prof. Dr.	สมชาย	ใจดี	Somchai	Jaidee	คณบดี และอาจารย์ประจำภาควิชา	Dean & Professor of Computer Science	ศาสตราจารย์	725d886d-5be6-4010-9c08-38347fd3f4c6	FULL_TIME	somchai.j@app.local	02-123-4567	https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80	ผู้เชี่ยวชาญด้านปัญญาประดิษฐ์และวิทยาการข้อมูล มีประสบการณ์สอนและวิจัยกว่า 25 ปี ดำรงตำแหน่งคณบดีประจำคณะ	Expert in Artificial Intelligence and Data Science with over 25 years of teaching and research experience.	["Artificial Intelligence", "Machine Learning", "Data Science", "Computer Vision"]	t	0	2026-09-11 06:55:39.26+00	2026-09-11 06:55:39.26+00
-0cd4354b-c546-42d2-992c-bf3f2580a4eb	6c59db5b-8a98-41e0-beb6-a21c9236920e	\N	FMS-002	รศ.ดร.	Assoc. Prof. Dr.	อรทัย	พัฒนศิลป์	Orathai	Pattanasilp	รองคณบดีฝ่ายวิชาการ	Associate Dean for Academic Affairs	รองศาสตราจารย์	2d2ed075-7f5b-48bc-aa67-fc58448d4e89	FULL_TIME	orathai.p@app.local	02-123-4568	https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80	หัวหน้ากลุ่มวิจัยวิศวกรรมซอฟต์แวร์และการพัฒนาเว็บแอพพลิเคชันระดับองค์กร	Head of Software Engineering Research Group and enterprise web development specialist.	["Software Architecture", "Cloud Computing", "DevOps", "Modular Monolith"]	t	0	2026-09-11 06:55:39.273+00	2026-09-11 06:55:39.273+00
-b707388e-c5f6-47e9-9840-05b1427e1a67	6c59db5b-8a98-41e0-beb6-a21c9236920e	\N	FMS-003	ผศ.	Asst. Prof.	วิชัย	เก่งการช่าง	Wichai	Kengkarnchang	หัวหน้าภาควิชาเทคโนโลยีสารสนเทศ	Head of Information Technology Department	ผู้ช่วยศาสตราจารย์	72013d59-608e-4353-bed6-26b6dbec214b	FULL_TIME	wichai.k@app.local	02-123-4569	https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80	เชี่ยวชาญด้านความมั่นคงปลอดภัยไซเบอร์ เครือข่ายคอมพิวเตอร์ และระบบบริหารจัดการฐานข้อมูลขนาดใหญ่	Specialist in Cybersecurity, Computer Networks, and Big Data Database Management.	["Cybersecurity", "Network Systems", "Database Management", "IoT"]	t	0	2026-09-11 06:55:39.28+00	2026-09-11 06:55:39.28+00
-e77ba396-8854-4d5a-864b-3de67d682eb8	6c59db5b-8a98-41e0-beb6-a21c9236920e	\N	FMS-004	ดร.	Dr.	กานดา	สุวรรณรัตน์	Kanda	Suwannarat	อาจารย์ประจำภาควิชาวิทยาการคอมพิวเตอร์	Lecturer in Computer Science	อาจารย์	725d886d-5be6-4010-9c08-38347fd3f4c6	FULL_TIME	kanda.s@app.local	02-123-4570	https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80	นักวิจัยด้านการประมวลผลภาษาธรรมชาติ (NLP) และโมเดลภาษาขนาดใหญ่ (LLM) สำหรับภาษาไทย	Researcher specializing in Natural Language Processing (NLP) and Large Language Models (LLM) for Thai language.	["NLP", "LLM", "Generative AI", "Python"]	t	0	2026-09-11 06:55:39.288+00	2026-09-11 06:55:39.288+00
+981bb26b-b655-438f-b472-d6b6f56e6149	6c59db5b-8a98-41e0-beb6-a21c9236920e	\N	FMS-001	ศ.ดร.	Prof. Dr.	สมชาย	ใจดี	Somchai	Jaidee	คณบดี และอาจารย์ประจำภาควิชา	Dean & Professor of Computer Science	ศาสตราจารย์	725d886d-5be6-4010-9c08-38347fd3f4c6	FULL_TIME	somchai.j@app.local	02-123-4567	https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80	ผู้เชี่ยวชาญด้านปัญญาประดิษฐ์และวิทยาการข้อมูล มีประสบการณ์สอนและวิจัยกว่า 25 ปี ดำรงตำแหน่งคณบดีประจำคณะ	Expert in Artificial Intelligence and Data Science with over 25 years of teaching and research experience.	["Artificial Intelligence", "Machine Learning", "Data Science", "Computer Vision"]	t	0	2026-09-11 13:55:39.26+07	2026-09-11 13:55:39.26+07
+e77ba396-8854-4d5a-864b-3de67d682eb8	6c59db5b-8a98-41e0-beb6-a21c9236920e	\N	FMS-004	ดร.	Dr.	กานดา	สุวรรณรัตน์	Kanda	Suwannarat	อาจารย์ประจำภาควิชาวิทยาการคอมพิวเตอร์	Lecturer in Computer Science	อาจารย์	725d886d-5be6-4010-9c08-38347fd3f4c6	FULL_TIME	kanda.s@app.local	02-123-4570	https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80	นักวิจัยด้านการประมวลผลภาษาธรรมชาติ (NLP) และโมเดลภาษาขนาดใหญ่ (LLM) สำหรับภาษาไทย	Researcher specializing in Natural Language Processing (NLP) and Large Language Models (LLM) for Thai language.	["NLP", "LLM", "Generative AI", "Python"]	t	0	2026-09-11 13:55:39.288+07	2026-09-11 13:55:39.288+07
+b707388e-c5f6-47e9-9840-05b1427e1a67	6c59db5b-8a98-41e0-beb6-a21c9236920e	\N	FMS-003	ผศ.	Asst. Prof.	วิชัย	เก่งการช่าง	Wichai	Kengkarnchang	หัวหน้าภาควิชาเทคโนโลยีสารสนเทศ	Head of Information Technology Department	ผู้ช่วยศาสตราจารย์	725d886d-5be6-4010-9c08-38347fd3f4c6	FULL_TIME	wichai.k@app.local	02-123-4569	https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80	เชี่ยวชาญด้านความมั่นคงปลอดภัยไซเบอร์ เครือข่ายคอมพิวเตอร์ และระบบบริหารจัดการฐานข้อมูลขนาดใหญ่	Specialist in Cybersecurity, Computer Networks, and Big Data Database Management.	["Cybersecurity", "Network Systems", "Database Management", "IoT"]	t	0	2026-09-11 13:55:39.28+07	2026-09-12 02:40:53.147+07
+0cd4354b-c546-42d2-992c-bf3f2580a4eb	6c59db5b-8a98-41e0-beb6-a21c9236920e	\N	FMS-002	รศ.ดร.	Assoc. Prof. Dr.	อรทัย	พัฒนศิลป์	Orathai	Pattanasilp	รองคณบดีฝ่ายวิชาการ	Associate Dean for Academic Affairs	รองศาสตราจารย์	725d886d-5be6-4010-9c08-38347fd3f4c6	FULL_TIME	orathai.p@app.local	02-123-4568	https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80	หัวหน้ากลุ่มวิจัยวิศวกรรมซอฟต์แวร์และการพัฒนาเว็บแอพพลิเคชันระดับองค์กร	Head of Software Engineering Research Group and enterprise web development specialist.	["Software Architecture", "Cloud Computing", "DevOps", "Modular Monolith"]	t	0	2026-09-11 13:55:39.273+07	2026-09-12 02:40:57.726+07
 \.
 
 
@@ -1563,10 +1561,10 @@ a1eacaa8-db9e-4baf-9252-5779d7f49ac5	eeaf3f50-74e1-49c3-be8d-d2230c525e45
 --
 
 COPY public.roles (id, tenant_id, code, name_th, name_en, description, is_system, created_at, updated_at) FROM stdin;
-17373540-7cbe-4f94-82d1-698561934c68	6c59db5b-8a98-41e0-beb6-a21c9236920e	SUPER_ADMIN	ผู้ดูแลสูงสุด	Super admin	\N	t	2026-09-11 06:55:38.834+00	2026-09-11 06:55:38.834+00
-df495de7-d623-45e3-b874-c798a8e49b2f	6c59db5b-8a98-41e0-beb6-a21c9236920e	ADMIN	ผู้ดูแลระบบ	Administrator	\N	f	2026-09-11 06:55:38.841+00	2026-09-11 06:55:38.841+00
-a1eacaa8-db9e-4baf-9252-5779d7f49ac5	6c59db5b-8a98-41e0-beb6-a21c9236920e	STAFF	เจ้าหน้าที่	Staff	\N	f	2026-09-11 06:55:38.863+00	2026-09-11 06:55:38.863+00
-355b396b-61fd-438d-b7e6-7f7376a3f3ed	6c59db5b-8a98-41e0-beb6-a21c9236920e	VIEWER	ผู้ดู	Viewer	\N	f	2026-09-11 06:55:38.867+00	2026-09-11 06:55:38.867+00
+17373540-7cbe-4f94-82d1-698561934c68	6c59db5b-8a98-41e0-beb6-a21c9236920e	SUPER_ADMIN	ผู้ดูแลสูงสุด	Super admin	\N	t	2026-09-11 13:55:38.834+07	2026-09-11 13:55:38.834+07
+df495de7-d623-45e3-b874-c798a8e49b2f	6c59db5b-8a98-41e0-beb6-a21c9236920e	ADMIN	ผู้ดูแลระบบ	Administrator	\N	f	2026-09-11 13:55:38.841+07	2026-09-11 13:55:38.841+07
+a1eacaa8-db9e-4baf-9252-5779d7f49ac5	6c59db5b-8a98-41e0-beb6-a21c9236920e	STAFF	เจ้าหน้าที่	Staff	\N	f	2026-09-11 13:55:38.863+07	2026-09-11 13:55:38.863+07
+355b396b-61fd-438d-b7e6-7f7376a3f3ed	6c59db5b-8a98-41e0-beb6-a21c9236920e	VIEWER	ผู้ดู	Viewer	\N	f	2026-09-11 13:55:38.867+07	2026-09-11 13:55:38.867+07
 \.
 
 
@@ -1583,7 +1581,7 @@ COPY public.sample_items (id, tenant_id, title, description, status, created_at,
 --
 
 COPY public.tenants (id, code, name_th, name_en, logo_url, settings, is_active, created_at, updated_at) FROM stdin;
-6c59db5b-8a98-41e0-beb6-a21c9236920e	DEMO	วิทยาลัยสงฆ์ตาก	mcutak	/uploads/logo-1789115643437.png	{"smtp": {"from": "ragnaroknaja888@gmail.com", "host": "smtp.gmail.com", "pass": "oxwpqcazgygxhorz", "port": 465, "user": "ragnaroknaja888@gmail.com", "secure": true, "enabled": true, "service": "gmail"}, "palette": "green"}	t	2026-09-11 06:55:38.575+00	2026-09-11 07:09:22.915+00
+6c59db5b-8a98-41e0-beb6-a21c9236920e	DEMO	วิทยาลัยสงฆ์ตาก	mcutak	/uploads/logo-1789115643437.png	{"smtp": {"from": "ragnaroknaja888@gmail.com", "host": "smtp.gmail.com", "pass": "oxwpqcazgygxhorz", "port": 465, "user": "ragnaroknaja888@gmail.com", "secure": true, "enabled": true, "service": "gmail"}, "palette": "green"}	t	2026-09-11 13:55:38.575+07	2026-09-11 14:09:22.915+07
 \.
 
 
@@ -1592,11 +1590,11 @@ COPY public.tenants (id, code, name_th, name_en, logo_url, settings, is_active, 
 --
 
 COPY public.user_roles (id, user_tenant_id, role_id, scope_type, scope_id, created_at) FROM stdin;
-8dac05e0-e9d3-42ff-a32b-35223ea0e592	dbd6abc2-1d14-48cb-99ec-87e02611ccfa	17373540-7cbe-4f94-82d1-698561934c68	ALL	\N	2026-09-11 06:55:39.198+00
-79c57f38-1c43-4051-b409-d98555e3ee49	01fdcd6e-45ec-43e5-9e48-a5c59a117625	a1eacaa8-db9e-4baf-9252-5779d7f49ac5	ALL	\N	2026-09-11 06:55:39.208+00
-78bdff7f-b1cb-42da-8334-4d99a93922da	8dd83ada-5755-41ef-959f-76016e392685	355b396b-61fd-438d-b7e6-7f7376a3f3ed	ALL	\N	2026-09-11 06:55:39.215+00
-14f12fc5-2c4a-406e-b10d-47db910f2526	85bbae9f-3330-4249-80f1-0bb519153a14	355b396b-61fd-438d-b7e6-7f7376a3f3ed	ALL	\N	2026-09-11 06:55:39.225+00
-510acb16-8596-40b0-a4c4-f1e56fa662dd	9a00abab-405d-44bb-8de3-7837716cb94d	355b396b-61fd-438d-b7e6-7f7376a3f3ed	ALL	\N	2026-09-11 06:55:39.232+00
+8dac05e0-e9d3-42ff-a32b-35223ea0e592	dbd6abc2-1d14-48cb-99ec-87e02611ccfa	17373540-7cbe-4f94-82d1-698561934c68	ALL	\N	2026-09-11 13:55:39.198+07
+79c57f38-1c43-4051-b409-d98555e3ee49	01fdcd6e-45ec-43e5-9e48-a5c59a117625	a1eacaa8-db9e-4baf-9252-5779d7f49ac5	ALL	\N	2026-09-11 13:55:39.208+07
+78bdff7f-b1cb-42da-8334-4d99a93922da	8dd83ada-5755-41ef-959f-76016e392685	355b396b-61fd-438d-b7e6-7f7376a3f3ed	ALL	\N	2026-09-11 13:55:39.215+07
+14f12fc5-2c4a-406e-b10d-47db910f2526	85bbae9f-3330-4249-80f1-0bb519153a14	355b396b-61fd-438d-b7e6-7f7376a3f3ed	ALL	\N	2026-09-11 13:55:39.225+07
+510acb16-8596-40b0-a4c4-f1e56fa662dd	9a00abab-405d-44bb-8de3-7837716cb94d	355b396b-61fd-438d-b7e6-7f7376a3f3ed	ALL	\N	2026-09-11 13:55:39.232+07
 \.
 
 
@@ -1605,11 +1603,11 @@ COPY public.user_roles (id, user_tenant_id, role_id, scope_type, scope_id, creat
 --
 
 COPY public.user_tenants (id, user_id, tenant_id, is_active, joined_at) FROM stdin;
-dbd6abc2-1d14-48cb-99ec-87e02611ccfa	966ff26c-5e24-4d58-a162-717bde229822	6c59db5b-8a98-41e0-beb6-a21c9236920e	t	2026-09-11 06:55:39.187+00
-01fdcd6e-45ec-43e5-9e48-a5c59a117625	63bd2879-0894-4b55-b7f9-3ff65826db41	6c59db5b-8a98-41e0-beb6-a21c9236920e	t	2026-09-11 06:55:39.205+00
-8dd83ada-5755-41ef-959f-76016e392685	a8b99266-fd91-4d11-9401-8ac5bedf7cf0	6c59db5b-8a98-41e0-beb6-a21c9236920e	t	2026-09-11 06:55:39.212+00
-85bbae9f-3330-4249-80f1-0bb519153a14	56ce7633-3c46-4896-aa4f-7b5dbd89e59f	6c59db5b-8a98-41e0-beb6-a21c9236920e	t	2026-09-11 06:55:39.222+00
-9a00abab-405d-44bb-8de3-7837716cb94d	2421ffff-e810-4da1-b84a-89282f24bea7	6c59db5b-8a98-41e0-beb6-a21c9236920e	t	2026-09-11 06:55:39.229+00
+dbd6abc2-1d14-48cb-99ec-87e02611ccfa	966ff26c-5e24-4d58-a162-717bde229822	6c59db5b-8a98-41e0-beb6-a21c9236920e	t	2026-09-11 13:55:39.187+07
+01fdcd6e-45ec-43e5-9e48-a5c59a117625	63bd2879-0894-4b55-b7f9-3ff65826db41	6c59db5b-8a98-41e0-beb6-a21c9236920e	t	2026-09-11 13:55:39.205+07
+8dd83ada-5755-41ef-959f-76016e392685	a8b99266-fd91-4d11-9401-8ac5bedf7cf0	6c59db5b-8a98-41e0-beb6-a21c9236920e	t	2026-09-11 13:55:39.212+07
+85bbae9f-3330-4249-80f1-0bb519153a14	56ce7633-3c46-4896-aa4f-7b5dbd89e59f	6c59db5b-8a98-41e0-beb6-a21c9236920e	t	2026-09-11 13:55:39.222+07
+9a00abab-405d-44bb-8de3-7837716cb94d	2421ffff-e810-4da1-b84a-89282f24bea7	6c59db5b-8a98-41e0-beb6-a21c9236920e	t	2026-09-11 13:55:39.229+07
 \.
 
 
@@ -1618,11 +1616,11 @@ dbd6abc2-1d14-48cb-99ec-87e02611ccfa	966ff26c-5e24-4d58-a162-717bde229822	6c59db
 --
 
 COPY public.users (id, email, password_hash, name, image_url, provider, provider_id, email_verified, is_active, must_change_password, locale, last_login_at, created_at, updated_at) FROM stdin;
-a8b99266-fd91-4d11-9401-8ac5bedf7cf0	viewer@app.local	$2b$12$cJJj9cZgYByBR2GCcK6XweMseBlsLYOInlpOMLadEvWb/kjJURglW	ผู้ดู	\N	credentials	\N	t	t	f	\N	\N	2026-09-11 06:55:39.21+00	2026-09-11 06:55:39.21+00
-56ce7633-3c46-4896-aa4f-7b5dbd89e59f	lockme@app.local	$2b$12$cJJj9cZgYByBR2GCcK6XweMseBlsLYOInlpOMLadEvWb/kjJURglW	บัญชีทดสอบล็อก	\N	credentials	\N	t	t	f	\N	\N	2026-09-11 06:55:39.219+00	2026-09-11 06:55:39.219+00
-2421ffff-e810-4da1-b84a-89282f24bea7	forced@app.local	$2b$12$cJJj9cZgYByBR2GCcK6XweMseBlsLYOInlpOMLadEvWb/kjJURglW	บัญชีบังคับเปลี่ยนรหัส	\N	credentials	\N	t	t	t	\N	\N	2026-09-11 06:55:39.227+00	2026-09-11 06:55:39.227+00
-63bd2879-0894-4b55-b7f9-3ff65826db41	staff@app.local	$2b$12$cJJj9cZgYByBR2GCcK6XweMseBlsLYOInlpOMLadEvWb/kjJURglW	เจ้าหน้าที่	\N	credentials	\N	t	t	f	\N	2026-09-11 14:34:57.961+00	2026-09-11 06:55:39.202+00	2026-09-11 14:34:57.962+00
-966ff26c-5e24-4d58-a162-717bde229822	ragnaroknaja888@gmail.com	$2b$12$3P4Kn4Lo4euPb9cpsPYktOuG0ZytNdA4ErdEgaLeA2gYmuyTebDTK	ผู้ดูแลสูงสุด	https://lh3.googleusercontent.com/a/ACg8ocLrgIQRqH54pjplzhcjSjM3dtJaMJSiv923f4xwonRs0LiGPw=s96-c	google	102063895045850453211	t	t	f	\N	2026-09-11 15:06:58.526+00	2026-09-11 06:55:39.18+00	2026-09-11 15:06:58.527+00
+63bd2879-0894-4b55-b7f9-3ff65826db41	staff@app.local	$2b$12$cJJj9cZgYByBR2GCcK6XweMseBlsLYOInlpOMLadEvWb/kjJURglW	เจ้าหน้าที่	\N	credentials	\N	t	t	f	\N	\N	2026-09-11 13:55:39.202+07	2026-09-11 13:55:39.202+07
+a8b99266-fd91-4d11-9401-8ac5bedf7cf0	viewer@app.local	$2b$12$cJJj9cZgYByBR2GCcK6XweMseBlsLYOInlpOMLadEvWb/kjJURglW	ผู้ดู	\N	credentials	\N	t	t	f	\N	\N	2026-09-11 13:55:39.21+07	2026-09-11 13:55:39.21+07
+56ce7633-3c46-4896-aa4f-7b5dbd89e59f	lockme@app.local	$2b$12$cJJj9cZgYByBR2GCcK6XweMseBlsLYOInlpOMLadEvWb/kjJURglW	บัญชีทดสอบล็อก	\N	credentials	\N	t	t	f	\N	\N	2026-09-11 13:55:39.219+07	2026-09-11 13:55:39.219+07
+2421ffff-e810-4da1-b84a-89282f24bea7	forced@app.local	$2b$12$cJJj9cZgYByBR2GCcK6XweMseBlsLYOInlpOMLadEvWb/kjJURglW	บัญชีบังคับเปลี่ยนรหัส	\N	credentials	\N	t	t	t	\N	\N	2026-09-11 13:55:39.227+07	2026-09-11 13:55:39.227+07
+966ff26c-5e24-4d58-a162-717bde229822	ragnaroknaja888@gmail.com	$2b$12$3P4Kn4Lo4euPb9cpsPYktOuG0ZytNdA4ErdEgaLeA2gYmuyTebDTK	ผู้ดูแลสูงสุด	https://lh3.googleusercontent.com/a/ACg8ocLrgIQRqH54pjplzhcjSjM3dtJaMJSiv923f4xwonRs0LiGPw=s96-c	google	102063895045850453211	t	t	f	\N	2026-09-12 02:09:31.16+07	2026-09-11 13:55:39.18+07	2026-09-12 02:09:31.162+07
 \.
 
 
@@ -2868,15 +2866,8 @@ ALTER TABLE ONLY public.user_tenants
 
 
 --
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: pg_database_owner
---
-
-REVOKE USAGE ON SCHEMA public FROM PUBLIC;
-
-
---
 -- PostgreSQL database dump complete
 --
 
-\unrestrict NO41clUbaZR12eGXhHBeZZheOprCMtAiRj7Jb002mtyni38t5ui5xc8JJmIoBjz
+\unrestrict 6ob2LjdmISECBJcwqAjKUNnd33PXFiRe7vWk3CAe4UMd0Hf3mZTrf0Hd8DbMtku
 

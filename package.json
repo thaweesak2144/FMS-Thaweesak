@@ -24,6 +24,8 @@
     "db:bootstrap": "tsx prisma/bootstrap.ts",
     "sync:liyon": "tsx scripts/sync-liyon-theme.ts",
     "sync:docker": "tsx scripts/sync-to-docker.ts",
+    "backup": "tsx scripts/backup-dev.ts",
+    "backup:dev": "tsx scripts/backup-dev.ts",
     "backup:docker": "tsx scripts/backup-docker.ts",
     "postinstall": "prisma generate"
   },
